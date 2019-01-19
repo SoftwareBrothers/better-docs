@@ -37,9 +37,11 @@ In your projects package.json file add a new script:
 
 in your `jsdoc.json` file, set the template:
 
+```json
 "opts": {
   "template": "node_modules/better-docs"
 }
+```
 
 ## Customization
 
