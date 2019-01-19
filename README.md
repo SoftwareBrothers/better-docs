@@ -37,6 +37,65 @@ in your `jsdoc.json` file, set the template:
   "template": "node_modules/better-docs"
 }
 
+## Customization
+
+First of all, let me remind you that better-docs extends `default` template. That is why default template parameters are also handled.
+
+To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc confuguration file`.
+
+Example configuration file with settings for both `default` and `better-docs` templates:
+
+```json
+{
+    "tags": {
+        "allowUnknownTags": ["mermaid"]
+    },
+    "source": {
+        "include": ["./admin-bro/src"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "jsdoc-mermaid"
+    ],
+    "opts": {
+        "encoding": "utf8",
+        "destination": "docs/",
+        "readme": "./docs-src/home.md",
+        "recurse": true,
+        "verbose": true,
+        "tutorials": "./docs-src/tutorials",
+        "template": "better-docs"
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "default": {
+            "staticFiles": {
+              "include": [
+                  "./docs-src/statics"
+              ]
+            }
+        },
+        "better-docs": {
+            "name": "AdminBro Documentation",
+            "logo": "images/logo.png",
+            "navigation": [
+                {
+                    "label": "Github",
+                    "href": "https://github.com/SoftwareBrothers/admin-bro"
+                },
+                {
+                    "label": "Example Application",
+                    "href": "https://admin-bro-example-app.herokuapp.com/admin"
+                }
+            ]
+        }
+    }
+}
+```
+
 ## Setting up for the development
 
 If you want to change the theam locally follow the steps:

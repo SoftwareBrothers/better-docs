@@ -19,6 +19,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-run": "^1.7.1",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.1",
+    "bulma": "^0.7.2"
   }
 }

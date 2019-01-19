@@ -12,3 +12,33 @@
     padding: 0 0 rem(4px) rem(16px)
     li
       padding: rem(3px) 0
+
+#sidebarNav.sticky
+  right: 0
+  transition: right 0.5s
+
+#sidebarNav
+  @include until($desktop)
+    z-index: 100
+    top: 0
+    right: -300px
+    position: fixed
+    transition: right 0.5s
+    padding: 28px
+    width: 300px
+    bottom: 0
+    overflow: auto
+    background: #fff
+
+#stickyNavbarOverlay
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  top: 0
+  z-index: 40
+  background: rgba(0,0,0,0.2)
+  display: none
+
+  &.active
+    display: block

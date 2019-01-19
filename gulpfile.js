@@ -42,6 +42,7 @@ gulp.task('watch', () => {
   gulp.watch('styles/**/*.sass', ['sass', 'docs'])
   gulp.watch('scripts/**/*.js', ['js', 'docs'])
   gulp.watch('tmpl/**/*.tmpl', ['docs'])
+  gulp.watch('publish.js', ['docs'])
 })
 
 gulp.task('sync', () => {
