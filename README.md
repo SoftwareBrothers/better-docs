@@ -5,6 +5,10 @@ Beautiful and simple documentation template for JSDoc 3.
 <img src="./readme/class.png" />
 <img src="./readme/with-mermaid.png" />
 
+## Example
+
+Simple example documentation can be found here: https://softwarebrothers.github.io/admin-bro-dev/index.html
+
 ## Installation
 
 ```sh
