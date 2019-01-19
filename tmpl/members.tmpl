@@ -2,7 +2,22 @@
 var data = obj;
 var self = this;
 ?>
-<h4 class="name" id="<?js= id ?>"><?js= data.attribs + name + (data.signature ? data.signature : '') ?></h4>
+<?js if (data.type && data.type.names) {?>
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        <?js= self.partial('type.tmpl', data.type.names) ?>
+    </span>
+<?js } ?>
+<h4 class="name" id="<?js= id ?>">
+    <?js if (data.rawAttribs && data.rawAttribs.length) {?>
+        <?js data.rawAttribs.forEach(function(attrib) { ?>
+            <span class='tag'><?js= attrib ?></span>
+        <?js }); ?>
+    <?js } ?>
+    <span class="code-name">
+        <?js= name ?>
+    </span>
+</h4>
 
 <?js if (data.summary) { ?>
 <p class="summary"><?js= summary ?></p>
@@ -14,22 +29,17 @@ var self = this;
 </div>
 <?js } ?>
 
-<?js if (data.type && data.type.names) {?>
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            <?js= self.partial('type.tmpl', data.type.names) ?>
-        </li>
-    </ul>
-<?js } ?>
-
 <?js= this.partial('details.tmpl', data) ?>
 
 <?js if (data.fires && fires.length) { ?>
-    <h5>Fires:</h5>
-    <ul><?js fires.forEach(function(f) { ?>
-        <li><?js= self.linkto(f) ?></li>
-    <?js }); ?></ul>
+    <div class="method-parameter columns">
+        <div class="column is-2"><label>Fires:</label></div>
+        <div class="column is-10">
+            <ul><?js fires.forEach(function(f) { ?>
+                <li><?js= self.linkto(f) ?></li>
+            <?js }); ?></ul>
+        </div>
+    </div>
 <?js } ?>
 
 <?js if (data.examples && examples.length) { ?>

@@ -1,0 +1,26 @@
+table.params, table.props
+  border: 1px solid $border
+  line-height: 26px
+  thead 
+    border: none
+    th
+      color: $border
+      font-weight: normal
+      padding: 13px 26px
+  tr
+    border-bottom: 1px solid $border
+  td
+    padding: 13px 26px
+  td.name code
+    background: transparent
+    padding: 0
+    font-size: 15px
+    color: $main-nav
+
+  @for $i from 1 through 10
+    tr.deep-level-#{$i}
+      background: darken(#fff, $i * 2)
+      .name code
+        padding-left: 25px
+        margin-left: #{($i - 1)*25}px
+        border-left: 1px solid #DEE1E5
