@@ -1,0 +1,22 @@
+$fill: rgba(248,249,250,0.8)
+$stroke: rgba(121,136,151,0.6)
+$fillWrap: rgba(125,132,255,0.1)
+$strokeWrap: rgba(125,132,255,0.5)
+  
+.mermaid
+  .edgeLabel
+    background: white
+    color: $codeBg
+    font-size: 15px
+    font-weight: normal
+  .node circle, .node ellipse, .node polygon, .node rect
+    fill: $fill !important
+    stroke: $stroke !important
+  .cluster rect
+    fill: $fillWrap !important
+    stroke: $strokeWrap !important
+  .node g.label
+    color: $codeBg
+    div
+      font-weight: normal
+      font-size: 15px

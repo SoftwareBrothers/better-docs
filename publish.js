@@ -198,6 +198,7 @@ function addAttribs(f) {
     var attribsString = buildAttribsString(attribs);
 
     f.attribs = util.format('<span class="type-signature">%s</span>', attribsString);
+    f.rawAttribs = attribs;
 }
 
 function shortenPaths(files, commonPrefix) {
@@ -220,7 +221,7 @@ function getPathFromDoclet(doclet) {
         doclet.meta.filename;
 }
 
-function generate(title, docs, filename, resolveLinks) {
+function generate(title, subtitle, docs, filename, resolveLinks) {
     var docData;
     var html;
     var outpath;
@@ -230,6 +231,7 @@ function generate(title, docs, filename, resolveLinks) {
     docData = {
         env: env,
         title: title,
+        subtitle: subtitle,
         docs: docs
     };
 
@@ -262,7 +264,7 @@ function generateSourceFiles(sourceFiles, encoding) {
             logger.error('Error while generating source file %s: %s', file, e.message);
         }
 
-        generate('Source: ' + sourceFiles[file].shortened, [source], sourceOutfile,
+        generate(sourceFiles[file].shortened, 'Source', [source], sourceOutfile,
             false);
     });
 }
@@ -367,7 +369,8 @@ function buildNav(members) {
     var nav = '<h2><a href="index.html">Home</a></h2>';
     var seen = {};
     var seenTutorials = {};
-
+    
+    nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
     nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
     nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
     nav += buildMemberNav(members.namespaces, 'Namespaces', seen, linkto);
@@ -375,7 +378,6 @@ function buildNav(members) {
     nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
     nav += buildMemberNav(members.events, 'Events', seen, linkto);
     nav += buildMemberNav(members.mixins, 'Mixins', seen, linkto);
-    nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
 
     if (members.globals.length) {
         globalNav = '';
@@ -432,6 +434,7 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     conf = env.conf.templates || {};
     conf.default = conf.default || {};
+    conf.betterDocs = conf.betterDocs || conf['better-docs'] || {}
 
     templatePath = path.normalize(opts.template);
     view = new template.Template( path.join(templatePath, 'tmpl') );
@@ -616,13 +619,13 @@ exports.publish = function(taffyData, opts, tutorials) {
         generateSourceFiles(sourceFiles, opts.encoding);
     }
 
-    if (members.globals.length) { generate('Global', [{kind: 'globalobj'}], globalUrl); }
+    if (members.globals.length) { generate('Global', 'Title', [{kind: 'globalobj'}], globalUrl); }
 
     // index page displays information from package.json and lists files
     files = find({kind: 'file'});
     packages = find({kind: 'package'});
 
-    generate('Home',
+    generate('Home', 'Title',
         packages.concat(
             [{
                 kind: 'mainpage',
@@ -648,34 +651,35 @@ exports.publish = function(taffyData, opts, tutorials) {
         var myNamespaces = helper.find(namespaces, {longname: longname});
 
         if (myModules.length) {
-            generate('Module: ' + myModules[0].name, myModules, helper.longnameToUrl[longname]);
+            generate(myModules[0].name, 'Module', myModules,  helper.longnameToUrl[longname]);
         }
 
         if (myClasses.length) {
-            generate('Class: ' + myClasses[0].name, myClasses, helper.longnameToUrl[longname]);
+            generate(myClasses[0].name, 'Class', myClasses, helper.longnameToUrl[longname]);
         }
 
         if (myNamespaces.length) {
-            generate('Namespace: ' + myNamespaces[0].name, myNamespaces, helper.longnameToUrl[longname]);
+            generate(myNamespaces[0].name, 'Namespace', myNamespaces, helper.longnameToUrl[longname]);
         }
 
         if (myMixins.length) {
-            generate('Mixin: ' + myMixins[0].name, myMixins, helper.longnameToUrl[longname]);
+            generate(myMixins[0].name, 'Mixin', myMixins, helper.longnameToUrl[longname]);
         }
 
         if (myExternals.length) {
-            generate('External: ' + myExternals[0].name, myExternals, helper.longnameToUrl[longname]);
+            generate(myExternals[0].name, 'External', myExternals, helper.longnameToUrl[longname]);
         }
 
         if (myInterfaces.length) {
-            generate('Interface: ' + myInterfaces[0].name, myInterfaces, helper.longnameToUrl[longname]);
+            generate(myInterfaces[0].name, 'Interface', myInterfaces, helper.longnameToUrl[longname]);
         }
     });
 
     // TODO: move the tutorial functions to templateHelper.js
-    function generateTutorial(title, tutorial, filename) {
+    function generateTutorial(title, subtitle, tutorial, filename) {
         var tutorialData = {
             title: title,
+            subtitle: subtitle,
             header: tutorial.title,
             content: tutorial.parse(),
             children: tutorial.children
@@ -692,7 +696,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     // tutorials can have only one parent so there is no risk for loops
     function saveChildren(node) {
         node.children.forEach(function(child) {
-            generateTutorial('Tutorial: ' + child.title, child, helper.tutorialToUrl(child.name));
+            generateTutorial(child.title, 'Tutorial', child, helper.tutorialToUrl(child.name));
             saveChildren(child);
         });
     }

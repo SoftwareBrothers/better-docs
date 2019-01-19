@@ -1,32 +1,19 @@
 <?js
     var data = obj;
 ?>
-<?js if (data.description && data.type && data.type.names) { ?>
-<dl>
-    <dt>
-        <div class="param-desc">
-        <?js= data.description ?>
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                <?js= this.partial('type.tmpl', data.type.names) ?>
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-<?js } else { ?>
-    <div class="param-desc">
-    <?js if (data.description) { ?>
-        <?js= data.description ?>
-    <?js } else if (data.type && data.type.names) { ?>
-        <?js= this.partial('type.tmpl', data.type.names) ?>
-    <?js } ?>
+<div class="columns">
+    <?js if (data.description && data.type && data.type.names) { ?>
+    <div class='param-desc column is-7'><?js= description ?></div>
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label><?js= this.partial('type.tmpl', data.type.names) ?>
     </div>
-<?js } ?>
+    <?js } else { ?>
+        <?js if (data.description) { ?>
+            <div class='param-desc column is-12'><?js= description ?></div>
+        <?js } else if (data.type && data.type.names) { ?>
+            <div class='column is-12 has-text-left'>
+            <label>Type: </label><?js= this.partial('type.tmpl', data.type.names) ?>
+            </div>
+        <?js } ?>
+    <?js } ?>
+</div>

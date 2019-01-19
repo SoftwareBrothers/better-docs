@@ -1,0 +1,53 @@
+.content
+  margin-bottom: 50px
+  header.page-title
+    text-transform: uppercase
+    h1
+      font-family: $header-font-family
+      font-size: 47px
+      font-weight: bold
+      margin: 0px 0 52px
+    p
+      font-size: 13px
+      margin: 0 0 5px
+    
+  h2
+    font-size: 27px
+    line-height: 52px
+    font-weight: normal
+    margin-bottom: 26px
+  header p
+    font-size: 20px
+  
+  & > section > article
+    margin-top: 54px
+    .vertical-section
+      padding-left: 70px
+      position: relative
+      border-top: 1px solid $border
+      min-height: 200px
+      background-color: $light-grey
+      .members
+        background: #fff
+        padding-left: 25px
+      .title
+        position: absolute
+        left: 0
+        top: 0
+        color: $grey
+        font-size: 27px
+        font-weight: normal
+        writing-mode: vertical-rl
+        text-orientation: mixed
+        margin-bottom: 0
+        display: inline-block
+        span
+          padding: 20px
+          display: inline-block
+  code
+    background: $codeBg
+    color: $codeFont
+
+#main-content-wrapper
+  @include until($desktop)
+    padding: 0 30px
