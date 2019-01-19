@@ -2,6 +2,9 @@
 
 Beautiful and simple documentation template for JSDoc 3.
 
+<img src="./readme/class.png" />
+<img src="./readme/with-mermaid.png" />
+
 ## Installation
 
 ```sh
