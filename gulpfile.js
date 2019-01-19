@@ -1,4 +1,7 @@
-const { spawn } = require('child_process')
+const DOCS_COMMAND = process.env.DOCS_COMMAND || 'npm run docs'
+const DOCS_OUTPUT = process.env.DOCS_OUTPUT || "../docs"
+
+
 const gulp = require('gulp')
 const sass = require('gulp-sass')
 const autoprefixer = require('gulp-autoprefixer')
@@ -6,7 +9,6 @@ const run = require('gulp-run')
 const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
-const nodemon = require('gulp-nodemon')
 const concat = require('gulp-concat')
 const path = require('path')
 const browserSync = require('browser-sync').create();
@@ -33,7 +35,7 @@ gulp.task('js', () => {
 })
 
 gulp.task('docs', function() {
-  return run('cd .. && npm run docs').exec()
+  return run(`cd .. && ${DOCS_COMMAND}`).exec()
 })
 
 gulp.task('watch', () => {
@@ -45,10 +47,10 @@ gulp.task('watch', () => {
 gulp.task('sync', () => {
   browserSync.init({
     server: {
-      baseDir: "../docs"
+      baseDir: DOCS_OUTPUT
     }
   })
-  gulp.watch("../docs/*").on('change', browserSync.reload)
+  gulp.watch(`${DOCS_OUTPUT}/*`).on('change', browserSync.reload)
 })
 
 gulp.task('default', ['sass', 'js', 'docs', 'watch', 'sync'])
