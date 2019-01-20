@@ -136,6 +136,10 @@ cd better-docs
 DOCS_COMMAND='npm run docs' DOCS_OUTPUT='../docs' cd better-docs && gulp
 ```
 
+## Setting up the jsdoc in your project
+
+If you want to see how to setup jsdoc in your project - take a look at this short tutorial: https://www.youtube.com/watch?v=Yl6WARA3IhQ
+
 ## License
 
 BetterDocs is Copyright © 2019 SoftwareBrothers.co. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file.
