@@ -4,7 +4,8 @@
   "description": "JSdoc theme",
   "main": "publish.js",
   "scripts": {
-    "gulp": "./node_modules/.bin/gulp"
+    "gulp": "./node_modules/.bin/gulp",
+    "test": "./node_modules/.bin/gulp sass js"
   },
   "author": "Wojciech Krysiak",
   "license": "MIT",
