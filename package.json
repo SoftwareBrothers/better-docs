@@ -1,6 +1,6 @@
 {
   "name": "better-docs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "JSdoc theme",
   "main": "publish.js",
   "scripts": {
