@@ -1,7 +1,6 @@
 const DOCS_COMMAND = process.env.DOCS_COMMAND || 'npm run docs'
 const DOCS_OUTPUT = process.env.DOCS_OUTPUT || "../docs"
 
-
 const gulp = require('gulp')
 const sass = require('gulp-sass')
 const autoprefixer = require('gulp-autoprefixer')
@@ -43,6 +42,10 @@ gulp.task('watch', () => {
   gulp.watch('scripts/**/*.js', ['js', 'docs'])
   gulp.watch('tmpl/**/*.tmpl', ['docs'])
   gulp.watch('publish.js', ['docs'])
+  if (process.env.DOCS) {
+    console.log(process.env.DOCS.split(','))
+    gulp.watch(process.env.DOCS.split(','), ['docs'])
+  }
 })
 
 gulp.task('sync', () => {
