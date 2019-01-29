@@ -19,6 +19,10 @@
   header p
     font-size: 20px
   
+  h3, h4, h5, h6
+    font-family: $base-font-family
+    font-weight: normal
+  
   & > section > article
     margin-top: 54px
     .vertical-section
@@ -30,6 +34,15 @@
       .members
         background: #fff
         padding-left: 25px
+        .member > .name:before
+          content: ""
+          position: absolute
+          display: block
+          width: 70px
+          height: 100%
+          background: darken($light-grey, 5)
+          left: -95px
+          z-index: 1
       .title
         position: absolute
         left: 0
@@ -41,6 +54,7 @@
         text-orientation: mixed
         margin-bottom: 0
         display: inline-block
+        z-index: 10
         span
           padding: 20px
           display: inline-block

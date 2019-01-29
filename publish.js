@@ -350,36 +350,25 @@ function linktoExternal(longName, name) {
     return linkto(longName, name.replace(/(^"|"$)/g, ''));
 }
 
-/**
- * Create the navigation sidebar.
- * @param {object} members The members that will be used to create the sidebar.
- * @param {array<object>} members.classes
- * @param {array<object>} members.externals
- * @param {array<object>} members.globals
- * @param {array<object>} members.mixins
- * @param {array<object>} members.modules
- * @param {array<object>} members.namespaces
- * @param {array<object>} members.tutorials
- * @param {array<object>} members.events
- * @param {array<object>} members.interfaces
- * @return {string} The HTML for the navigation sidebar.
- */
-function buildNav(members) {
+function buildGroupNav (members, title) {
     var globalNav;
-    var nav = '<h2><a href="index.html">Home</a></h2>';
-    var seen = {};
     var seenTutorials = {};
+    var nav = '';
+    var seen = {};
+    nav += '<div class="category">';
+    if (title) {
+        nav += '<h2>' + title + '</h2>';
+    }
+    nav += buildMemberNav(members.tutorials || [], 'Tutorials', seenTutorials, linktoTutorial);
+    nav += buildMemberNav(members.modules || [], 'Modules', {}, linkto);
+    nav += buildMemberNav(members.externals || [], 'Externals', seen, linktoExternal);
+    nav += buildMemberNav(members.namespaces || [], 'Namespaces', seen, linkto);
+    nav += buildMemberNav(members.classes || [], 'Classes', seen, linkto);
+    nav += buildMemberNav(members.interfaces || [], 'Interfaces', seen, linkto);
+    nav += buildMemberNav(members.events || [], 'Events', seen, linkto);
+    nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto);
     
-    nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
-    nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
-    nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
-    nav += buildMemberNav(members.namespaces, 'Namespaces', seen, linkto);
-    nav += buildMemberNav(members.classes, 'Classes', seen, linkto);
-    nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
-    nav += buildMemberNav(members.events, 'Events', seen, linkto);
-    nav += buildMemberNav(members.mixins, 'Mixins', seen, linkto);
-
-    if (members.globals.length) {
+    if (members.globals && members.globals.length) {
         globalNav = '';
 
         members.globals.forEach(function(g) {
@@ -397,6 +386,49 @@ function buildNav(members) {
             nav += '<h3>Global</h3><ul>' + globalNav + '</ul>';
         }
     }
+    nav += '</div>';
+    return nav
+}
+
+/**
+ * Create the navigation sidebar.
+ * @param {object} members The members that will be used to create the sidebar.
+ * @param {array<object>} members.classes
+ * @param {array<object>} members.externals
+ * @param {array<object>} members.globals
+ * @param {array<object>} members.mixins
+ * @param {array<object>} members.modules
+ * @param {array<object>} members.namespaces
+ * @param {array<object>} members.tutorials
+ * @param {array<object>} members.events
+ * @param {array<object>} members.interfaces
+ * @return {string} The HTML for the navigation sidebar.
+ */
+function buildNav(members) {
+    var nav = '<h2><a href="index.html">Home</a></h2>';
+
+    var categorised = {}
+    var rootScope = {}
+
+    var types = ['tutorials', 'modules', 'externals', 'namespaces', 'classes',
+     'interface', 'events', 'mixins', 'globals']
+    types.forEach(function(type) {
+        if (!members[type]) { return }
+        members[type].forEach(function(element) {
+            if (element.category) {
+                if (!categorised[element.category]){ categorised[element.category] = []; }
+                if (!categorised[element.category][type]){ categorised[element.category][type] = []; }
+                categorised[element.category][type].push(element);
+            } else {
+                rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element];
+            }
+        })
+    })
+    
+    nav += buildGroupNav(rootScope);
+    Object.keys(categorised).forEach(function (category) {
+        nav += buildGroupNav(categorised[category], category);
+    });
 
     return nav;
 }

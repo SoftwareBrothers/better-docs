@@ -1,4 +1,5 @@
 .sidebar
+  padding-bottom: 120px
   a
     color: $grey
     &:hover
@@ -12,6 +13,12 @@
     padding: 0 0 rem(4px) rem(16px)
     li
       padding: rem(3px) 0
+
+  .category
+    h2
+      color: #000
+      font-size: 20px
+      margin-top: 40px
 
 #sidebarNav.sticky
   right: 0
@@ -29,6 +36,8 @@
     bottom: 0
     overflow: auto
     background: #fff
+    .sidebar
+      padding-bottom: 10px
 
 #stickyNavbarOverlay
   position: absolute
