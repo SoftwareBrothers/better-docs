@@ -182,7 +182,10 @@ Script should launch the browser and refresh it whenever you change something in
 
 ## Setting up the jsdoc in your project
 
-If you want to see how to setup jsdoc in your project - take a look at this short tutorial: https://www.youtube.com/watch?v=Yl6WARA3IhQ
+If you want to see how to setup jsdoc in your project - take a look at this short tutorials: 
+
+- JSDoc - https://www.youtube.com/watch?v=Yl6WARA3IhQ
+- BetterDoc and Mermaid: https://www.youtube.com/watch?v=UBMYogTzsBk
 
 ## License
 
