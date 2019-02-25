@@ -426,7 +426,7 @@ function buildNav(members) {
     })
     
     nav += buildGroupNav(rootScope);
-    Object.keys(categorised).forEach(function (category) {
+    Object.keys(categorised).sort().forEach(function (category) {
         nav += buildGroupNav(categorised[category], category);
     });
 
