@@ -15,8 +15,9 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
     <meta charset="utf-8">
     <title>JSDoc: <?js= title ?></title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -93,7 +94,6 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
     </div>
 </footer>
 
-<script> prettyPrint(); </script>
 <script src="scripts/app.min.js"></script>
 <script src="scripts/linenumber.js"> </script>
 </body>
