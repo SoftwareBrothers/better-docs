@@ -2,6 +2,7 @@ import React from 'react'
 
 import brace from 'brace';
 import AceEditor from 'react-ace'
+import Frame from 'react-frame-component'
 
 import 'brace/mode/jsx';
 import 'brace/theme/monokai';
@@ -78,11 +79,11 @@ class Wrapper extends React.Component {
         </div>
         <div>
           <h5>Preview</h5>
-          <div className="component-wrapper">
+          <Frame className="component-wrapper">
             <ComponentRenderer>
               {component}
             </ComponentRenderer>
-          </div>
+          </Frame>
         </div>
       </div>
     )

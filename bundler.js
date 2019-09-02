@@ -1,7 +1,11 @@
 const fs = require('fs')
 const path = require('path')
+const execSync = require('child_process').execSync
 
 module.exports = function bundle (Components, out, config) {
+  if (!Components.length) {
+    return
+  }
   const entry = path.join(out, 'entry.js')
   const absoluteOut = path.resolve(out)
   let init = `
@@ -14,8 +18,8 @@ module.exports = function bundle (Components, out, config) {
     window.ReactDOM = ReactDOM;\n
     window.Wrapper = Wrapper;\n
   `
-  if (config.betterDocs.wrapperComponent) {
-    const absolute = path.resolve(config.betterDocs.wrapperComponent)
+  if (config.betterDocs.component && config.betterDocs.component.wrapper) {
+    const absolute = path.resolve(config.betterDocs.component.wrapper)
     init +=`
     import _CustomWrapper from '${path.relative(absoluteOut, absolute)}';\n
     Components._CustomWrapper = _CustomWrapper;\n
@@ -30,5 +34,14 @@ module.exports = function bundle (Components, out, config) {
     ].join('\n')
   }).join('\n\n')
 
+  console.log('Generating entry file for "components" plugin')
   fs.writeFileSync(entry, entryFile);
+  console.log('Bundling components')
+  try {
+    const outDist = path.join(out, 'build')
+    const cmd = `parcel build ${entry} --out-dir ${outDist}`
+    execSync(cmd)
+  } catch (error) {
+    throw error
+  }
 }

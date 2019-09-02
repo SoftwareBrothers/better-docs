@@ -74,6 +74,168 @@ class YourClass {
 }
 ```
 
+## @component plugin
+
+Better-docs also allows you to document your React and Vue (soon) components automatically. The only thing you have to do is to add `@component` tag. It will take all props from your components and along with an `@example` tag - generate __live preview__.
+
+### Installation instructions
+
+Similar as before to add a plugin - you have to update `plugins` section in your `jsdoc.json` file:
+
+```
+...
+"tags": {
+    "allowUnknownTags": ["component"] //or true
+},
+"plugins": [
+    "node_modules/better-docs/component"
+],
+...
+```
+
+Since __component__ plugin uses [parcel](https://parceljs.org) as a bundler you have to install it globally. In order to do this run:
+
+```
+# if you use npm
+npm install -g parcel-bundler
+
+# or yarn
+yarn global add parcel-bundler
+```
+
+### Usage
+
+To document components simply add @component in your JSDoc documentation:
+
+```
+/**
+ * Some documented component
+ * 
+ * @component
+ */
+const Documented = (props) => {
+  const { text } = props
+  return (
+    <div>{text}</div>
+  )
+}
+
+Documented.propTypes = {
+  /**
+   * Text is a text
+   */
+  text: PropTypes.string.isRequired,
+}
+
+export default Documented
+```
+
+Plugin will take the information from your [PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html) and put them into an array.
+
+### Preview
+
+@component plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__ if it returns a component:
+
+```javacript
+/**
+ * Some documented component
+ * 
+ * @component
+ * @example
+ * const text = 'some example text'
+ * return (
+ *   <Documented text={text} />
+ * )
+ */
+const Component = (props) => {
+  ///...
+}
+```
+
+You put as many examples as you like in one component.
+
+### Mixing components in preview
+
+Also you can use other components which are documented with component tag. So lets say you have 2 components
+
+```javascript
+// component-1.js
+/**
+ * Component 1
+ * @component
+ * 
+ */
+const Component1 = (props) => {...}
+
+// component-2.js
+/**
+ * Component 2
+ * @component
+ * @example
+ * return (
+ *   <Component1>
+ *     <Component2 prop1={'some value'}/>
+ *     <Component2 prop1={'some other value'}/>
+ *   </Component1>
+ * )
+ */
+const Component2 = (props) => {...}
+```
+
+### Wrapper components
+
+Most probably your components will have to run within particular context, like within redux store provider or with custom CSS libraries.
+You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
+_(To read more about passing options - scroll down to __Customization__ section)_
+
+```json
+// jsdoc.json
+{
+    "opts": {...},
+    "templates": {
+        "better-docs": {
+            "name": "AdminBro Documentation",
+            "component": {
+              "wrapper": "./path/to/your/wrapper-component.js",
+            },
+            "...": "...",
+        }
+    }
+}
+```
+
+Wrapper component can look like this:
+
+```javascript
+// wrapper-component.js
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
+const store = createStore(() => ({}), {})
+
+const Component = (props) => {
+  return (
+    <React.Fragment>
+      <head>
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+      </head>
+      <Provider store={store}>
+        <BrowserRouter>
+          {props.children}
+        </BrowserRouter>
+      </Provider>
+    </React.Fragment>
+  )
+}
+
+export default Component
+```
+
+### Document Vue components
+
+_comming soon_
 
 ## Customization
 
