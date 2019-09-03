@@ -49,6 +49,11 @@ var self = this;
     </p>
 <?js } ?>
 
+<?js if (data.component && data.component.props) { ?>
+    <h5>PropTypes:</h5>
+    <?js= self.partial('proptypes.tmpl', data.component) ?>
+<?js } ?>
+
 <?js if (data.params && params.length && !data.hideconstructor) { ?>
     <h5>Parameters:</h5>
     <?js= this.partial('params.tmpl', params) ?>
@@ -156,5 +161,5 @@ var self = this;
 
 <?js if (data.examples && examples.length) { ?>
     <h5>Example<?js= examples.length > 1? 's':'' ?></h5>
-    <?js= this.partial('examples.tmpl', examples) ?>
+    <?js= this.partial('examples.tmpl', data) ?>
 <?js } ?>

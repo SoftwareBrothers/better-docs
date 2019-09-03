@@ -43,8 +43,12 @@ gulp.task('watch', () => {
   gulp.watch('tmpl/**/*.tmpl', ['docs'])
   gulp.watch('publish.js', ['docs'])
   if (process.env.DOCS) {
-    console.log(process.env.DOCS.split(','))
-    gulp.watch(process.env.DOCS.split(','), ['docs'])
+    const array = [
+      ...process.env.DOCS.split(','),
+      ...process.env.DOCS.split(',').map(src => '!' + src.replace('**/*', 'node_modules/**/*'))
+    ]
+    console.log(array)
+    gulp.watch(array, ['docs'])
   }
 })
 

@@ -10,8 +10,7 @@
   "author": "Wojciech Krysiak",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/core": "^7.4.4",
     "browser-sync": "^2.26.3",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
@@ -19,8 +18,16 @@
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.4.0",
     "gulp-run": "^1.7.1",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.1",
-    "bulma": "^0.7.2"
+    "gulp-sass": "^4.0.2"
+  },
+  "peerDependencies": {
+    "react": "^0.16.0",
+    "react-dom": "^0.16.0"
+  },
+  "dependencies": {
+    "brace": "^0.11.1",
+    "react-ace": "^6.5.0",
+    "react-docgen": "^4.1.1",
+    "react-frame-component": "^4.1.1"
   }
 }

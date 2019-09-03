@@ -10,6 +10,8 @@ var taffy = require('taffydb').taffy;
 var template = require('jsdoc/template');
 var util = require('util');
 
+var bundler = require('./bundler')
+
 var htmlsafe = helper.htmlsafe;
 var linkto = helper.linkto;
 var resolveAuthorLinks = helper.resolveAuthorLinks;
@@ -367,6 +369,7 @@ function buildGroupNav (members, title) {
     nav += buildMemberNav(members.interfaces || [], 'Interfaces', seen, linkto);
     nav += buildMemberNav(members.events || [], 'Events', seen, linkto);
     nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto);
+    nav += buildMemberNav(members.components || [], 'Components', seen, linkto);
     
     if (members.globals && members.globals.length) {
         globalNav = '';
@@ -394,6 +397,7 @@ function buildGroupNav (members, title) {
  * Create the navigation sidebar.
  * @param {object} members The members that will be used to create the sidebar.
  * @param {array<object>} members.classes
+ * @param {array<object>} members.components
  * @param {array<object>} members.externals
  * @param {array<object>} members.globals
  * @param {array<object>} members.mixins
@@ -411,7 +415,7 @@ function buildNav(members) {
     var rootScope = {}
 
     var types = ['tutorials', 'modules', 'externals', 'namespaces', 'classes',
-     'interface', 'events', 'mixins', 'globals']
+    'components', 'interfaces', 'events', 'mixins', 'globals']
     types.forEach(function(type) {
         if (!members[type]) { return }
         members[type].forEach(function(element) {
@@ -447,6 +451,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     var globalUrl;
     var indexUrl;
     var interfaces;
+    var components;
     var members;
     var mixins;
     var modules;
@@ -630,6 +635,8 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     members = helper.getMembers(data);
     members.tutorials = tutorials.children;
+    members.components = helper.find(data, {kind: 'class', component: {isUndefined: false}})
+    members.classes = helper.find(data, {kind: 'class', component: {isUndefined: true}})
 
     // output pretty-printed source files by default
     outputSourceFiles = conf.default && conf.default.outputSourceFiles !== false;
@@ -644,6 +651,7 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     // once for all
     view.nav = buildNav(members);
+    bundler(members.components, outdir, conf)
     attachModuleSymbols( find({ longname: {left: 'module:'} }), members.modules );
 
     // generate the pretty-printed source files first so other pages can link to them
@@ -673,6 +681,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     mixins = taffy(members.mixins);
     externals = taffy(members.externals);
     interfaces = taffy(members.interfaces);
+    components = taffy(members.components);
 
     Object.keys(helper.longnameToUrl).forEach(function(longname) {
         var myClasses = helper.find(classes, {longname: longname});
@@ -681,6 +690,7 @@ exports.publish = function(taffyData, opts, tutorials) {
         var myMixins = helper.find(mixins, {longname: longname});
         var myModules = helper.find(modules, {longname: longname});
         var myNamespaces = helper.find(namespaces, {longname: longname});
+        var myComponents = helper.find(components, {longname: longname});
 
         if (myModules.length) {
             generate(myModules[0].name, 'Module', myModules,  helper.longnameToUrl[longname]);
@@ -704,6 +714,10 @@ exports.publish = function(taffyData, opts, tutorials) {
 
         if (myInterfaces.length) {
             generate(myInterfaces[0].name, 'Interface', myInterfaces, helper.longnameToUrl[longname]);
+        }
+
+        if (myComponents.length) {
+            generate(myComponents[0].name, 'Components', myComponents, helper.longnameToUrl[longname]);
         }
     });
 

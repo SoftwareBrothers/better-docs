@@ -44,5 +44,5 @@ var self = this;
 
 <?js if (data.examples && examples.length) { ?>
     <h5>Example<?js= examples.length > 1? 's':'' ?></h5>
-    <?js= this.partial('examples.tmpl', examples) ?>
+    <?js= this.partial('examples.tmpl', data) ?>
 <?js } ?>
