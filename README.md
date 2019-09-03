@@ -76,7 +76,7 @@ class YourClass {
 
 ## @component plugin
 
-Better-docs also allows you to document your React and Vue (soon) components automatically. The only thing you have to do is to add `@component` tag. It will take all props from your components and along with an `@example` tag - generate __live preview__.
+Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) (soon) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
 ### Installation instructions
 
@@ -105,7 +105,7 @@ yarn global add parcel-bundler
 
 ### Usage
 
-To document components simply add @component in your JSDoc documentation:
+To document components simply add `@component` in your JSDoc documentation:
 
 ```
 /**
@@ -134,7 +134,7 @@ Plugin will take the information from your [PropTypes](https://reactjs.org/docs/
 
 ### Preview
 
-@component plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__ if it returns a component:
+`@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to ad an `@example` tag and return component from it:
 
 ```javacript
 /**
@@ -147,16 +147,16 @@ Plugin will take the information from your [PropTypes](https://reactjs.org/docs/
  *   <Documented text={text} />
  * )
  */
-const Component = (props) => {
+const Documented = (props) => {
   ///...
 }
 ```
 
-You put as many examples as you like in one component.
+You can put as many `@example` tags as you like in one component.
 
 ### Mixing components in preview
 
-Also you can use other components which are documented with component tag. So lets say you have 2 components
+Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the seccond component you want to use the first one as a wrapper like this:
 
 ```javascript
 // component-1.js
@@ -233,9 +233,49 @@ const Component = (props) => {
 export default Component
 ```
 
+### Styling examples
+
+Better-docs inserts all examples within an `iframe`. This results in a different styling options:
+
+1. If you pass styles inline - they will work right away.
+
+2. For `css modules` to work with `parcel` bundler - you have to create install `postcss-modules` package:
+
+```
+yarn add postcss-modules
+```
+
+and create `.postcssrc` file:
+
+
+```json
+// .postcssrc
+{
+	"modules": true
+}
+```
+
+3. For [styled-components](https://www.styled-components.com/) you have to use wrapper component which looks like this:
+
+```jsx
+import React from 'react'
+import { StyleSheetManager } from 'styled-components'
+
+const Component = (props) => {
+  const { frameContext } = props
+  return (
+    <StyleSheetManager target={frameContext.document.head}>
+      {props.children}
+    </StyleSheetManager>
+  )
+}
+
+export default Component
+```
+
 ### Document Vue components
 
-_comming soon_
+_Vue is comming soon_
 
 ## Customization
 

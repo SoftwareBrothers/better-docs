@@ -21,7 +21,7 @@ class ComponentRenderer extends React.Component {
   render() {
     const { children } = this.props
     return (
-      <this.Wrapper>
+      <this.Wrapper {...this.props}>
         {children}
       </this.Wrapper>
     )
