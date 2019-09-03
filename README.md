@@ -27,7 +27,7 @@ jsdoc your-documented-file.js -t ./node_modules/better-docs
 
 ### With npm and configuration file
 
-In your projects package.json file add a new script:
+In your projects package.json file - add a new script:
 
 ```
 "script": {
@@ -45,7 +45,7 @@ in your `jsdoc.json` file, set the template:
 
 ## @category plugin
 
-better-docs also allows you to nest your documentation into a categories in the side bar menu.
+better-docs also allows you to nest your documentation into categories in the sidebar menu.
 
 ### Usage
 
@@ -76,11 +76,11 @@ class YourClass {
 
 ## @component plugin
 
-Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) (soon) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
+Better-docs also allows you to document your [React](https://reactjs.org/) ([Vue](https://vuejs.org/) coming soon) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
 ### Installation instructions
 
-Similar as before to add a plugin - you have to update `plugins` section in your `jsdoc.json` file:
+Similar as before to add a plugin - you have to update the `plugins` section in your `jsdoc.json` file:
 
 ```
 ...
@@ -93,7 +93,7 @@ Similar as before to add a plugin - you have to update `plugins` section in your
 ...
 ```
 
-Since __component__ plugin uses [parcel](https://parceljs.org) as a bundler you have to install it globally. In order to do this run:
+Since __component__ plugin uses [parcel](https://parceljs.org) as a bundler you have to install it globally. To do this run:
 
 ```
 # if you use npm
@@ -130,7 +130,7 @@ Documented.propTypes = {
 export default Documented
 ```
 
-Plugin will take the information from your [PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html) and put them into an array.
+The plugin will take the information from your [PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html) and put them into an array.
 
 ### Preview
 
@@ -184,7 +184,7 @@ const Component2 = (props) => {...}
 
 ### Wrapper components
 
-Most probably your components will have to run within particular context, like within redux store provider or with custom CSS libraries.
+Most probably your components will have to run within a particular context, like within redux store provider or with custom CSS libraries.
 You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
 _(To read more about passing options - scroll down to __Customization__ section)_
 
@@ -235,7 +235,7 @@ export default Component
 
 ### Styling examples
 
-Better-docs inserts all examples within an `iframe`. This results in a different styling options:
+Better-docs inserts all examples within an `iframe`. This results in different styling options:
 
 1. If you pass styles inline - they will work right away.
 
@@ -275,7 +275,7 @@ export default Component
 
 ### Adding commands to bundle entry file
 
-`@component` plugin creates an entry file: `.entry.js` in your docs output folder. Somethimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
+`@component` plugin creates an entry file: `.entry.js` in your docs output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
 
 So let's say you want to add `babel-polyfill` to your bundle. You can do it like this:
 
@@ -299,11 +299,11 @@ So let's say you want to add `babel-polyfill` to your bundle. You can do it like
 
 ### Document Vue components
 
-_Vue is comming soon_
+_Vue is coming soon_
 
 ## Customization
 
-First of all, let me state that better-docs extends `default` template. That is why default template parameters are also handled.
+First of all, let me state that better-docs extends the `default` template. That is why default template parameters are also handled.
 
 To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc confuguration file`.
 
@@ -391,7 +391,7 @@ npm install
 yarn
 ```
 
-3. Within the better-docs folder run the gulp script. It will regenerate documentation everytime you change something.
+3. Within the better-docs folder run the gulp script. It will regenerate documentation every time you change something.
 
 It supports following EVN variables:
 
@@ -404,11 +404,11 @@ cd better-docs
 DOCS_COMMAND='npm run docs' DOCS=../src/**/*,../config/**/* DOCS_OUTPUT=../docs cd better-docs && gulp
 ```
 
-Script should launch the browser and refresh it whenever you change something in the template or in `DOCS`.
+The script should launch the browser and refresh it whenever you change something in the template or in `DOCS`.
 
 ## Setting up the jsdoc in your project
 
-If you want to see how to setup jsdoc in your project - take a look at this short tutorials: 
+If you want to see how to setup jsdoc in your project - take a look at these brief tutorials: 
 
 - JSDoc - https://www.youtube.com/watch?v=Yl6WARA3IhQ
 - better-docs and Mermaid: https://www.youtube.com/watch?v=UBMYogTzsBk
