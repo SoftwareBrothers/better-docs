@@ -12,6 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "browser-sync": "^2.26.3",
+    "bulma": "^0.7.5",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^8.0.0",
@@ -19,7 +20,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-run": "^1.7.1",
     "gulp-sass": "^4.0.2",
-    "bulma": "^0.7.5"
+    "gulp-uglify": "^3.0.2"
   },
   "peerDependencies": {
     "react": "^0.16.0",
