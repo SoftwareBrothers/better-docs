@@ -5,12 +5,16 @@
   "main": "publish.js",
   "scripts": {
     "gulp": "./node_modules/.bin/gulp",
-    "test": "./node_modules/.bin/gulp sass js"
+    "test": "./node_modules/.bin/gulp sass js",
+    "build": "babel src --out-dir lib"
   },
   "author": "Wojciech Krysiak",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
     "browser-sync": "^2.26.3",
     "bulma": "^0.7.5",
     "gulp": "^3.9.1",

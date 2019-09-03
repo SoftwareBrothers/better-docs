@@ -13,7 +13,7 @@ module.exports = function bundle (Components, out, config) {
     import ReactDOM from "react-dom";\n
     window.Components = {};\n
 
-    import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, 'wrapper.jsx'))}';\n
+    import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, 'lib/wrapper.js'))}';\n
     window.React = React;\n
     window.ReactDOM = ReactDOM;\n
     window.Wrapper = Wrapper;\n
