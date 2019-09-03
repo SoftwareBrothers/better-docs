@@ -18,8 +18,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.4.0",
     "gulp-run": "^1.7.1",
-    "gulp-sass": "^4.0.2",
-    "parcel-bundler": "^1.12.3"
+    "gulp-sass": "^4.0.2"
   },
   "peerDependencies": {
     "react": "^0.16.0",
