@@ -273,6 +273,30 @@ const Component = (props) => {
 export default Component
 ```
 
+### Adding commands to bundle entry file
+
+`@component` plugin creates an entry file: `.entry.js` in your docs output folder. Somethimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
+
+So let's say you want to add `babel-polyfill` to your bundle. You can do it like this:
+
+```json
+// jsdoc.json
+{
+    "opts": {...},
+    "templates": {
+        "better-docs": {
+            "name": "AdminBro Documentation",
+            "component": {
+                "entry": [
+                    "import \"babel-polyfill\""
+                ]
+            },
+            "...": "...",
+        }
+    }
+}
+```
+
 ### Document Vue components
 
 _Vue is comming soon_

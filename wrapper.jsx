@@ -14,11 +14,13 @@ class Wrapper extends React.Component {
   constructor(props) {
     super(props)
     window.component = window.component || {}
+    this.iframeRef= React.createRef()
     this.handleChange = this.handleChange.bind(this)
     let { example } = props
     example = example || 'return (<div>Example</div>)'
     this.state = {
       example,
+      height: 200,
     }
     this.executeScript(example)
   }
@@ -60,8 +62,26 @@ class Wrapper extends React.Component {
     }))
   }
 
+  computeHeight() {
+    const { height } = this.state
+    if (
+      this.iframeRef.current
+      && this.iframeRef.current.node.contentDocument
+      && this.iframeRef.current.node.contentDocument.body.scrollHeight !== 0
+      && this.iframeRef.current.node.contentDocument.body.scrollHeight !== height
+    ) {
+      this.setState({
+        height: this.iframeRef.current.node.contentDocument.body.scrollHeight,
+      })
+    }
+  }
+
+  componentDidUpdate() {
+    this.computeHeight();
+  }
+
   render () {
-    const { component } = this.state
+    const { component, height } = this.state
     return (
       <div>
         <div>
@@ -79,7 +99,12 @@ class Wrapper extends React.Component {
         </div>
         <div>
           <h5>Preview</h5>
-          <Frame className="component-wrapper">
+          <Frame
+            className="component-wrapper"
+            ref={this.iframeRef}
+            style={{width: '100%', height }}
+            onLoad={this.computeHeight()}
+            >
             <link type="text/css" rel="stylesheet" href="./build/entry.css" />
             <FrameContextConsumer>
               {
