@@ -74,7 +74,7 @@ class YourClass {
 }
 ```
 
-## @component plugin
+## @component plugin [BETA]
 
 Better-docs also allows you to document your [React](https://reactjs.org/) ([Vue](https://vuejs.org/) coming soon) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
@@ -184,7 +184,7 @@ const Component2 = (props) => {...}
 
 ### Wrapper components
 
-Most probably your components will have to run within a particular context, like within redux store provider or with custom CSS libraries.
+Most probably your components will have to be run within a particular context, like within redux store provider or with custom CSS libraries.
 You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
 _(To read more about passing options - scroll down to __Customization__ section)_
 
@@ -235,17 +235,17 @@ export default Component
 
 ### Styling examples
 
-Better-docs inserts all examples within an `iframe`. This results in different styling options:
+Better-docs inserts all examples within an `iframe`. This results in following styling options:
 
 1. If you pass styles inline - they will work right away.
 
-2. For `css modules` to work with `parcel` bundler - you have to create install `postcss-modules` package:
+2. For `css modules` to work with `parcel` bundler - you have to install `postcss-modules` package:
 
 ```
 yarn add postcss-modules
 ```
 
-and create `.postcssrc` file:
+and create a `.postcssrc` file:
 
 
 ```json
@@ -275,7 +275,7 @@ export default Component
 
 ### Adding commands to bundle entry file
 
-`@component` plugin creates an entry file: `.entry.js` in your docs output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
+`@component` plugin creates an entry file: `.entry.js` in your _docs_ output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
 
 So let's say you want to add `babel-polyfill` to your bundle. You can do it like this:
 
