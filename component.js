@@ -1,34 +1,90 @@
-var reactDocs = require('react-docgen');
+var reactDocs = require('react-docgen')
+var vueDocs = require('vue-docgen-api')
 var fs = require('fs')
 var path = require('path')
 
 exports.handlers = {
+  beforeParse: function(e) {
+    if (path.extname(e.filename) === '.vue') {
+      e.componentInfo = vueDocs.parse(e.filename)
+      var script = e.source.match(/<script>(.*?)<\/script>/s)
+      e.source = script[1]
+    }
+  },
+
   newDoclet: function({ doclet }) {
-    if (doclet.tags && doclet.tags.length > 0) {
-      const componentTag = doclet.tags.find(tag => tag.title === 'component')
-      if (componentTag) {
-        var filePath = path.join(doclet.meta.path,doclet.meta.filename)
-        var src = fs.readFileSync(filePath, 'UTF-8')
-        try {
-          var docGen = reactDocs.parse(src)
-          doclet.component = {
-            props: docGen.props,
-            methods: docGen.methods,
-            displayName: docGen.displayName,
-            filePath: filePath,
-          }
-        } catch(error) {
-          if (error.message === 'No suitable component definition found.') {
-            doclet.component = {
-              filePath: filePath,
-              displayName: doclet.name,
-            }
-          } else {
-            throw error
-          }
+    var filePath = path.join(doclet.meta.path, doclet.meta.filename)
+    const componentTag = (doclet.tags || []).find(tag => tag.title === 'component')
+    if (componentTag) {
+      if (path.extname(filePath) === '.vue') {
+      doclet.component = parseVue(filePath, doclet)
+        doclet.component.type = 'vue'
+      } else {
+        doclet.component = parseReact(filePath, doclet)
+        doclet.component.type = 'react'
+      }
+      doclet.kind = 'class'
+    } else {
+      if (path.extname(filePath) === '.vue') {
+        if (doclet.kind === 'function') {
+          doclet.memberof = 'grid'
+        } else {
+          doclet.undocumented = true
         }
-        doclet.kind = 'class'
       }
     }
   }
-};
+}
+
+var parseReact = function (filePath, doclet) {
+  var src = fs.readFileSync(filePath, 'UTF-8')
+  var docGen
+  try {
+    docGen = reactDocs.parse(src)
+  } catch (error) {
+    if (error.message === 'No suitable component definition found.') {
+      return {
+        filePath: filePath,
+        displayName: doclet.name,
+      }
+    } else {
+      throw error
+    }
+  }
+  
+  return {
+    props: docGen.props,
+    methods: docGen.methods,
+    displayName: docGen.displayName,
+    filePath: filePath,
+  }
+}
+
+var parseVue = function (filePath, doclet) {
+  const docGen = vueDocs.parse(filePath)
+  doclet.name = doclet.longname = docGen.displayName
+  return {
+    displayName: docGen.displayName,
+    filePath: filePath,
+    props: Object.values(docGen.props || {}).map(prop => ({
+      name: prop.name,
+      description: prop.description,
+      type: prop.type.name,
+      required: typeof prop.required === 'boolean' && prop.required,
+      defaultValue: prop.defaultValue
+        ? (prop.defaultValue.func ? 'function()' : prop.defaultValue.value)
+        : undefined
+    })),
+    slots: Object.keys(docGen.slots || {}).map(key => ({
+      name: key,
+      description: docGen.slots[key].description,
+    })),
+    events: Object.keys(docGen.events || {}).map(key => ({
+      name: key,
+      description: docGen.events[key].description,
+      type: docGen.events[key].type,
+    })),
+  }
+}
+
+exports.parseVue = parseVue

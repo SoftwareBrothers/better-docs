@@ -49,9 +49,11 @@ var self = this;
     </p>
 <?js } ?>
 
-<?js if (data.component && data.component.props) { ?>
-    <h5>PropTypes:</h5>
-    <?js= self.partial('proptypes.tmpl', data.component) ?>
+<?js if (data.component) { ?>
+    <?js if (data.component.props) { ?>
+        <h5>PropTypes:</h5>
+        <?js= self.partial('proptypes.tmpl', data.component) ?>
+    <?js } ?>
 <?js } ?>
 
 <?js if (data.params && params.length && !data.hideconstructor) { ?>

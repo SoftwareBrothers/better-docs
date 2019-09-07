@@ -9,14 +9,16 @@ module.exports = function bundle (Components, out, config) {
   const entry = path.join(out, 'entry.js')
   const absoluteOut = path.resolve(out)
   let init = `
-    import React from "react";\n
-    import ReactDOM from "react-dom";\n
+    // import React from "react";\n
+    // import ReactDOM from "react-dom";\n
     window.Components = {};\n
 
-    import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, 'lib/wrapper.js'))}';\n
-    window.React = React;\n
-    window.ReactDOM = ReactDOM;\n
-    window.Wrapper = Wrapper;\n
+    // import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, 'lib/wrapper.js'))}';\n
+    // window.React = React;\n
+    // window.ReactDOM = ReactDOM;\n
+    // window.Wrapper = Wrapper;\n
+    import Vue from 'vue';\n
+    window.Vue = Vue;\n
   `
   if (config.betterDocs.component) {
     if(config.betterDocs.component.wrapper) {

@@ -75,7 +75,46 @@
         <?js } ?>
     <?js } ?>
     </div>
-
+    <?js if (doc.component) { ?>
+        <?js if (doc.component.slots) { ?>  
+            <div class='vertical-section'>
+                <h3 class="title"><span>Slots</span></h3>
+                <div class="members">
+                <?js doc.component.slots.forEach(function(slot) { ?>
+                    <div class="member">
+                        <h4 class="name">
+                            <span class="code-name"><?js= slot.name ?></span>
+                        </h4>
+                        <div class="description">
+                            <p><?js= slot.description ?></p>
+                        </div>
+                    </div>
+                <?js }); ?>
+                </div>
+            </div>
+        <?js }; ?>
+        <?js if (doc.component.events) { ?>
+            <div class='vertical-section'>
+                <h3 class="title"><span>Events</span></h3>
+                <div class="members">
+                <?js doc.component.events.forEach(function(event) { ?>
+                    <div class="member">
+                        <p class="method-parameter is-pulled-right">
+                        <label>Type: </label>
+                            <?js= self.partial('type.tmpl', event.type.names) ?>
+                        </p>
+                        <h4 class="name">
+                            <span class="code-name"><?js= event.name ?></span>
+                        </h4>
+                        <div class="description">
+                            <p><?js= event.description ?></p>
+                        </div>
+                    </div>
+                <?js }); ?>
+                </div>
+            </div>
+        <?js }; ?>
+    <?js }; ?>
     <?js if (doc.augments && doc.augments.length) { ?>
         <h3 class="subsection-title">Extends</h3>
 

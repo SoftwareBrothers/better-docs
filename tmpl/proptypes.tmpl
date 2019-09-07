@@ -1,9 +1,6 @@
 <?js
 var data = obj;
 var self = this;
-
-var propTypes = Object.keys(data.props);
-
 ?>
 
 <table class="params">
@@ -21,20 +18,16 @@ var propTypes = Object.keys(data.props);
   <?js
       var self = this;
       var level = 0;
-      propTypes.forEach(function(key) {
-          var propType = data.props[key]
+      data.props.forEach(function(propType) {
   ?>
         <tr class="deep-level-0">
-          <td class="name"><code><?js= key ?></code></td>
+          <td class="name"><code><?js= propType.name ?></code></td>
           <td>
-            <?js= propType.type.name ?>
-            <?js if (propType.type.raw) { ?>
-              [<?js= propType.type.raw ?>]
-            <?js }; ?>
+            <?js= propType.type ?>
           </td>
           <td><?js= propType.required ? 'Yes' : 'No' ?></td>
           <td><?js= propType.description ?></td>
-          <td><?js= propType.defaultValue ? JSON.stringify(propType.defaultValue.value) : '' ?></td>
+          <td><?js= propType.defaultValue ?></td>
         </tr>
         <?js if(propType.type.value) {
           var keys = Object.keys(propType.type.value);
