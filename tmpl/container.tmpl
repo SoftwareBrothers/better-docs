@@ -76,7 +76,7 @@
     <?js } ?>
     </div>
     <?js if (doc.component) { ?>
-        <?js if (doc.component.slots) { ?>  
+        <?js if (doc.component.slots && doc.component.slots.length) { ?>  
             <div class='vertical-section'>
                 <h3 class="title"><span>Slots</span></h3>
                 <div class="members">
@@ -93,7 +93,7 @@
                 </div>
             </div>
         <?js }; ?>
-        <?js if (doc.component.events) { ?>
+        <?js if (doc.component.events && doc.component.events.length) { ?>
             <div class='vertical-section'>
                 <h3 class="title"><span>Events</span></h3>
                 <div class="members">

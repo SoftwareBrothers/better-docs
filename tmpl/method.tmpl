@@ -50,7 +50,7 @@ var self = this;
 <?js } ?>
 
 <?js if (data.component) { ?>
-    <?js if (data.component.props) { ?>
+    <?js if (data.component.props && data.component.props.length) { ?>
         <h5>PropTypes:</h5>
         <?js= self.partial('proptypes.tmpl', data.component) ?>
     <?js } ?>

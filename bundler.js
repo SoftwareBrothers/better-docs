@@ -6,6 +6,7 @@ module.exports = function bundle (Components, out, config) {
   if (!Components.length) {
     return
   }
+  const vueComponents = Components.filter(c => c.component.type === 'vue')
   const entry = path.join(out, 'entry.js')
   const absoluteOut = path.resolve(out)
   let init = `
@@ -17,9 +18,16 @@ module.exports = function bundle (Components, out, config) {
     // window.React = React;\n
     // window.ReactDOM = ReactDOM;\n
     // window.Wrapper = Wrapper;\n
-    import Vue from 'vue';\n
-    window.Vue = Vue;\n
   `
+  if (vueComponents.length) {
+    init = init + `
+    import Vue from 'vue/dist/vue.js';\n
+    window.Vue = Vue;\n
+
+    import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, 'src/vue-wrapper.vue'))}';\n
+    window.Wrapper = Wrapper;\n
+    `
+  }
   if (config.betterDocs.component) {
     if(config.betterDocs.component.wrapper) {
       const absolute = path.resolve(config.betterDocs.component.wrapper)
@@ -43,7 +51,7 @@ module.exports = function bundle (Components, out, config) {
   }).join('\n\n')
 
   console.log('Generating entry file for "components" plugin')
-  fs.writeFileSync(entry, entryFile);
+  fs.writeFileSync(entry, entryFile)
   console.log('Bundling components')
   const outDist = path.join(out, 'build')
   const cmd = `parcel build ${entry} --out-dir ${outDist}`
@@ -52,7 +60,7 @@ module.exports = function bundle (Components, out, config) {
     execSync(cmd)
   } catch (error) {
     if(error.output && error.output.length){
-     console.log(error.output[1].toString())
+      console.log(error.output[1].toString())
     }
     throw error
   }

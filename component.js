@@ -66,6 +66,7 @@ var parseVue = function (filePath, doclet) {
   return {
     displayName: docGen.displayName,
     filePath: filePath,
+    type: 'vue',
     props: Object.values(docGen.props || {}).map(prop => ({
       name: prop.name,
       description: prop.description,
