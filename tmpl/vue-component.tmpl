@@ -4,19 +4,20 @@ var self = this;
 var uniqId = 'A' + Math.random().toString(36).substring(2) 
                + (new Date()).getTime().toString(36);
 ?>
+<div style="margin-bottom: 30px;">
+  <div id='<?js= uniqId ?>'></div>
 
-<div id='<?js= uniqId ?>'></div>
+  <link type="text/css" rel="stylesheet" href="./build/entry.css" />
 
-<link type="text/css" rel="stylesheet" href="./build/entry.css" />
-
-<script>
-  new Vue({
-    // render: h => h(Components.withPreview),
-    components: Components,
-    render: (d, context) => {
-      return d(Wrapper, {
-        props: {defaultCode: <?js= JSON.stringify(example.code || null) ?>}
-      })
-    },
-  }).$mount('#<?js= uniqId ?>');
-</script>
+  <script>
+    new Vue({
+      // render: h => h(Components.withPreview),
+      components: Components,
+      render: (d, context) => {
+        return d(Wrapper, {
+          props: {defaultCode: <?js= JSON.stringify(example.code || null) ?>}
+        })
+      },
+    }).$mount('#<?js= uniqId ?>');
+  </script>
+</div>
