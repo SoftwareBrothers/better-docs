@@ -26,8 +26,10 @@ exports.handlers = {
       doclet.kind = 'class'
     } else {
       if (path.extname(filePath) === '.vue') {
-        if (doclet.kind === 'function') {
-          doclet.memberof = 'grid'
+        const docGen = vueDocs.parse(filePath)
+        const name = docGen.displayName
+        if (doclet.kind === 'function' || doclet.kind === 'event') {
+          doclet.memberof = name
         } else {
           doclet.undocumented = true
         }

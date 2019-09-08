@@ -2,6 +2,12 @@
 var data = obj;
 var self = this;
 ?>
+<?js if (kind === 'event' && data.type && data.type.names) {?>
+    <p class="method-parameter is-pulled-right">
+        <label>Type: </label>
+        <?js= self.partial('type.tmpl', data.type.names) ?>
+    </p>
+<?js } ?>
 <?js if (data.kind !== 'module' && !data.hideconstructor) { ?>
     <?js if (data.kind !== 'namespace') { ?>
     <h4 class="name" id="<?js= id ?>">
@@ -33,13 +39,6 @@ var self = this;
             <?js= self.partial('augments.tmpl', data) ?>
         </div>
     </div>
-<?js } ?>
-
-<?js if (kind === 'event' && data.type && data.type.names) {?>
-    <p class="method-parameter">
-    <label>Type: </label>
-        <?js= this.partial('type.tmpl', data.type.names) ?>
-    </p>
 <?js } ?>
 
 <?js if (data['this']) { ?>

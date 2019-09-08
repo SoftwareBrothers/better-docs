@@ -1,26 +1,24 @@
-<template>
-  <div>
-    <label>Code:</label>
-    <div style="margin-bottom: 20px">
-      <editor
-        v-model="code"
-        @init="editorInit"
-        lang="jsx"
-        theme="monokai"
-        width="100%"
-        height="200"
-        mode="vue2">
-      </editor>
-    </div>
-    <component :is="userComponent"></component>
-  </div>
-</template>
-
-<script>
 import editor from 'vue2-ace-editor'
 import _ from 'underscore'
 
 export default {
+  template: `
+    <div>
+      <label>Code:</label>
+      <div style="margin-bottom: 20px">
+        <editor
+          v-model="code"
+          @init="editorInit"
+          lang="html"
+          theme="monokai"
+          width="100%"
+          height="200"
+          mode="jsx">
+        </editor>
+      </div>
+      <component :is="userComponent"></component>
+    </div>
+  `,
   props: {
     defaultCode: String
   },
@@ -40,7 +38,7 @@ export default {
   methods: {
     editorInit: function () {
       require('brace/ext/language_tools') //language extension prerequsite...      
-      require('brace/mode/jsx')    //language
+      require('brace/mode/html')    //language
       require('brace/theme/monokai')
     },
     renderComponent: function (code) {
@@ -62,4 +60,3 @@ export default {
     }
   },
 }
-</script>

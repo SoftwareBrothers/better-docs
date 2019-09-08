@@ -41,7 +41,7 @@ describe('@component', function () {
       expect(this.output.events[0]).to.have.deep.equal({
         name: 'success',
         description: 'Success event.',
-        type: 'object'
+        type: {names: ['object']}
       })
     })
   })
