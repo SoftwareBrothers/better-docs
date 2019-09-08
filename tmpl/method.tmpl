@@ -2,6 +2,12 @@
 var data = obj;
 var self = this;
 ?>
+<?js if (kind === 'event' && data.type && data.type.names) {?>
+    <p class="method-parameter is-pulled-right">
+        <label>Type: </label>
+        <?js= self.partial('type.tmpl', data.type.names) ?>
+    </p>
+<?js } ?>
 <?js if (data.kind !== 'module' && !data.hideconstructor) { ?>
     <?js if (data.kind !== 'namespace') { ?>
     <h4 class="name" id="<?js= id ?>">
@@ -35,13 +41,6 @@ var self = this;
     </div>
 <?js } ?>
 
-<?js if (kind === 'event' && data.type && data.type.names) {?>
-    <p class="method-parameter">
-    <label>Type: </label>
-        <?js= this.partial('type.tmpl', data.type.names) ?>
-    </p>
-<?js } ?>
-
 <?js if (data['this']) { ?>
     <p class="method-parameter">
         <label>This:</label>
@@ -49,9 +48,11 @@ var self = this;
     </p>
 <?js } ?>
 
-<?js if (data.component && data.component.props) { ?>
-    <h5>PropTypes:</h5>
-    <?js= self.partial('proptypes.tmpl', data.component) ?>
+<?js if (data.component) { ?>
+    <?js if (data.component.props && data.component.props.length) { ?>
+        <h5>PropTypes:</h5>
+        <?js= self.partial('proptypes.tmpl', data.component) ?>
+    <?js } ?>
 <?js } ?>
 
 <?js if (data.params && params.length && !data.hideconstructor) { ?>

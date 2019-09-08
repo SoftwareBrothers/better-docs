@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - '8'
 deploy:
+  tag: 'beta'
   provider: npm
   email: wojciech.g.krysiak@gmail.com
   api_key:
