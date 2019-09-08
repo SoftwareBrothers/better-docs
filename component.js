@@ -17,7 +17,7 @@ exports.handlers = {
     const componentTag = (doclet.tags || []).find(tag => tag.title === 'component')
     if (componentTag) {
       if (path.extname(filePath) === '.vue') {
-      doclet.component = parseVue(filePath, doclet)
+        doclet.component = parseVue(filePath, doclet)
         doclet.component.type = 'vue'
       } else {
         doclet.component = parseReact(filePath, doclet)
@@ -68,7 +68,6 @@ var parseVue = function (filePath, doclet) {
   return {
     displayName: docGen.displayName,
     filePath: filePath,
-    type: 'vue',
     props: Object.values(docGen.props || {}).map(prop => ({
       name: prop.name,
       description: prop.description,
@@ -81,12 +80,7 @@ var parseVue = function (filePath, doclet) {
     slots: Object.keys(docGen.slots || {}).map(key => ({
       name: key,
       description: docGen.slots[key].description,
-    })),
-    events: Object.keys(docGen.events || {}).map(key => ({
-      name: key,
-      description: docGen.events[key].description,
-      type: docGen.events[key].type,
-    })),
+    }))
   }
 }
 

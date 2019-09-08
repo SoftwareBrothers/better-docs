@@ -35,14 +35,5 @@ describe('@component', function () {
         description: 'Use this slot header',
       })
     })
-
-    it('returns events', function () {
-      expect(this.output.events).to.have.lengthOf(1)
-      expect(this.output.events[0]).to.have.deep.equal({
-        name: 'success',
-        description: 'Success event.',
-        type: {names: ['object']}
-      })
-    })
   })
 })
