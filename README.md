@@ -4,14 +4,14 @@ Beautiful and simple documentation template for JSDoc 3 with **@category** and *
 
 <table>
   <tr>
-    <td style="width: 30%">
-      <a href='./readme/class.png'><img src="./readme/class.png" /></a>
+    <td>
+      <a href='./readme/class.png'><img src="./readme/class.png" style="width: 300px"/></a>
     </td>
-    <td style="width: 30%">
-      <a href='./readme/with-mermaid.png'><img src="./readme/with-mermaid.png" /></a>
+    <td>
+      <a href='./readme/with-mermaid.png'><img src="./readme/with-mermaid.png" style="width: 300px"/></a>
     </td>
-    <td style="width: 30%">
-      <a href='./readme/component.png'><img src="./readme/component.png" /></a>
+    <td>
+      <a href='./readme/component.png'><img src="./readme/component.png" style="width: 300px"/></a>
     </td>
   </tr>
 </table>
