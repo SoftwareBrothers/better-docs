@@ -1,13 +1,24 @@
 # better-docs
 
-Beautiful and simple documentation template for JSDoc 3 with @category plugin.
+Beautiful and simple documentation template for JSDoc 3 with **@category** and **@component** plugins:
 
-<img src="./readme/class.png" />
-<img src="./readme/with-mermaid.png" />
+<table>
+  <tr>
+    <td style="width: 30%">
+      <a href='./readme/class.png'><img src="./readme/class.png" /></a>
+    </td>
+    <td style="width: 30%">
+      <a href='./readme/with-mermaid.png'><img src="./readme/with-mermaid.png" /></a>
+    </td>
+    <td style="width: 30%">
+      <a href='./readme/component.png'><img src="./readme/component.png" /></a>
+    </td>
+  </tr>
+</table>
 
 ## Example
 
-Simple example documentation can be found here: https://softwarebrothers.github.io/admin-bro-dev/index.html
+Example documentation can be found here: https://softwarebrothers.github.io/admin-bro-dev/index.html
 
 ## Installation
 
@@ -19,7 +30,7 @@ npm install --save-dev better-docs
 
 ### With command line
 
-Assuming that you have jsdoc installed globally:
+Assuming that you have [jsdoc](https://github.com/jsdoc/jsdoc) installed globally:
 
 ```
 jsdoc your-documented-file.js -t ./node_modules/better-docs
@@ -31,7 +42,7 @@ In your projects package.json file - add a new script:
 
 ```
 "script": {
-  "docs": "node_modules/.bin/jsdoc -c jsdoc.json"
+  "docs": "jsdoc -c jsdoc.json"
 }
 ```
 
@@ -107,7 +118,7 @@ yarn global add parcel-bundler
 
 To document components simply add `@component` in your JSDoc documentation:
 
-```
+```jsx
 /**
  * Some documented component
  * 
@@ -155,7 +166,7 @@ export default {
 </script>
 ```
 
-Here props will be taken from `props` property.
+In this case, props will be taken from `props` property.
 
 ### Preview
 
@@ -163,7 +174,7 @@ Here props will be taken from `props` property.
 
 **React example:**
 
-```javacript
+```jsx
 /**
  * Some documented component
  * 
@@ -181,7 +192,7 @@ const Documented = (props) => {
 
 **Vue example 1:**
 
-```
+```vue
 <script>
 /**
  * @component
@@ -197,7 +208,7 @@ export default {
 
 **Vue example 2:**
 
-```
+```vue
 <script>
 /**
  * @component
@@ -219,7 +230,7 @@ export default {
 </script>
 ```
 
-You can put as many `@example` tags as you like in one component and name each of them like this:
+You can put as many `@example` tags as you like in one component and "caption" each of them like this:
 
 ```javascript
 /**
@@ -310,7 +321,7 @@ export default Component
 
 ### Styling React examples
 
-Better-docs inserts all examples within an `iframe`. This results in following styling options:
+Better-docs inserts all examples within an `iframe`. This results in the following styling options:
 
 1. If you pass styles inline - they will work right away.
 
@@ -487,7 +498,7 @@ If you want to see how to setup jsdoc in your project - take a look at these bri
 
 ## License
 
-better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file.
+better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file - MIT.
 
 ## About SoftwareBrothers.co
 

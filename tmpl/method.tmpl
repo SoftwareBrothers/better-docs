@@ -18,7 +18,7 @@ var self = this;
         <?js } ?>
         <span class="code-name">
             <?js if (data.component) { ?>
-                <?js= '&lt' + name + ' ' + data.component.props.map(p => '<i>' + p.name + '</i>').join(', ') + ' /&gt' ?>
+                <?js= '&lt' + name + ' ' + data.component.props.map(p => '<i>' + p.name + '</i>').join(' ') + ' /&gt' ?>
             <?js } else { ?>
                 <?js= (kind === 'class' ? 'new ' : '') + name + (data.signature || '') ?>
             <?js } ?>

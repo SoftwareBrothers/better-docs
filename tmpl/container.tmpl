@@ -40,7 +40,7 @@
         <?js }) ?>
     <?js } else if (doc.component) { ?>
         <h2>
-            <?js= '&lt' + doc.name + ' ' + doc.component.props.map(p => '<i>' + p.name + '</i>').join(', ') + ' /&gt' ?>
+            <?js= '&lt' + doc.name + ' ' + doc.component.props.map(p => '<i>' + p.name + '</i>').join(' ') + ' /&gt' ?>
         </h2>
     <?js } ?>
 </header>
