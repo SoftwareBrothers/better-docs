@@ -36,6 +36,13 @@ module.exports = function bundle (Components, out, config) {
       window.Wrapper = Wrapper;\n
     `
   }
+
+  // Import css
+  init = init + `
+    import './styles/reset.css';\n
+    import './styles/iframe.css';\n
+  `
+
   if (config.betterDocs.component) {
     if(config.betterDocs.component.wrapper) {
       const absolute = path.resolve(config.betterDocs.component.wrapper)
@@ -49,12 +56,13 @@ module.exports = function bundle (Components, out, config) {
       init = `${config.betterDocs.component.entry.join('\n')}\n${init}`
     }
   }
+  
   const entryFile = init + Components.map(c => {
     const { displayName, filePath} = c.component
     const relativePath = path.relative(absoluteOut, filePath)
     return [
       `import ${displayName} from '${relativePath}';`,
-      `Components.${displayName} = ${displayName};`,
+      `Components['${displayName}'] = ${displayName};`,
     ].join('\n')
   }).join('\n\n')
 

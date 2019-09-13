@@ -1,9 +1,10 @@
 const path = require('path')
 const { expect } = require('chai')
 
-const { parseVue } = require('./component')
+const { parseVue, parseReact } = require('./component')
 
 const VUE_PATH = path.join(__dirname, 'fixtures/component.vue')
+const REACT_PATH = path.join(__dirname, 'fixtures/component.jsx')
 
 describe('@component', function () {
   describe('.parseVue', function () {
@@ -33,6 +34,28 @@ describe('@component', function () {
       expect(this.output.slots[0]).to.deep.equal({
         name: 'header',
         description: 'Use this slot header',
+      })
+    })
+  })
+
+  describe('.parseReact', function () {
+    beforeEach(function () {
+      this.doclet = {}
+      this.output = parseReact(REACT_PATH, this.doclet)
+    })
+
+    it('returns displayName', function () {
+      expect(this.output.displayName).to.equal('Documented')
+    })
+
+    it('returns prop types', function () {
+      expect(this.output.props).to.have.lengthOf(2)
+      expect(this.output.props[0]).to.deep.equal({
+        description: 'Text is a text',
+        name: 'text',
+        required: false,
+        type: 'string',
+        defaultValue: '\'Hello World\''
       })
     })
   })

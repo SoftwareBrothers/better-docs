@@ -76,7 +76,7 @@ class YourClass {
 
 ## @component plugin [BETA]
 
-Better-docs also allows you to document your [React](https://reactjs.org/) ([Vue](https://vuejs.org/) coming soon) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
+Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
 ### Installation instructions
 
@@ -132,9 +132,36 @@ export default Documented
 
 The plugin will take the information from your [PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html) and put them into an array.
 
+For Vue it looks similar:
+
+```vue
+<script>
+/**
+ * @component
+ */
+export default {
+  name: 'ExampleComponent',
+  props: {
+    spent: {
+      type: Number,
+      default: 30,
+    },
+    remaining: {
+      type: Number,
+      default: 40,
+    }
+  },
+}
+</script>
+```
+
+Here props will be taken from `props` property.
+
 ### Preview
 
-`@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to ad an `@example` tag and return component from it:
+`@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to add an `@example` tag and return component from it:
+
+**React example:**
 
 ```javacript
 /**
@@ -152,7 +179,55 @@ const Documented = (props) => {
 }
 ```
 
-You can put as many `@example` tags as you like in one component.
+**Vue example 1:**
+
+```
+<script>
+/**
+ * @component
+ * @example
+ * <ExampleComponent :spent="100" :remaining="50"></ExampleComponent>
+ */
+export default {
+  name: 'ExampleComponent',
+  //...
+}
+</script>
+```
+
+**Vue example 2:**
+
+```
+<script>
+/**
+ * @component
+ * @example
+ * {
+ *   template: `<Box>
+ *     <ProgressBar :spent="spent" :remaining="50"></ProgressBar>
+ *     <ProgressBar :spent="50" :remaining="50" style="margin-top: 20px"></ProgressBar>
+ *   </Box>`,
+ *   data: function() {
+ *     return {spent: 223};
+ *   }
+ * }
+ */
+export default {
+  name: 'ExampleComponent',
+  //...
+}
+</script>
+```
+
+You can put as many `@example` tags as you like in one component and name each of them like this:
+
+```javascript
+/**
+ * @component
+ * @example <caption>Example usage of method1.</caption>
+ * // your example here
+ */
+```
 
 ### Mixing components in preview
 
@@ -182,7 +257,7 @@ const Component1 = (props) => {...}
 const Component2 = (props) => {...}
 ```
 
-### Wrapper components
+### Wrapper component [only React]
 
 Most probably your components will have to be run within a particular context, like within redux store provider or with custom CSS libraries.
 You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
@@ -233,7 +308,7 @@ const Component = (props) => {
 export default Component
 ```
 
-### Styling examples
+### Styling React examples
 
 Better-docs inserts all examples within an `iframe`. This results in following styling options:
 
@@ -277,7 +352,7 @@ export default Component
 
 `@component` plugin creates an entry file: `.entry.js` in your _docs_ output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
 
-So let's say you want to add `babel-polyfill` to your bundle. You can do it like this:
+So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your bundle. You can do it like this:
 
 ```json
 // jsdoc.json
@@ -288,7 +363,8 @@ So let's say you want to add `babel-polyfill` to your bundle. You can do it like
             "name": "AdminBro Documentation",
             "component": {
                 "entry": [
-                    "import \"babel-polyfill\""
+                    "import 'babel-polyfill';",
+                    "import 'bulma/css/bulma.css';"
                 ]
             },
             "...": "...",
@@ -296,10 +372,6 @@ So let's say you want to add `babel-polyfill` to your bundle. You can do it like
     }
 }
 ```
-
-### Document Vue components
-
-_Vue is coming soon_
 
 ## Customization
 

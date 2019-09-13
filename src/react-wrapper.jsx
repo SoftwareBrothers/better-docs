@@ -16,11 +16,13 @@ class Wrapper extends React.Component {
     window.component = window.component || {}
     this.iframeRef= React.createRef()
     this.handleChange = this.handleChange.bind(this)
+    this.toggleEditor = this.toggleEditor.bind(this)
     let { example } = props
     example = example || 'return (<div>Example</div>)'
     this.state = {
       example,
       height: 200,
+      showEditor: false,
     }
     this.executeScript(example)
   }
@@ -64,7 +66,7 @@ class Wrapper extends React.Component {
 
   computeHeight() {
     const { height } = this.state
-    const padding = 30 // buffer for any unstyled margins
+    const padding = 5 // buffer for any unstyled margins
     if (
       this.iframeRef.current
       && this.iframeRef.current.node.contentDocument
@@ -81,11 +83,39 @@ class Wrapper extends React.Component {
     this.computeHeight();
   }
 
+  toggleEditor(event) {
+    event.preventDefault()
+    this.setState(state => ({
+      ...state,
+      showEditor: !state.showEditor,
+    }))
+  }
+
   render () {
-    const { component, height } = this.state
+    const { component, height, showEditor } = this.state
     return (
       <div>
-        <div>
+        <Frame
+          className="component-wrapper"
+          ref={this.iframeRef}
+          style={{width: '100%', height }}
+          onLoad={this.computeHeight()}
+          >
+          <link type="text/css" rel="stylesheet" href="./build/entry.css" />
+          <FrameContextConsumer>
+            {
+              frameContext => (
+                <ComponentRenderer frameContext={frameContext}>
+                  {component}
+                </ComponentRenderer>
+              )
+            }
+          </FrameContextConsumer>
+        </Frame>
+        <div class="bd__button">
+          <a href="#" onClick={this.toggleEditor}>Modify Example Code</a>
+        </div>
+        {showEditor ? (
           <div className="field">
             <AceEditor
               style={{width: '100%', height: '200px', marginBottom: '20px'}}
@@ -97,27 +127,7 @@ class Wrapper extends React.Component {
               editorProps={{ $useSoftTabs: true }}
             />
           </div>
-        </div>
-        <div>
-          <h5>Preview</h5>
-          <Frame
-            className="component-wrapper"
-            ref={this.iframeRef}
-            style={{width: '100%', height }}
-            onLoad={this.computeHeight()}
-            >
-            <link type="text/css" rel="stylesheet" href="./build/entry.css" />
-            <FrameContextConsumer>
-              {
-                frameContext => (
-                  <ComponentRenderer frameContext={frameContext}>
-                    {component}
-                  </ComponentRenderer>
-                )
-              }
-            </FrameContextConsumer>
-          </Frame>
-        </div>
+        ) : ""}
       </div>
     )
   }

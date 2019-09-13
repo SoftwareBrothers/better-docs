@@ -17,7 +17,11 @@ var self = this;
             <?js }); ?>
         <?js } ?>
         <span class="code-name">
-            <?js= (kind === 'class' ? 'new ' : '') + name + (data.signature || '') ?>
+            <?js if (data.component) { ?>
+                <?js= '&lt' + name + ' ' + data.component.props.map(p => '<i>' + p.name + '</i>').join(', ') + ' /&gt' ?>
+            <?js } else { ?>
+                <?js= (kind === 'class' ? 'new ' : '') + name + (data.signature || '') ?>
+            <?js } ?>
         </span>
     </h4>
     <?js } ?>

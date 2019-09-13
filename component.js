@@ -55,8 +55,15 @@ var parseReact = function (filePath, doclet) {
   }
   
   return {
-    props: docGen.props,
-    methods: docGen.methods,
+    props: Object.entries(docGen.props || {}).map(([key, prop]) => ({
+      name: key,
+      description: prop.description,
+      type: prop.type.name,
+      required: typeof prop.required === 'boolean' && prop.required,
+      defaultValue: prop.defaultValue
+        ? (prop.defaultValue.computed ? 'function()' : prop.defaultValue.value)
+        : undefined
+    })),
     displayName: docGen.displayName,
     filePath: filePath,
   }
@@ -85,3 +92,4 @@ var parseVue = function (filePath, doclet) {
 }
 
 exports.parseVue = parseVue
+exports.parseReact = parseReact
