@@ -1,7 +1,5 @@
 <img src="./readme/logo.png" />
 
-# better-docs
-
 Beautiful and simple documentation template for JSDoc 3 with **@category** and **@component** plugins:
 
 <table>
@@ -20,7 +18,7 @@ Beautiful and simple documentation template for JSDoc 3 with **@category** and *
 
 ## Example
 
-Example documentation can be found here: https://softwarebrothers.github.io/admin-bro-dev/index.html
+Example documentation can be found here: https://softwarebrothers.github.io/example-design-system/index.html
 
 ## Installation
 
