@@ -1,3 +1,5 @@
+<img src="./readme/logo.png" />
+
 # better-docs
 
 Beautiful and simple documentation template for JSDoc 3 with **@category** and **@component** plugins:
