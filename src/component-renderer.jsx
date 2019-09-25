@@ -7,7 +7,7 @@ const DefaultWrapper = (props) => (
 class ComponentRenderer extends React.Component {
   constructor(props) {
     super(props)
-    this.Wrapper = Components._CustomWrapper || DefaultWrapper
+    this.Wrapper = window._CustomWrapper || DefaultWrapper
     this.state = {
       hasError: false,
       error: null,

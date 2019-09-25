@@ -42,6 +42,9 @@
         <h2>
             <?js= '&lt' + doc.name + ' ' + doc.component.props.map(p => '<i>' + p.name + '</i>').join(' ') + ' /&gt' ?>
         </h2>
+        <?js if (doc.classdesc) { ?>
+            <div class="class-description"><?js= doc.classdesc ?></div>
+        <?js } ?>
     <?js } ?>
 </header>
 

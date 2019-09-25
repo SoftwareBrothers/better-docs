@@ -39,7 +39,7 @@ class Wrapper extends React.Component {
       }))
     }
     const wrapper = `window.component['${uniqId}'] = (() => {
-      ${Object.keys(Components).map(k => `const ${k} = Components.${k};`).join('\n')}
+      ${Object.keys(reactComponents).map(k => `const ${k} = reactComponents['${k}'];`).join('\n')}
       try {
         ${source}
       } catch (error) {

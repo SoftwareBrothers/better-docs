@@ -14,7 +14,8 @@ module.exports = function bundle (Components, out, config) {
   const entry = path.join(out, 'entry.js')
   const absoluteOut = path.resolve(out)
   let init = `
-    window.Components = {};\n
+    window.reactComponents = {};\n
+    window.vueComponents = {};\n
   `
   if (vueComponents.length) {
     init = init + `
@@ -48,7 +49,7 @@ module.exports = function bundle (Components, out, config) {
       const absolute = path.resolve(config.betterDocs.component.wrapper)
       init +=`
       import _CustomWrapper from '${path.relative(absoluteOut, absolute)}';\n
-      Components._CustomWrapper = _CustomWrapper;\n
+      window._CustomWrapper = _CustomWrapper;\n
       `
     }
     if(config.betterDocs.component.entry
@@ -57,12 +58,13 @@ module.exports = function bundle (Components, out, config) {
     }
   }
   
-  const entryFile = init + Components.map(c => {
-    const { displayName, filePath} = c.component
+  const entryFile = init + Components.map((c, i) => {
+    const { displayName, filePath, type } = c.component
     const relativePath = path.relative(absoluteOut, filePath)
+    const name = `Component${i}`
     return [
-      `import ${displayName} from '${relativePath}';`,
-      `Components['${displayName}'] = ${displayName};`,
+      `import ${name} from '${relativePath}';`,
+      `${type}Components['${displayName}'] = ${name};`,
     ].join('\n')
   }).join('\n\n')
 

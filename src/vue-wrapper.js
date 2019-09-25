@@ -54,7 +54,7 @@ export default {
       }
 
       try {
-        json.components = Components
+        json.components = vueComponents
         json.template = json.template || code
         const component = Vue.component('user-component', json)
         this.userComponent = component
