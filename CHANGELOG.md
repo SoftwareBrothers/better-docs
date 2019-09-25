@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## [1.3.3] - 2019-09-25
+### Fixed
+- fixed vue components preview
+- attempt to fix error with paths on windows
+
 ## [1.3.2] - 2019-09-25
 ### Added
 - add the ability to document vue components with dash in a name
