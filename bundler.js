@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+const path = require('path').posix
 const execSync = require('child_process').execSync
 
 const VUE_WRAPPER = process.env.IS_DEV ? 'src/vue-wrapper.js' : 'lib/vue-wrapper.js'
