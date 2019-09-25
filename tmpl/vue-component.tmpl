@@ -17,7 +17,7 @@ var uniqId = 'A' + Math.random().toString(36).substring(2)
         new Vue({
           components: Components,
           render: (d, context) => {
-            return d(Wrapper, {
+            return d(VueWrapper, {
               props: {defaultCode: <?js= JSON.stringify(example.code || null) ?>}
             })
           },

@@ -21,8 +21,8 @@ module.exports = function bundle (Components, out, config) {
       import Vue from 'vue/dist/vue.js';\n
       window.Vue = Vue;\n
 
-      import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, VUE_WRAPPER))}';\n
-      window.Wrapper = Wrapper;\n
+      import VueWrapper from '${path.relative(absoluteOut, path.join(__dirname, VUE_WRAPPER))}';\n
+      window.VueWrapper = VueWrapper;\n
     `
   }
   if (reactComponents.length) {
@@ -30,10 +30,10 @@ module.exports = function bundle (Components, out, config) {
       import React from "react";\n
       import ReactDOM from "react-dom";\n
 
-      import Wrapper from '${path.relative(absoluteOut, path.join(__dirname, REACT_WRAPPER))}';\n
+      import ReactWrapper from '${path.relative(absoluteOut, path.join(__dirname, REACT_WRAPPER))}';\n
       window.React = React;\n
       window.ReactDOM = ReactDOM;\n
-      window.Wrapper = Wrapper;\n
+      window.ReactWrapper = ReactWrapper;\n
     `
   }
 

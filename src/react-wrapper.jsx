@@ -1,11 +1,11 @@
 import React from 'react'
 
-import brace from 'brace';
+import brace from 'brace'
 import AceEditor from 'react-ace'
 import Frame, { FrameContextConsumer } from 'react-frame-component'
 
-import 'brace/mode/jsx';
-import 'brace/theme/monokai';
+import 'brace/mode/jsx'
+import 'brace/theme/monokai'
 import ComponentRenderer from './component-renderer'
 
 window.component = null
@@ -29,15 +29,15 @@ class Wrapper extends React.Component {
 
   executeScript(source) {
     const { uniqId } = this.props
-    const script = document.createElement('script');
+    const script = document.createElement('script')
     const self = this
     script.onload = script.onerror = function() {
-      this.remove();
+      this.remove()
       self.setState(state =>({
         ...state,
         component: window.component[uniqId] || '',
       }))
-    };
+    }
     const wrapper = `window.component['${uniqId}'] = (() => {
       ${Object.keys(Components).map(k => `const ${k} = Components.${k};`).join('\n')}
       try {
@@ -47,13 +47,13 @@ class Wrapper extends React.Component {
       }
     })()`
     try {
-      const src = Babel.transform(wrapper, { presets: ['react', 'es2015'] }).code;
-      script.src = "data:text/plain;base64," + btoa(src);
+      const src = Babel.transform(wrapper, { presets: ['react', 'es2015'] }).code
+      script.src = 'data:text/plain;base64,' + btoa(src)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
     
-    document.body.appendChild(script);
+    document.body.appendChild(script)
   }
 
   handleChange(code) {
@@ -80,7 +80,17 @@ class Wrapper extends React.Component {
   }
 
   componentDidUpdate() {
-    this.computeHeight();
+    this.computeHeight()
+  }
+
+  componentDidMount() {
+    this.heightInterval = setInterval(() => {
+      this.computeHeight()
+    }, 1000)
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.heightInterval)
   }
 
   toggleEditor(event) {
@@ -100,7 +110,7 @@ class Wrapper extends React.Component {
           ref={this.iframeRef}
           style={{width: '100%', height }}
           onLoad={this.computeHeight()}
-          >
+        >
           <link type="text/css" rel="stylesheet" href="./build/entry.css" />
           <FrameContextConsumer>
             {
@@ -112,7 +122,7 @@ class Wrapper extends React.Component {
             }
           </FrameContextConsumer>
         </Frame>
-        <div class="bd__button">
+        <div className="bd__button">
           <a href="#" onClick={this.toggleEditor}>Modify Example Code</a>
         </div>
         {showEditor ? (
@@ -127,7 +137,7 @@ class Wrapper extends React.Component {
               editorProps={{ $useSoftTabs: true }}
             />
           </div>
-        ) : ""}
+        ) : ''}
       </div>
     )
   }

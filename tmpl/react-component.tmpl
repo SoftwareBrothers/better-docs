@@ -8,7 +8,7 @@ var uniqId = Math.random().toString(36).substring(2)
 <div id='<?js= uniqId ?>'></div>
 
 <script>
-  ReactDOM.render(Wrapper({
+  ReactDOM.render(ReactWrapper({
     example: <?js= JSON.stringify(example.code || null) ?>,
     uniqId: <?js= JSON.stringify(uniqId) ?>,
   }), document.getElementById('<?js= uniqId ?>'));

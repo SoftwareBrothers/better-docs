@@ -34,6 +34,12 @@ exports.handlers = {
           doclet.undocumented = true
         }
       }
+
+      if (path.extname(filePath) === '.jsx') {
+        if (doclet.kind !== 'function' && doclet.kind !== 'event') {
+          doclet.undocumented = true
+        }
+      }
     }
   }
 }
