@@ -20,7 +20,7 @@ export default {
     </div>
   `,
   props: {
-    defaultCode: String
+    defaultCode: string
   },
   data: function () {
     return {

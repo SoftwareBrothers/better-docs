@@ -5,7 +5,7 @@
   "main": "publish.js",
   "scripts": {
     "gulp": "./node_modules/.bin/gulp",
-    "test": "mocha --recursive './*spec.js'",
+    "test": "mocha --recursive './*spec.js' './typescript/*spec.js'",
     "build": "babel src --out-dir lib"
   },
   "author": "Wojciech Krysiak",
@@ -21,8 +21,10 @@
     "chai": "^4.2.0",
     "eslint": "^6.3.0",
     "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-vue": "^5.2.3",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
@@ -32,21 +34,21 @@
     "gulp-run": "^1.7.1",
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "mocha": "^6.2.0",
-    "eslint-plugin-react": "^7.14.3"
+    "mocha": "^6.2.0"
   },
   "peerDependencies": {
     "react": "^0.16.0",
     "react-dom": "^0.16.0"
   },
   "dependencies": {
+    "@typescript-eslint/parser": "^2.3.2",
     "brace": "^0.11.1",
-    "vue-docgen-api": "^3.22.0",
     "react-ace": "^6.5.0",
     "react-docgen": "^4.1.1",
     "react-frame-component": "^4.1.1",
+    "typescript-parser": "^2.6.1",
     "underscore": "^1.9.1",
+    "vue-docgen-api": "^3.22.0",
     "vue2-ace-editor": "^0.0.13"
   }
 }

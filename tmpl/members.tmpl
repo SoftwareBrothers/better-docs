@@ -17,6 +17,9 @@ var self = this;
     <span class="code-name">
         <?js= name ?>
     </span>
+    <?js if (data.optional) { ?>
+        <span class='tag'>Optional</span>
+    <?js }; ?>
 </h4>
 
 <?js if (data.summary) { ?>
