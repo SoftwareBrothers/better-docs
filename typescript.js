@@ -15,7 +15,7 @@ exports.handlers = {
   },
 
   beforeParse: function(e) {
-    if (path.extname(e.filename) === '.ts') {
+    if (['.ts', '.tsx'].includes(path.extname(e.filename))) {
       // adding const a = 1 ensures that the comments always will be copied,
       // even when there is no javascript inside (just interfaces)
       const interfaces = interfaceConverter(e.source)
@@ -28,6 +28,11 @@ exports.handlers = {
         }
       });
       let src = result.outputText
+      if(e.filename.match('breadcrumbs')){
+        console.log('e.source', e.source)
+        console.log('interfaces', interfaces)
+        console.log('types', types)
+      }
       e.source = src + '\n' + interfaces + '\n' + types
     }
   }

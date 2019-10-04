@@ -1,7 +1,7 @@
 const util = require('util')
 const { parseBracketBody, appendComment, stripComments, appendPropsTable } = require('./parse-bracket-body')
 
-const regGlobal = /(export)?\s?(default)?\s?(type)\s+(?<name>\w+)\s+=/sg
+const regGlobal = /(export\s)?(default\s)?(type)\s+(?<name>\w+)\s+=/sg
 const regComments = /(?<comment>\/\*\*.*?(\*\/)\s+(\r?\n|\r)?)/sg
 
 const typeConverter = (src) => {

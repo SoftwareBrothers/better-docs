@@ -45,6 +45,13 @@ exports.handlers = {
 }
 
 var parseReact = function (filePath, doclet) {
+  if (path.extname(filePath) === '.tsx') {
+    return {
+      props: [],
+      displayName: doclet.name,
+      filePath: filePath,
+    }
+  }
   var src = fs.readFileSync(filePath, 'UTF-8')
   var docGen
   try {
@@ -52,6 +59,7 @@ var parseReact = function (filePath, doclet) {
   } catch (error) {
     if (error.message === 'No suitable component definition found.') {
       return {
+        props: [],
         filePath: filePath,
         displayName: doclet.name,
       }
