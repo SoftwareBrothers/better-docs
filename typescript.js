@@ -28,11 +28,6 @@ exports.handlers = {
         }
       });
       let src = result.outputText
-      if(e.filename.match('breadcrumbs')){
-        console.log('e.source', e.source)
-        console.log('interfaces', interfaces)
-        console.log('types', types)
-      }
       e.source = src + '\n' + interfaces + '\n' + types
     }
   }
