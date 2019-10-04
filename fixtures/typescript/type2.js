@@ -1,3 +1,5 @@
+const input =
+`
 /**
  * ActionRequest
  * @memberof Action
@@ -23,4 +25,13 @@ export type ActionRequest = {
 
     [key: string]: any;
   };
+}
+`
+
+const output = `* @property {any} params.{...}`
+
+
+module.exports = {
+  input,
+  output,
 }

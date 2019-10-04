@@ -88,7 +88,8 @@ const typeConverter = (src) => {
       if (typeDef.type === 'function') {
         jsDoc = appendComment(typeDef.comment, `@typedef {function} ${typeDef.name}`)
         if(typeDef.elements.length) {
-          typeDef.elements.forEach(element => {
+          const strippedElements = stripComments(typeDef.elements)
+          strippedElements.forEach(element => {
             jsDoc = appendComment(jsDoc, `@param {${element.body}} ${element.title}   ${element.comment}`)
           })
         }

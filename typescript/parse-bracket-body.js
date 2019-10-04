@@ -1,21 +1,46 @@
-const bracketsDeep = [
-  {brackets: ['{', '}'], deep: 0},
-  {brackets: ['<', '>'], deep: 0},
-  // {brackets: ['[', ']'], deep: 0},
-  // {brackets: ['(', ')'], deep: 0}
-]
-bracketsDeep.isZero = function(){ return !this.find((bracket) => bracket.deep !== 0) }
-bracketsDeep.update = function (letter){
-  this.forEach(bracket => {
-    if(letter === bracket.brackets[0]) {
-      bracket.deep += 1
-    }
-    if(letter === bracket.brackets[1]) {
-      bracket.deep -= 1
-    }
-  })
+const util = require('util')
+
+const normalizeElement = (element) => {
+  let title = element.title
+  let body = element.body
+  const isSpread = /\[key:\s?(?<type>.*)\]/.exec(title)
+  if(isSpread) {
+    title = `{...}`
+  }
+  return {
+    ...element,
+    title: title
+  }
 }
+
+const getBracketsDeep = () => {
+  const bracketsDeep = [
+    {brackets: ['{', '}'], deep: 0},
+    {brackets: ['<', '>'], deep: 0},
+    {brackets: ['[', ']'], deep: 0},
+    // {brackets: ['(', ')'], deep: 0}
+  ]
+  bracketsDeep.isZero = function(){ return !this.find((bracket) => bracket.deep !== 0) }
+  bracketsDeep.update = function (letter){
+    this.forEach(bracket => {
+      if(letter === bracket.brackets[0]) {
+        bracket.deep += 1
+      }
+      if(letter === bracket.brackets[1]) {
+        bracket.deep -= 1
+      }
+    })
+  }
+  bracketsDeep.reset = function (){
+    this.forEach(bracket => {
+      bracket.deep = 0
+    })
+  }
+  return bracketsDeep
+}
+
 const parseBracketBody = (body, delimiter = ';') => {
+  const bracketsDeep = getBracketsDeep()
   const elements = [];
   let current = {
     title: '',
@@ -72,19 +97,32 @@ const parseBracketBody = (body, delimiter = ';') => {
     }
   }
 
-  elements.forEach((element) => {
-    const match = (/{(?<body>.*?)}/sg).exec(element.body)
+  elements.map((element) => {
+    const match = (/{(?<body>.*)}/sg).exec(element.body)
     if(match){
       element.elements = parseBracketBody(match.groups.body, delimiter)
-      element.body = 'object'
-      element.elements.forEach(child => {
-        let matchSub = (/{(?<body>.*?)}/sg).exec(child.body)
+      if(element.body.match(/^Array</)) {
+        element.body = 'Array'
+        element.isArray = true
+      } else {
+        element.body = 'object'
+      }
+      
+      element.elements = element.elements.map(child => {
+        let matchSub = (/{(?<body>.*)}/sg).exec(child.body)
         if (matchSub) {
-          child.elements = parseBracketBody(match.groups.body, delimiter)
-          child.body = 'object'
+          child.elements = parseBracketBody(matchSub.groups.body, delimiter)
+          if(element.body.match(/^Array</)) {
+            child.body = 'Array'
+            child.isArray = true
+          } else {
+            child.body = 'object'
+          }
         }
+        return normalizeElement(child)
       })
     }
+    return normalizeElement(element)
   })
 
   return elements;
@@ -111,13 +149,17 @@ const stripComments = (elements) => {
 
 const appendPropsTable = (jsDoc, elements) => {
   const strippedElements = stripComments(elements)
+  // console.log(util.inspect(strippedElements, false, 10))
   strippedElements.forEach(element => {
-    const title = element.opional ? `[${element.title}]` : element.title
+    let title = element.opional ? `[${element.title}]` : element.title
+    if (element.isArray) {
+      element.title = element.title + '[]'
+    }
     jsDoc = appendComment(jsDoc, `@property {${element.body}} ${title}   ${element.comment}`)
     if (element.elements.length) {
       element.elements.forEach(child => {
-        const title = child.opional ? `[${element.title}.${child.title}]` : `${element.title}.${child.title}`
-      jsDoc = appendComment(jsDoc, `@property {${child.body}} ${title}   ${child.comment}`)
+        let title = child.opional ? `[${element.title}.${child.title}]` : `${element.title}.${child.title}`
+        jsDoc = appendComment(jsDoc, `@property {${child.body}} ${title}   ${child.comment}`)
       })
     }
   })

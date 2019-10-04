@@ -1,3 +1,4 @@
+const util = require('util')
 const { parseBracketBody, appendComment, appendPropsTable } = require("./parse-bracket-body")
 
 const regGlobal = /(export)?\s?(default)?\s?(interface)\s+(?<name>\w+)\s*?{(?<body>.*?)(\n})/sg
@@ -13,6 +14,7 @@ const interfaceConverter = (src) => {
       comment: result[0]
     })
   }
+
   while((result = regGlobal.exec(src)) !== null) {
     const { name, body } = result.groups
     const comment = comments.find(c => c.end === result.index)
@@ -21,6 +23,7 @@ const interfaceConverter = (src) => {
     let jsDocInerface = appendComment(comment.comment, `@interface ${name}`)
     
     const elements = parseBracketBody(body)
+    // console.log(util.inspect(elements, false, 10))
 
     elements.forEach(element => {
       if(element.comment) {
