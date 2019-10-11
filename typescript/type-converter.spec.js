@@ -22,4 +22,8 @@ describe('.typeConverter', function () {
       expect(typeConverter(type3.input)).to.have.string(out)
     })
   })
+
+  it.only('parses test', function() {
+    console.log(typeConverter(src, '../fixtures/interface.ts'))
+  })
 })

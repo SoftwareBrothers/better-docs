@@ -1,4 +1,4 @@
-var path = require('path')
+const path = require('path')
 const ts = require('typescript')
 
 const interfaceConverter = require('./typescript/interface-converter')
@@ -18,8 +18,6 @@ exports.handlers = {
     if (['.ts', '.tsx'].includes(path.extname(e.filename))) {
       // adding const a = 1 ensures that the comments always will be copied,
       // even when there is no javascript inside (just interfaces)
-      const interfaces = interfaceConverter(e.source)
-      const types = typeConverter(e.source)
       let result = ts.transpileModule('const _____a = 1; \n' + e.source, {
         compilerOptions: {
           target: 'esnext',
@@ -27,8 +25,9 @@ exports.handlers = {
           jsx: 'react',
         }
       });
+      const types = typeConverter(e.source, e.filename)
       let src = result.outputText
-      e.source = src + '\n' + interfaces + '\n' + types
+      e.source = src + '\n' + types
     }
   }
 }

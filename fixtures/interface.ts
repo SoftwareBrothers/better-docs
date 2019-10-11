@@ -1,26 +1,66 @@
-/**
- * ActionRequest
- * @memberof Action
- * @alias ActionRequest
- */
-export type ActionRequest = {
-  /**
-   * parameters passed in an URL
-   */
-  params: {
-    /**
-     * Id of current resource
-     */
-    resourceId: string;
-    /**
-     * Id of current record
-     */
-    recordId?: string;
-    /**
-     * Name of an action
-     */
-    action: string;
+export enum PropertyPlace {
+  show = 'show',
+  list = 'list',
+  edit = 'edit',
+  filter = 'filter',
+}
 
-    [key: string]: any;
+/**
+ * JSON representation of a Property.
+ */
+type PropertyJSON = {
+  /**
+   * If given property should be treated as a title
+   */
+  isTitle: boolean;
+  /**
+   * If given property should be treaten as a Id field
+   */
+  isId: boolean;
+  /**
+   * Property position on a list
+   */
+  position: number;
+  /**
+   * If property is sortable
+   */
+  isSortable: boolean;
+  /**
+   * If property has restricted number of values
+   */
+  availableValues: Array<{label: string; value: string}> | null;
+  /**
+   * Property uniq name/path
+   */
+  name: string;
+  /**
+   * Property label
+   */
+  label: string;
+  /**
+   * Property type
+   */
+  type: string;
+  /**
+   * Has a name of a resource to which it is a reference.
+   * For instance property `userId` will have here `Users`
+   */
+  reference: string | null;
+  /**
+   * Indicates if property is an array of properties
+   */
+  isArray: boolean;
+  /**
+   * Contain list of all sub properties
+   */
+  subProperties: Array<PropertyJSON>;
+  /**
+   * All components overriden by the user in PropertyOptions
+   */
+  components?: {
+    show?: string;
+    edit?: string;
+    filter?: string;
+    list?: string;
   };
 }

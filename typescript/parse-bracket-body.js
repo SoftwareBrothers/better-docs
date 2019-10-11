@@ -151,15 +151,15 @@ const appendPropsTable = (jsDoc, elements) => {
   const strippedElements = stripComments(elements)
   // console.log(util.inspect(strippedElements, false, 10))
   strippedElements.forEach(element => {
-    let title = element.opional ? `[${element.title}]` : element.title
+    let name = element.optional ? `[${element.name}]` : element.name
     if (element.isArray) {
-      element.title = element.title + '[]'
+      element.name = element.name + '[]'
     }
-    jsDoc = appendComment(jsDoc, `@property {${element.body}} ${title}   ${element.comment}`)
+    jsDoc = appendComment(jsDoc, `@property {${element.type}} ${name}   ${element.comment}`)
     if (element.elements.length) {
       element.elements.forEach(child => {
-        let title = child.opional ? `[${element.title}.${child.title}]` : `${element.title}.${child.title}`
-        jsDoc = appendComment(jsDoc, `@property {${child.body}} ${title}   ${child.comment}`)
+        let name = child.opional ? `[${element.name}.${child.name}]` : `${element.name}.${child.name}`
+        jsDoc = appendComment(jsDoc, `@property {${child.type}} ${name}   ${child.comment}`)
       })
     }
   })
