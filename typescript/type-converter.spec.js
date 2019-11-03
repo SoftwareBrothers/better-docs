@@ -10,6 +10,7 @@ const interface1 = require('../fixtures/typescript/interface1')
 const type1 = require('../fixtures/typescript/type1')
 const type2 = require('../fixtures/typescript/type2')
 const type3 = require('../fixtures/typescript/type3')
+const type4 = require('../fixtures/typescript/type4')
 
 describe('.typeConverter', function () {
   describe('@typedef', function () {
@@ -28,6 +29,12 @@ describe('.typeConverter', function () {
     it('parses type 3: Array<{key: string}>', function () {
       type3.outputs.forEach(out => {
         expect(typeConverter(type3.input)).to.have.string(out)
+      })
+    })
+
+    it('parses type 4: inline function', function () {
+      type4.outputs.forEach(out => {
+        expect(typeConverter(type4.input)).to.have.string(out)
       })
     })
   })

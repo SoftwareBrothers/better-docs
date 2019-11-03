@@ -21,6 +21,10 @@ const getTypeName = (type, src) => {
       return typeName
     }
   }
+  if(ts.isFunctionTypeNode(type)) {
+    // it replaces ():void => {} (and other) to simple function
+    return 'function'
+  }
   if (type.types) {
     return type.types.map(subType => getTypeName(subType, src)).join(' | ')
   }
