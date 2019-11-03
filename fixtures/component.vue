@@ -42,7 +42,7 @@
        * @model
        */
       value: {
-        type: string,
+        type: String,
         default: 'something'
       },
       /**
@@ -58,7 +58,7 @@
        * filter key
        */
       filterKey: {
-        type: string,
+        type: String,
         default: 'example'
       }
     },
