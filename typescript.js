@@ -1,7 +1,6 @@
 const path = require('path')
 const ts = require('typescript')
 
-const interfaceConverter = require('./typescript/interface-converter')
 const typeConverter = require('./typescript/type-converter')
 
 exports.handlers = {
@@ -24,7 +23,7 @@ exports.handlers = {
           esModuleInterop: true,
           jsx: 'react',
         }
-      });
+      })
       const types = typeConverter(e.source, e.filename)
       let src = result.outputText
       e.source = src + '\n' + types

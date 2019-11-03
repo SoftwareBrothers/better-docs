@@ -1,47 +1,60 @@
 const input =
 `
 /**
- * ActionRequest
- * @memberof Action
- * @alias ActionRequest
+ * JSON representation of an {@link Action}
+ * @see Action
  */
-export type ActionRequest = {
+export default interface ActionJSON {
   /**
-   * parameters passed in an URL
+   * Unique action name
    */
-  params: {
-    /**
-     * Id of current resource
-     */
-    resourceId: string;
-    /**
-     * Id of current record
-     */
-    recordId?: string;
-    /**
-     * Name of an action
-     */
-    action: string;
-
-    [key: string]: any;
-  };
+  name: string;
+  /**
+   * Type of an action
+   */
+  actionType: 'record' | 'resource' | Array<'record' | 'resource'>;
+  /**
+   * Action icon
+   */
+  icon?: string;
+  /**
+   * Action label - visible on the frontend
+   */
+  label: string;
+  /**
+   * Guarding message
+   */
+  guard?: string;
+  /**
+   * If action should have a filter (for resource actions)
+   */
+  showFilter: boolean;
+  /**
+   * Action component. When set to false action will be invoked immediately after clicking it,
+   * to put in another words: tere wont be an action view
+   */
+  component?: string | false | null;
 }
 `
 
-const output = 
-`/**
- * Before action hook. When it is given - it is performed before the {@link ActionHandler}
- * method.
- * @alias Before
- * @memberof Action
- * @typedef {function} Before
- * @param {ActionRequest} request   Request object
- * @return {ActionRequest}
- */
-`
+const outputs = [
+  // main interface
+  '* JSON representation of an {@link Action}',
+  '* @see Action',
+  '* @interface ActionJSON',
 
+  // representation of a name property
+  '* Unique action name',
+  '* @name ActionJSON#name',
+  '* @type {string}',
+
+  // representation for an action property
+  '* Type of an action',
+  '* @name ActionJSON#actionType',
+  '* @type {\'record\' | \'resource\' | Array<\'record\' | \'resource\'>}',
+]
 
 module.exports = {
   input,
-  output,
+  outputs,
 }

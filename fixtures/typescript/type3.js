@@ -21,8 +21,18 @@ export type RouterType = {
 `
 
 const outputs = [
-  '@property {Array} assets',
-  '@property {string} assets[].path'
+  '* @memberof AdminBro',
+  '* @alias RouterType',
+  '* @typedef {object} RouterType',
+  '* @property {Array<object>} assets',
+  '* @property {string} assets[].path',
+  '* @property {string} assets[].src',
+  '* @property {Array<object>} routes',
+  '* @property {string} routes[].method',
+  '* @property {string} routes[].path',
+  '* @property {any} routes[].Controller',
+  '* @property {string} routes[].action',
+  '* @property {string} [routes[].contentType]',
 ]
 
 

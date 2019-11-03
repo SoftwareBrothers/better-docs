@@ -28,10 +28,20 @@ export type ActionRequest = {
 }
 `
 
-const output = `* @property {any} params.{...}`
+const outputs = [
+  '* ActionRequest',
+  '* @memberof Action',
+  '* @alias ActionRequest',
+  '* @typedef {object} ActionRequest',
+  '* @property {object} params   parameters passed in an URL',
+  '* @property {string} params.resourceId   Id of current resource',
+  '* @property {string} [params.recordId]   Id of current record',
+  '* @property {string} params.action   Name of an action',
+  '* @property {any} params.{...}',
+]
 
 
 module.exports = {
   input,
-  output,
+  outputs,
 }

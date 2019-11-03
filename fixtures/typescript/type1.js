@@ -14,20 +14,14 @@ export type Before = (
 ) => ActionRequest
 `
 
-const output = 
-`/**
- * Before action hook. When it is given - it is performed before the {@link ActionHandler}
- * method.
- * @alias Before
- * @memberof Action
- * @typedef {function} Before
- * @param {ActionRequest} request   Request object
- * @return {ActionRequest}
- */
-`
+const outputs = [
+  '* @memberof Action',
+  '* @typedef {function} Before',
+  '* @param {ActionRequest} request   Request object'
+]
 
 
 module.exports = {
   input,
-  output,
+  outputs,
 }
