@@ -1,6 +1,8 @@
 <img src="./readme/logo.png" />
 
-Beautiful and simple documentation template for JSDoc 3 with **@category** and **@component** plugins:
+Documentation toolbox for your **javascript** / **typsecript** projects based on JSDoc3 with **@category**, **@component** and **@optional** plugins.
+
+This is how it looks:
 
 <table>
   <tr>
@@ -16,19 +18,19 @@ Beautiful and simple documentation template for JSDoc 3 with **@category** and *
   </tr>
 </table>
 
-## Example
+# Example
 
 Example documentation can be found here: https://softwarebrothers.github.io/example-design-system/index.html
 
-## Installation
+# Installation
 
 ```sh
 npm install --save-dev better-docs
 ```
 
-## Theme Usage
+# Theme Usage
 
-### With command line
+## With command line
 
 Assuming that you have [jsdoc](https://github.com/jsdoc/jsdoc) installed globally:
 
@@ -36,7 +38,7 @@ Assuming that you have [jsdoc](https://github.com/jsdoc/jsdoc) installed globall
 jsdoc your-documented-file.js -t ./node_modules/better-docs
 ```
 
-### With npm and configuration file
+## With npm and configuration file
 
 In your projects package.json file - add a new script:
 
@@ -54,11 +56,136 @@ in your `jsdoc.json` file, set the template:
 }
 ```
 
-## @category plugin
+# TypeScript support
+
+better-docs has a plugin which allows you to generate documentation from your TypeScript codebase.
+
+## Usage
+
+To use it update your `jsdoc.json` file
+
+```
+...
+"tags": {
+    "allowUnknownTags": ["optional"] //or true
+},
+"plugins": [
+    "node_modules/better-docs/typescript"
+],
+"source": {
+    "includePattern": "\\.(jsx|js|ts|tsx)$",
+},
+...
+```
+
+And now you can run your `jsdoc` command and parse TypeScript files.
+
+## How it works?
+
+It performs 3 operations:
+
+* First of all it transpiles all .ts and .tsx files to .js, so that all comments used by you are treated
+as a regular JSDoc comments.
+
+Furhtermore it:
+
+* Converts all your commented `type` aliases to `@typedef`
+* Converts all your commented `interface` definitions to `@interface`,
+
+so they can be printed by JSDoc automatically.
+
+## Examples
+
+```
+/**
+ * ActionRequest
+ * @memberof Action
+ * @alias ActionRequest
+ */
+export type ActionRequest = {
+  /**
+   * parameters passed in an URL
+   */
+  params: {
+    /**
+     * Id of current resource
+     */
+    resourceId: string;
+    /**
+     * Id of current record
+     */
+    recordId?: string;
+    /**
+     * Name of an action
+     */
+    action: string;
+
+    [key: string]: any;
+  };
+}
+```
+
+is converted to:
+
+```
+/**
+ * ActionRequest'
+ * @memberof Action'
+ * @alias ActionRequest'
+ * @typedef {object} ActionRequest'
+ * @property {object} params   parameters passed in an URL'
+ * @property {string} params.resourceId   Id of current resource'
+ * @property {string} [params.recordId]   Id of current record'
+ * @property {string} params.action   Name of an action'
+ * @property {any} params.{...}'
+ */
+```
+
+Also you can comment the interface in a similar fashion:
+
+```
+/**
+ * JSON representation of an {@link Action}
+ * @see Action
+ */
+export default interface ActionJSON {
+  /**
+   * Unique action name
+   */
+  name: string;
+  /**
+   * Type of an action
+   */
+  actionType: 'record' | 'resource' | Array<'record' | 'resource'>;
+  /**
+   * Action icon
+   */
+  icon?: string;
+  /**
+   * Action label - visible on the frontend
+   */
+  label: string;
+  /**
+   * Guarding message
+   */
+  guard?: string;
+  /**
+   * If action should have a filter (for resource actions)
+   */
+  showFilter: boolean;
+  /**
+   * Action component. When set to false action will be invoked immediately after clicking it,
+   * to put in another words: tere wont be an action view
+   */
+  component?: string | false | null;
+}
+```
+
+# @category plugin
 
 better-docs also allows you to nest your documentation into categories in the sidebar menu.
 
-### Usage
+## Usage
 
 To add a plugin - update `plugins` section in your `jsdoc.json` file:
 
@@ -85,11 +212,11 @@ class YourClass {
 }
 ```
 
-## @component plugin [BETA]
+# @component plugin [BETA]
 
 Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
-### Installation instructions
+## Installation instructions
 
 Similar as before to add a plugin - you have to update the `plugins` section in your `jsdoc.json` file:
 
@@ -114,7 +241,7 @@ npm install -g parcel-bundler
 yarn global add parcel-bundler
 ```
 
-### Usage
+## Usage
 
 To document components simply add `@component` in your JSDoc documentation:
 
@@ -168,7 +295,7 @@ export default {
 
 In this case, props will be taken from `props` property.
 
-### Preview
+## Preview
 
 `@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to add an `@example` tag and return component from it:
 
@@ -240,7 +367,7 @@ You can put as many `@example` tags as you like in one component and "caption" e
  */
 ```
 
-### Mixing components in preview
+## Mixing components in preview
 
 Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the seccond component you want to use the first one as a wrapper like this:
 
@@ -268,7 +395,7 @@ const Component1 = (props) => {...}
 const Component2 = (props) => {...}
 ```
 
-### Wrapper component [only React]
+## Wrapper component [only React]
 
 Most probably your components will have to be run within a particular context, like within redux store provider or with custom CSS libraries.
 You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
@@ -319,7 +446,7 @@ const Component = (props) => {
 export default Component
 ```
 
-### Styling React examples
+## Styling React examples
 
 Better-docs inserts all examples within an `iframe`. This results in the following styling options:
 
@@ -359,7 +486,7 @@ const Component = (props) => {
 export default Component
 ```
 
-### Adding commands to bundle entry file
+## Adding commands to bundle entry file
 
 `@component` plugin creates an entry file: `.entry.js` in your _docs_ output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
 
@@ -384,7 +511,7 @@ So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your 
 }
 ```
 
-## Customization
+# Customization
 
 First of all, let me state that better-docs extends the `default` template. That is why default template parameters are also handled.
 
@@ -445,7 +572,7 @@ Example configuration file with settings for both `default` and `better-docs` te
 }
 ```
 
-## Setting up for the development
+# Setting up for the development
 
 If you want to change the theme locally follow the steps:
 
@@ -489,18 +616,18 @@ DOCS_COMMAND='npm run docs' DOCS=../src/**/*,../config/**/* DOCS_OUTPUT=../docs 
 
 The script should launch the browser and refresh it whenever you change something in the template or in `DOCS`.
 
-## Setting up the jsdoc in your project
+# Setting up the jsdoc in your project
 
 If you want to see how to setup jsdoc in your project - take a look at these brief tutorials: 
 
 - JSDoc - https://www.youtube.com/watch?v=Yl6WARA3IhQ
 - better-docs and Mermaid: https://www.youtube.com/watch?v=UBMYogTzsBk
 
-## License
+# License
 
 better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file - MIT.
 
-## About SoftwareBrothers.co
+# About SoftwareBrothers.co
 
 <img src="https://softwarebrothers.co/assets/images/software-brothers-logo-full.svg" width=240>
 
