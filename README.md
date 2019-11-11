@@ -586,6 +586,7 @@ Example configuration file with settings for both `default` and `better-docs` te
             "name": "AdminBro Documentation",
             "logo": "images/logo.png",
             "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
+	    "hideGenerator": false,
             "navigation": [
                 {
                     "label": "Github",
