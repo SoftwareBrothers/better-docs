@@ -91,3 +91,5 @@ lerna-debug.log
 Thumbs.db
 
 .cache
+
+docs

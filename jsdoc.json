@@ -1,0 +1,28 @@
+{
+    "tags": {
+        "allowUnknownTags": "all"
+    },
+    "source": {
+        "include": ["fixtures/typescript"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "category",
+        "component",
+        "typescript"
+    ],
+    "opts": {
+        "encoding": "utf8",
+        "destination": "docs/",
+        "recurse": true,
+        "verbose": true,
+        "template": "./"
+    },
+    "templates": {
+        "better-docs": {
+            "name": "AdminBro Documentation",
+            "logo": "images/logo.png"
+        }
+    }
+}
