@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## [1.4.4] - 2019-10-11
+
+### Added
+- support for documenting class members in typescript
+- current item in sidebar is selected
+- hash with the link to the documentation element
+
+## [1.4.0] - 2019-10-03
+
+### Added
+- Add typescript support
+
 ## [1.3.3] - 2019-09-25
 ### Fixed
 - fixed vue components preview
