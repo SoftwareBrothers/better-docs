@@ -11,6 +11,7 @@ var self = this;
 <?js if (data.kind !== 'module' && !data.hideconstructor) { ?>
     <?js if (data.kind !== 'namespace') { ?>
     <h4 class="name" id="<?js= id ?>">
+        <?js= self.partial('name-link.tmpl', {id: id}) ?>
         <?js if (data.rawAttribs && data.rawAttribs.length) {?>
             <?js data.rawAttribs.forEach(function(attrib) { ?>
                 <span class='tag'><?js= attrib ?></span>
