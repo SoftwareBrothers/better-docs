@@ -168,6 +168,32 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
         })
         return comment
       }
+      if (ts.isClassDeclaration(statement)) {
+        comment = ''
+        const className = getName(statement, src)
+        statement.members.forEach(member => {
+          if (!member.jsDoc) { return }
+          if (!ts.isPropertyDeclaration(member)) { return }
+          let memberComment = src.substring(member.jsDoc[0].pos, member.jsDoc[0].end)
+          const modifiers = (member.modifiers || []).map(m => m.getText({text: src}))
+          modifiers.forEach(m => {
+            if (['private', 'public', 'protected'].includes(m)) {
+              memberComment = appendComment(memberComment, `@${m}`)
+            }
+          })
+          if (member.type) {
+            memberComment = appendComment(memberComment, `@type {${getTypeName(member.type, src)}}`)
+          }
+          getTypeName(member, src)
+          if (modifiers.find((m => m === 'static'))) {
+            memberComment += '\n' + `${className}.${getName(member, src)}`
+          } else {
+            memberComment += '\n' + `${className}.prototype.${getName(member, src)}`
+          }
+          comment += '\n' + memberComment
+        })
+        return comment
+      }
     }
     return ''
   }).join('\n')

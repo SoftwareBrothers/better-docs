@@ -82,7 +82,7 @@ And now you can run your `jsdoc` command and parse TypeScript files.
 
 ## How it works?
 
-It performs 3 operations:
+It performs 4 operations:
 
 * First of all it transpiles all .ts and .tsx files to .js, so that all comments used by you are treated
 as a regular JSDoc comments.
@@ -91,6 +91,7 @@ Furhtermore it:
 
 * Converts all your commented `type` aliases to `@typedef`
 * Converts all your commented `interface` definitions to `@interface`,
+* Converts descriptions for your public, protected, static class members 
 
 so they can be printed by JSDoc automatically.
 
@@ -178,6 +179,34 @@ export default interface ActionJSON {
    * to put in another words: tere wont be an action view
    */
   component?: string | false | null;
+}
+```
+
+or describe your class properties like that:
+
+```
+/**
+ * Class name
+ */
+class ClassName {
+  /**
+   * Some private member which WONT be in jsdoc (because it is private)
+   */
+  private name: string
+
+  /**
+   * Some protected member which will go to the docs
+   */
+  protected somethingIsA: number
+
+  /**
+   * And static member which will goes to the docs.
+   */
+  static someStaticMember: number
+
+  public notCommentedWontBeInJSDoc: string
+
+  constructor(color: string) {}
 }
 ```
 

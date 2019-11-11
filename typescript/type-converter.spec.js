@@ -3,7 +3,7 @@ const path = require('path')
 const { expect } = require('chai')
 const typeConverter = require('./type-converter')
 
-const src = fs.readFileSync(path.join(__dirname, '../fixtures/interface.ts'), 'utf-8')
+const src = fs.readFileSync(path.join(__dirname, '../fixtures/typescript/entity.ts'), 'utf-8')
 
 const interface1 = require('../fixtures/typescript/interface1')
 
@@ -11,6 +11,8 @@ const type1 = require('../fixtures/typescript/type1')
 const type2 = require('../fixtures/typescript/type2')
 const type3 = require('../fixtures/typescript/type3')
 const type4 = require('../fixtures/typescript/type4')
+const staticMember = require('../fixtures/typescript/static-member')
+const protectedMember = require('../fixtures/typescript/protected-member')
 
 describe('.typeConverter', function () {
   describe('@typedef', function () {
@@ -47,6 +49,19 @@ describe('.typeConverter', function () {
     })
   })
 
+  describe('class members', function () {
+    it('parses static member', function () {
+      staticMember.outputs.forEach(out => {
+        expect(typeConverter(staticMember.input)).to.have.string(out)
+      })
+    })
+
+    it('parses protected', function () {
+      protectedMember.outputs.forEach(out => {
+        expect(typeConverter(protectedMember.input)).to.have.string(out)
+      })
+    })
+  })
   
 
   // it.only('parses test', function() {
