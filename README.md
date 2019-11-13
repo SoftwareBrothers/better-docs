@@ -1,6 +1,6 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typsecript** projects based on JSDoc3 with **@category**, **@component** and **@optional** plugins.
+Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component** and **@optional** plugins.
 
 This is how it looks:
 
