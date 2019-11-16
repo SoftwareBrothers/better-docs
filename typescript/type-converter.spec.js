@@ -6,6 +6,7 @@ const typeConverter = require('./type-converter')
 const src = fs.readFileSync(path.join(__dirname, '../fixtures/typescript/entity.ts'), 'utf-8')
 
 const interface1 = require('../fixtures/typescript/interface1')
+const interface2 = require('../fixtures/typescript/interface2')
 
 const type1 = require('../fixtures/typescript/type1')
 const type2 = require('../fixtures/typescript/type2')
@@ -45,6 +46,12 @@ describe('.typeConverter', function () {
     it('parses interface 1', function () {
       interface1.outputs.forEach(out => {
         expect(typeConverter(interface1.input)).to.have.string(out)
+      })
+    })
+
+    it('parses interface 2 - with nested array defined as []', function () {
+      interface2.outputs.forEach(out => {
+        expect(typeConverter(interface2.input)).to.have.string(out)
       })
     })
   })

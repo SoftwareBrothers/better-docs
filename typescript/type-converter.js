@@ -25,6 +25,9 @@ const getTypeName = (type, src) => {
     // it replaces ():void => {} (and other) to simple function
     return 'function'
   }
+  if (ts.isArrayTypeNode(type)) {
+    return 'Array'
+  }
   if (type.types) {
     return type.types.map(subType => getTypeName(subType, src)).join(' | ')
   }
@@ -85,11 +88,16 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     typesToCheck.push(...type.types)
   }
   typesToCheck.forEach(type => {
+    // Handling array defined like this: {alement1: 'something'}[]
+    if(ts.isArrayTypeNode(type) && type.elementType) {
+      jsDoc = convertMembers(jsDoc, type.elementType, src, parentName ? parentName + '[]' : '[]')
+    }
+
     // Handling Array<{element1: 'somethin'}>
     if (type.typeName && type.typeName.escapedText === 'Array') {
       if(type.typeArguments && type.typeArguments.length) {
         type.typeArguments.forEach(subType => {
-          jsDoc = convertMembers(jsDoc, subType, src, parentName ? parentName + '[]' : null)
+          jsDoc = convertMembers(jsDoc, subType, src, parentName ? parentName + '[]' : '[]')
         })
       }
     }
