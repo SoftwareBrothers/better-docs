@@ -21,7 +21,7 @@ exports.handlers = {
         compilerOptions: {
           target: 'esnext',
           esModuleInterop: true,
-          jsx: 'react',
+          jsx: path.extname(e.filename) === '.tsx' ? 'react' : null,
         }
       })
       const types = typeConverter(e.source, e.filename)
