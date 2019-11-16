@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## [1.4.5] - 2019-10-16
+
+### Fixed
+
+- fix problem treating not react files as react (related to [#39])
+
 ## [1.4.4] - 2019-10-16
 
 ### Fixed
