@@ -21,7 +21,7 @@ const getTypeName = (type, src) => {
       return typeName
     }
   }
-  if(ts.isFunctionTypeNode(type)) {
+  if(ts.isFunctionTypeNode(type) || ts.isFunctionLike(type)) {
     // it replaces ():void => {} (and other) to simple function
     return 'function'
   }
@@ -169,9 +169,15 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           if (member.questionToken) {
             memberComment = appendComment(memberComment, '@optional')
           }
-          memberComment = convertMembers(memberComment, member.type, src, parentName = null)
-          let type = getTypeName(member.type, src)
-          memberComment = appendComment(memberComment, `@type {${type}}`)
+          if (!member.type && ts.isFunctionLike(member)) {
+            let type = getTypeName(member, src)
+            memberComment = appendComment(memberComment, `@type {${type}}`)
+            memberComment = appendComment(memberComment, `@method`)
+          } else {
+            memberComment = convertMembers(memberComment, member.type, src, parentName = null)
+            let type = getTypeName(member.type, src)
+            memberComment = appendComment(memberComment, `@type {${type}}`)
+          }
           comment += '\n' + memberComment
         })
         return comment

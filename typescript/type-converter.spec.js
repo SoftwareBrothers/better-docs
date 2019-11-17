@@ -7,6 +7,7 @@ const src = fs.readFileSync(path.join(__dirname, '../fixtures/typescript/entity.
 
 const interface1 = require('../fixtures/typescript/interface1')
 const interface2 = require('../fixtures/typescript/interface2')
+const interface3 = require('../fixtures/typescript/interface3')
 
 const type1 = require('../fixtures/typescript/type1')
 const type2 = require('../fixtures/typescript/type2')
@@ -52,6 +53,12 @@ describe('.typeConverter', function () {
     it('parses interface 2 - with nested array defined as []', function () {
       interface2.outputs.forEach(out => {
         expect(typeConverter(interface2.input)).to.have.string(out)
+      })
+    })
+
+    it('parses interface 3 - with methods', function () {
+      interface3.outputs.forEach(out => {
+        expect(typeConverter(interface3.input)).to.have.string(out)
       })
     })
   })
