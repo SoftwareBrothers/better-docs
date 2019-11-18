@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## [1.4.7] - 2019-10-18
+
+### Fixed
+
+- fixed problem of one line comments of types and interfaces [#40]
+
+
 ## [1.4.6] - 2019-10-17
 
 ### Fixed
