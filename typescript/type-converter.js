@@ -2,7 +2,7 @@ const path = require('path')
 const ts = require('typescript')
 
 const appendComment = (commentBlock, toAppend) => {
-  return commentBlock.replace(/\n.*\*\//, toAppend.split('\n').map(line => `\n * ${line}`) + '\n */')
+  return commentBlock.replace(/[\n,\s]*\*\//, toAppend.split('\n').map(line => `\n * ${line}`) + '\n */')
 }
 
 /**
