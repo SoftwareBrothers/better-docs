@@ -544,6 +544,8 @@ So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your 
 
 First of all, let me state that better-docs extends the `default` template. That is why default template parameters are also handled.
 
+You must explicitly set the `search` option of the `default` template to `true` to enable search.
+
 To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc confuguration file`.
 
 Example configuration file with settings for both `default` and `better-docs` templates:
@@ -575,6 +577,7 @@ Example configuration file with settings for both `default` and `better-docs` te
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false,
+        "search": true,
         "default": {
             "staticFiles": {
               "include": [
