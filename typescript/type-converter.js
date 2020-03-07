@@ -97,7 +97,11 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     if (type.typeName && type.typeName.escapedText === 'Array') {
       if(type.typeArguments && type.typeArguments.length) {
         type.typeArguments.forEach(subType => {
-          jsDoc = convertMembers(jsDoc, subType, src, parentName ? parentName + '[]' : '[]')
+
+          jsDoc = convertMembers(jsDoc, subType, src, parentName
+            ? parentName + '[]'
+            : '' // when there is no parent - jsdoc cannot parse [].name
+          )
         })
       }
     }
@@ -106,15 +110,13 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
       let name = getName(member, src)
       let comment = member.jsDoc && member.jsDoc[0] && member.jsDoc[0].comment || ''
       const members = member.type.members || []
-      let type = members.length ? 'object' : getTypeName(member.type, src)
+      let typeName = members.length ? 'object' : getTypeName(member.type, src)
       if (parentName) {
         name = [parentName, name].join('.')
       }
       // optional
-      if (member.questionToken) {
-        name = ['[', name, ']'].join('')
-      }
-      jsDoc = appendComment(jsDoc, `@property {${type}} ${name}   ${comment}`)
+      const nameToPlace = member.questionToken ? `[${name}]` : name
+      jsDoc = appendComment(jsDoc, `@property {${typeName}} ${nameToPlace}   ${comment}`)
       jsDoc = convertMembers(jsDoc, member.type, src, name)
     })
   })
@@ -152,6 +154,10 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           return convertParams(comment, statement, src)
         }
         if (ts.isTypeLiteralNode(statement.type)) {
+          comment = appendComment(comment, `@typedef {object} ${name}`)
+          return convertMembers(comment, statement.type, src)
+        }
+        if (ts.isIntersectionTypeNode(statement.type)) {
           comment = appendComment(comment, `@typedef {object} ${name}`)
           return convertMembers(comment, statement.type, src)
         }

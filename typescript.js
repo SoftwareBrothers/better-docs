@@ -24,6 +24,7 @@ exports.handlers = {
           jsx: path.extname(e.filename) === '.tsx' ? 'react' : null,
         }
       })
+      
       const types = typeConverter(e.source, e.filename)
       let src = result.outputText
       e.source = src + '\n' + types

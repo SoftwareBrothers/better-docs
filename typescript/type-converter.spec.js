@@ -14,6 +14,8 @@ const type2 = require('../fixtures/typescript/type2')
 const type3 = require('../fixtures/typescript/type3')
 const type4 = require('../fixtures/typescript/type4')
 const type5 = require('../fixtures/typescript/type5')
+const type6 = require('../fixtures/typescript/type6')
+const type7 = require('../fixtures/typescript/type7')
 const staticMember = require('../fixtures/typescript/static-member')
 const protectedMember = require('../fixtures/typescript/protected-member')
 
@@ -46,6 +48,18 @@ describe('.typeConverter', function () {
     it('parses type 5: one line comment', function () {
       type5.outputs.forEach(out => {
         expect(typeConverter(type5.input)).to.have.string(out)
+      })
+    })
+
+    it('parses type 6: joined by && types', function () {
+      type6.outputs.forEach(out => {
+        expect(typeConverter(type6.input)).to.have.string(out)
+      })
+    })
+
+    it('parses type 7: object types', function () {
+      type7.outputs.forEach(out => {
+        expect(typeConverter(type7.input)).to.have.string(out)
       })
     })
   })

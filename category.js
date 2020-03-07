@@ -5,6 +5,10 @@ exports.handlers = {
       if (categoryTag) {
         doclet.category = categoryTag.value
       }
+      const subCategoryTag = doclet.tags.find(tag => tag.title === 'subcategory')
+      if (subCategoryTag) {
+        doclet.subCategory = subCategoryTag.value
+      }
     }
   }
 }
