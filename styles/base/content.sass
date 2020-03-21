@@ -5,69 +5,38 @@
     margin-right: 3px
     font-style: italic
   header.page-title
-    h1
-      font-family: $header-font-family
-      font-size: 47px
-      font-weight: bold
-      margin: 0px 0 52px
-      font-variant: small-caps
     p
       font-size: 13px
       margin: 0 0 5px
       text-transform: uppercase
-  h2
-    font-size: 27px
-    line-height: 52px
-    font-weight: normal
-    margin-bottom: 26px
   header p
     font-size: 20px
+
+  h1, header.page-title h1
+    font-family: $header-font-family
+    font-size: 47px
+    font-weight: bold
+    margin: $space-md 0
+  h2
+    font-size: 26px
+    line-height: 48px
+    font-weight: bold
+    margin-bottom: 26px
   
   h3, h4, h5, h6
-    font-family: $base-font-family
-    font-weight: normal
-  
-  & > section > article
-    margin-top: 54px
-    .vertical-section
-      padding-left: 70px
-      position: relative
-      border-top: 1px solid $border
-      min-height: 200px
-      background-color: $light-grey
-      .members
-        background: #fff
-        padding-left: 25px
-        .member > .name:before
-          content: ""
-          position: absolute
-          display: block
-          width: 70px
-          height: 100%
-          background: darken($light-grey, 5)
-          left: -95px
-          z-index: 1
-      .title
-        position: absolute
-        left: 0
-        top: 0
-        color: $grey
-        font-size: 27px
-        font-weight: normal
-        writing-mode: vertical-rl
-        text-orientation: mixed
-        margin-bottom: 0
-        display: inline-block
-        z-index: 10
-        span
-          padding: 20px
-          display: inline-block
+    font-family: $header-font-family
+    font-weight: 900
+    letter-spacing: 0
+
   code
-    background: $codeBg
-    color: $codeFont
+    color: $black
+    font-family: $code-font-family
   
   .container-overview .prettyprint:last-child
     margin-bottom: 50px
+  
+  .vertical-section
+    padding: $space-lg 0
 
 #main-content-wrapper
   @include until($desktop)

@@ -1,10 +1,13 @@
 .button
-  font-size: 15px
-  border-style: none
-  border-radius: 2px
-  background: $grey
-  color: #fff
-  padding: 13px 16px
-  height: auto
+  border-radius: 8px
+  padding: $space-md $space-xl
+  height: 40px
+  border-color: $primary100
+  color: $primary100
   &:hover
-    color: #eee
+    color: $hoverBg
+    border-color: $hoverBg
+  &.is-primary
+    background-color: $primary100
+    &:hover
+      background-color: $hoverBg

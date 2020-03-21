@@ -1,6 +1,14 @@
+.members
+  margin-top: $space-xl
+
 .member
-  border-bottom: 2px solid $light-grey
-  padding: 50px 0 45px
+  &:not(:last-child)
+    &:after
+      content: ""
+      background: $border
+      height: 2px
+      display: block
+      margin: 45px -40px 40px
   & > .is-pulled-right
     position: relative
     z-index: 2
@@ -8,31 +16,33 @@
     color: $main-nav
     font-size: 20px
     line-height: 26px
-    font-weight: normal
     position: relative
+    margin-bottom: $space-md
     .code-name
       font-family: $code-font-family
-      margin-left: 8px
+      display: block
+      font-size: 25px
+      line-height: 30px
+      margin-top: 8px
       &:first-child
         margin-left: 0
     .tag
       position: relative
       top: -1px
       margin-right: 3px
-    .type-signature
-      color: $border
     .href-link
       color: $main-nav
       position: absolute
       padding: 1px
       left: -20px
       top: 0
+      bottom: 0
       width: 21px
-      display: none
+      opacity: 0
     &:hover .href-link
-      display: block
+      opacity: 1
   h5
-    font-weight: normal
+    font-size: 20px
   & > .description
     p
       font-size: 20px

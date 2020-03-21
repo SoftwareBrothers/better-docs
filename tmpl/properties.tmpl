@@ -55,41 +55,42 @@
         }
     });
 ?>
+<div class="table-container">
+    <table class="props table">
+        <thead>
+        <tr>
+            <?js if (props.hasName) {?>
+            <th>Name</th>
+            <?js } ?>
 
-<table class="props">
-    <thead>
-    <tr>
-        <?js if (props.hasName) {?>
-        <th>Name</th>
-        <?js } ?>
+            <th>Type</th>
 
-        <th>Type</th>
+            <?js if (props.hasAttributes) {?>
+            <th>Attributes</th>
+            <?js } ?>
 
-        <?js if (props.hasAttributes) {?>
-        <th>Attributes</th>
-        <?js } ?>
+            <?js if (props.hasDefault) {?>
+            <th>Default</th>
+            <?js } ?>
 
-        <?js if (props.hasDefault) {?>
-        <th>Default</th>
-        <?js } ?>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
 
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <?js
-        var self = this;
-        var level = 0;
-        props.forEach(function(prop) {
-            if (!prop) { return; }
-            var propData = {
-                props: props,
-                prop: prop,
-                level: level
-            }
-    ?>
-        <?js= self.partial('property.tmpl', propData) ?>
-    <?js }); ?>
-    </tbody>
-</table>
+        <tbody>
+        <?js
+            var self = this;
+            var level = 0;
+            props.forEach(function(prop) {
+                if (!prop) { return; }
+                var propData = {
+                    props: props,
+                    prop: prop,
+                    level: level
+                }
+        ?>
+            <?js= self.partial('property.tmpl', propData) ?>
+        <?js }); ?>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+.side-nav
+  a
+    color: $grey
+    overflow-wrap: break-word
+    &:hover, &.is-active
+      color: $red-active
+    &.is-past
+      opacity: 0.7
+  h3
+    margin: rem(24px) 0 rem(6px)
+    color: $main-nav
+    font-size: 12px
+    text-transform: uppercase
+  ul
+    padding: 0 0 rem(4px) rem(16px)
+    li
+      padding: rem(3px) 0
+
+  @include until($tablet)
+    display: none

@@ -1,17 +1,15 @@
 .top-navbar
-  background: $black
-  padding: rem(25px) 0
-  margin-bottom: rem(70px)
+  background: $white
+  padding: $space-xl $space-xxl
+  box-shadow: 0 0 40px 0 $shadow
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  z-index: 5
+  
   .navbar
-    background: $black
-
-  .navbar-item, .navbar-burger
-    color: #fff
-    a
-      color: #fff
-      &:hover
-        color: $red-active
-
+    display: flex
 
   .navbar-brand
     img
@@ -21,3 +19,13 @@
     h1
       font-size: 30px
       font-family: $header-font-family
+    @include until($desktop)
+      flex-grow: 1
+
+  .github-stars
+    padding: 6px 14px 0
+    @include until($desktop)
+      display: none
+
+  .navbar-burger
+    margin-left: 0

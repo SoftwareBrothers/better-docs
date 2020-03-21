@@ -1,4 +1,4 @@
-const DOCS_COMMAND = process.env.DOCS_COMMAND || 'npm run docs'
+const DOCS_COMMAND = process.env.DOCS_COMMAND || 'yarn docs'
 const DOCS_OUTPUT = process.env.DOCS_OUTPUT || "../docs"
 
 const gulp = require('gulp')

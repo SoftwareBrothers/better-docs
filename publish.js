@@ -426,13 +426,13 @@ function buildGroupNav (members, title) {
  * @param {array<object>} members.interfaces
  * @return {string} The HTML for the navigation sidebar.
  */
-function buildNav(members) {
-    var nav = '<h2><a href="index.html">Home</a></h2>';
+function buildNav(members, navTypes = null) {
+    var nav = navTypes ? '' : '<h2><a href="index.html">Documentation</a></h2>';
 
     var categorised = {}
     var rootScope = {}
 
-    var types = ['tutorials', 'modules', 'externals', 'namespaces', 'classes',
+    var types = navTypes || ['modules', 'externals', 'namespaces', 'classes',
     'components', 'interfaces', 'events', 'mixins', 'globals']
     types.forEach(function(type) {
         if (!members[type]) { return }
@@ -655,7 +655,14 @@ exports.publish = function(taffyData, opts, tutorials) {
     });
 
     members = helper.getMembers(data);
-    members.tutorials = tutorials.children;
+    if (opts.tutorials) {
+        // sort tutorials
+        const tutorialsFile = JSON.parse(fs.readFileSync(`${opts.tutorials}/tutorials.json`))
+        members.tutorials = Object.keys(tutorialsFile).map(key => tutorials._tutorials[key]);
+    } else {
+        members.tutorials = tutorials.children
+    }
+    view.tutorials = members.tutorials
     members.components = helper.find(data, {kind: 'class', component: {isUndefined: false}})
     members.classes = helper.find(data, {kind: 'class', component: {isUndefined: true}})
 
@@ -666,12 +673,13 @@ exports.publish = function(taffyData, opts, tutorials) {
     view.find = find;
     view.linkto = linkto;
     view.resolveAuthorLinks = resolveAuthorLinks;
-    view.tutoriallink = tutoriallink;
+    view.tutorialToUrl = helper.tutorialToUrl;
     view.htmlsafe = htmlsafe;
     view.outputSourceFiles = outputSourceFiles;
 
     // once for all
     view.nav = buildNav(members);
+    view.tutorialsNav = buildNav(members, ['tutorials']);
     bundler(members.components, outdir, conf)
     attachModuleSymbols( find({ longname: {left: 'module:'} }), members.modules );
 
