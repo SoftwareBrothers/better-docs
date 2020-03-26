@@ -1,5 +1,5 @@
 .button
-  border-radius: 8px
+  border-radius: 4px
   padding: $space-md $space-xl
   height: 40px
   border-color: $primary100
@@ -11,3 +11,18 @@
     background-color: $primary100
     &:hover
       background-color: $hoverBg
+    &.is-outlined
+      border-color: $primary100
+      color: $primary100
+      &:hover
+        border-color: $hoverBg
+        color: $hoverBg
+        background: transparent
+
+  &.is-white.is-outlined
+    background: transparent
+    border-color: $white
+
+  & > i:first-child
+    margin-right: $space-md
+    margin-left: -$space-md

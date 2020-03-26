@@ -1,31 +1,35 @@
-.top-navbar
+.top-nav
   background: $white
-  padding: $space-xl $space-xxl
+  padding: $space-md $space-xxl
   box-shadow: 0 0 40px 0 $shadow
   position: fixed
   top: 0
   left: 0
   right: 0
   z-index: 5
+  height: 120px
   
-  .navbar
-    display: flex
-
-  .navbar-brand
-    img
-      margin-right: 20px
-      @include until($desktop)
-        margin-left: 30px
-    h1
-      font-size: 30px
-      font-family: $header-font-family
-    @include until($desktop)
-      flex-grow: 1
-
-  .github-stars
-    padding: 6px 14px 0
-    @include until($desktop)
-      display: none
-
-  .navbar-burger
-    margin-left: 0
+  .branding
+    flex-grow: 1
+  
+  .menu .top-buttons
+    text-align: right
+    margin-bottom: $space-md
+    margin-top: $space-xs
+    .button
+      margin-left: $space-lg
+  
+  .menu .navigation
+    text-align: right
+    margin-bottom: $space-sm
+    .link
+      border: none
+      display: inline-block
+      padding: $space-sm $space-md
+      color: $grey
+      margin-right: $space-xs
+      line-height: $space-xxl
+      height: $space-xxl
+      vertical-align: middle
+      &:hover
+        color: $black

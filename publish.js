@@ -9,8 +9,10 @@ var path = require('jsdoc/path');
 var taffy = require('taffydb').taffy;
 var template = require('jsdoc/template');
 var util = require('util');
+const { getParser } = require('jsdoc/util/markdown');
 
 var bundler = require('./bundler')
+const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe;
 var linkto = helper.linkto;
@@ -427,7 +429,7 @@ function buildGroupNav (members, title) {
  * @return {string} The HTML for the navigation sidebar.
  */
 function buildNav(members, navTypes = null) {
-    var nav = navTypes ? '' : '<h2><a href="index.html">Documentation</a></h2>';
+    var nav = navTypes ? '' : '<h2><a href="docs.html">Documentation</a></h2>';
 
     var categorised = {}
     var rootScope = {}
@@ -777,4 +779,31 @@ exports.publish = function(taffyData, opts, tutorials) {
     }
 
     saveChildren(tutorials);
+
+    function saveLandingPage() {
+        const content = fs.readFileSync(conf.betterDocs.landing, 'utf8')
+        
+        var landingPageData = {
+            title: 'Home',
+            content,
+        };
+
+        var homePath = path.join(outdir, 'index.html');
+        var docsPath = path.join(outdir, 'docs.html');
+
+        fs.renameSync(homePath, docsPath)
+        
+        view.layout = 'landing.tmpl'
+        var html = view.render('content.tmpl', landingPageData);
+
+        // yes, you can use {@link} in tutorials too!
+        html = helper.resolveLinks(html); // turn {@link foo} into <a href="foodoc.html">foo</a>
+
+        fs.writeFileSync(homePath, html, 'utf8');
+
+    }
+
+    if (conf.betterDocs.landing) {
+        saveLandingPage()
+    }
 };

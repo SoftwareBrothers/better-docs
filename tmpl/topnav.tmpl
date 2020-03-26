@@ -1,0 +1,64 @@
+<?js 
+  self = this
+?>
+
+<div class="top-nav">
+    <div class="inner level">
+        <div class="logo">
+            <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+            <?js if(betterDocs.logo) { ?> 
+                <a class="image" href="index.html">
+                    <img src="<?js= betterDocs.logo ?>" alt="logo">
+                </a>
+            <?js } ?>
+            <?js if(betterDocs.name) { ?> 
+                <h1 class="navbar-item"><?js= betterDocs.name?></h1>
+            <?js } else { ?>
+                <h1 class="navbar-item">API</h1>
+            <?js } ?>
+        </div>
+        <div class="menu">
+            <?js if(betterDocs.navigation && betterDocs.navigation.length) { ?> 
+                <div class="top-buttons">
+                    <?js betterDocs.navigation.forEach(function(nav) { ?>
+                        <a  href="<?js= nav.href ?>"
+                            target="<?js= nav.target ? '_blank' : '' ?>"
+                            class="button <?js= nav.className ?>"
+                        ?>
+                            <?js= nav.label ?>
+                        </a>
+                    <?js }); ?>
+                </div>
+                <?js } ?>
+            <div class="navigation">
+                <a href="docs.html" class="link">
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        <?js if (this.tutorials.length) { ?>
+                            <?js this.tutorials.forEach(function(tutorial) { ?>
+                                <a class="dropdown-item" href="<?js= self.tutorialToUrl(tutorial.name) ?>">
+                                    <?js= tutorial.title ?>
+                                </a>
+                            <?js }); ?>
+                        <?js } ?>
+                        </div>
+                    </div>
+                </div>
+                <a class="dropdown-trigger link">
+                    <i class="fab fa-github fa-3x"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
