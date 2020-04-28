@@ -1,9 +1,12 @@
 const fs = require('fs')
-const path = require('path').posix
 const execSync = require('child_process').execSync
+const path = require('path')[process.platform === 'win32' ? 'win32' : 'posix']
 
 const VUE_WRAPPER = process.env.IS_DEV ? 'src/vue-wrapper.js' : 'lib/vue-wrapper.js'
 const REACT_WRAPPER = process.env.IS_DEV ? 'src/react-wrapper.jsx' : 'lib/react-wrapper.js'
+
+const pathCrossEnv = (path) =>
+  process.platform !== 'win32' ? path : path.replace(/\\/g, '/')
 
 module.exports = function bundle (Components, out, config) {
   if (!Components.length) {
@@ -27,11 +30,15 @@ module.exports = function bundle (Components, out, config) {
     `
   }
   if (reactComponents.length) {
+    const reactWrapperRelPath = pathCrossEnv(
+      path.relative(absoluteOut, path.join(__dirname, REACT_WRAPPER))
+    )
+
     init = init + `
       import React from "react";\n
       import ReactDOM from "react-dom";\n
 
-      import ReactWrapper from '${path.relative(absoluteOut, path.join(__dirname, REACT_WRAPPER))}';\n
+      import ReactWrapper from '${reactWrapperRelPath}';\n
       window.React = React;\n
       window.ReactDOM = ReactDOM;\n
       window.ReactWrapper = ReactWrapper;\n
@@ -47,8 +54,9 @@ module.exports = function bundle (Components, out, config) {
   if (config.betterDocs.component) {
     if(config.betterDocs.component.wrapper) {
       const absolute = path.resolve(config.betterDocs.component.wrapper)
+      const relative = pathCrossEnv(path.relative(absoluteOut, absolute))
       init +=`
-      import _CustomWrapper from '${path.relative(absoluteOut, absolute)}';\n
+      import _CustomWrapper from '${relative}';\n
       window._CustomWrapper = _CustomWrapper;\n
       `
     }
@@ -57,10 +65,10 @@ module.exports = function bundle (Components, out, config) {
       init = `${config.betterDocs.component.entry.join('\n')}\n${init}`
     }
   }
-  
+
   const entryFile = init + Components.map((c, i) => {
     const { displayName, filePath, type } = c.component
-    const relativePath = path.relative(absoluteOut, filePath)
+    const relativePath = pathCrossEnv(path.relative(absoluteOut, filePath))
     const name = `Component${i}`
     return [
       `import ${name} from '${relativePath}';`,
