@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## Version 1.4.11 - 2020-04-28
+
+### Added
+
+- support for flow type
+
 ## Version 1.4.10 - 2020-04-28
 
 ### Fixed
