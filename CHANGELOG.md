@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## Version 1.4.8 - 2020-04-28
+
+### Fixed
+
+- [#43] - fixed windows issue
+
 ## [1.4.7] - 2019-10-18
 
 ### Fixed
