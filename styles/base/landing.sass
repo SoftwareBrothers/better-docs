@@ -1,0 +1,390 @@
+body.landing
+  & > .top-nav
+    box-shadow: none
+    transition: margin-top 0.3s
+    &.hidden
+      transition: margin-top 0.3s
+      margin-top: (-$main-nav-height - 10px)
+      @include until($desktop)
+        margin-top: (-$main-nav-height-mobile - 10px)
+    &.sticky
+      box-shadow: 0 0 20px 0 rgba(0,0,255,0.5)
+    & .inner
+      margin: 0 auto
+      max-width: 1226px
+    color: $white
+    background: $primary100
+    & a.button
+      color: $white
+      border-color: $white
+      background: transparent
+      &:hover
+        background: $white
+        border-color: $white
+        color: $grey100
+    & .menu .navigation a.link
+      color: $white
+      &:hover
+        border-color: $white
+
+    .image img
+      content:url("../images/logo.svg")
+    
+    #hamburger
+      display: none
+
+  #main
+    display: block
+    height: auto
+
+  .main-hero
+    background: $primary100
+    color: $white
+    padding: 300px 40% 160px
+    border-bottom-left-radius: 50%
+    border-bottom-right-radius: 50%
+    margin: -250px -30% 0
+    text-align: center
+    .action-buttons
+      margin: 60px 0
+      vertical-align: middle
+      span
+        color: $white
+    h3
+      font-size: 24px
+      line-height: 65px
+      font-weight: lighter
+    h1
+      font-size: 52px
+      line-height: 65px
+      font-weight: lighter
+      max-width: 900px
+      margin-left: auto
+      margin-right: auto
+    strong
+      color: $white
+  
+  .gif-box
+    margin-top: -140px
+    text-align: center
+
+  .grey-logos
+    text-align: center
+    margin-bottom: 50px
+    .column
+      display: flex
+      align-items: center
+      justify-content: center
+
+  .white-oval
+    background: $white
+    padding: 110px 500px 100px
+    margin: 0 -500px
+    text-align: center
+    border-bottom-left-radius: 50%
+    border-bottom-right-radius: 50%
+
+
+  h2
+    font-weight: bold
+    font-size: 36px
+    line-height: 48px
+    color: $black
+    margin-bottom: 15px
+    &+p
+      color: $grey80
+      font-size: 16px
+  
+  h4
+    font-weight: bold
+    font-size: 24px
+    line-height: 32px
+
+  .header-message
+    margin-bottom: 80px
+
+  .todo-actions
+    text-align: left
+    padding: 100px 0 100px 100px
+    @include until($widescreen)
+      padding-top: 20px
+    h4
+      margin-bottom: 60px
+      position: relative
+      &:before
+        content: ''
+        position: absolute
+        left: -50px
+        top: 0
+        height: 30px
+        width: 30px
+        background: url('../images/check.svg') no-repeat 50% 50%
+  .action-buttons span
+    line-height: 36px
+    margin: 0 10px
+    color: $primary100
+
+
+  .credentials
+    text-align: center
+    padding: 100px 0
+    background: url('../images/map.svg') no-repeat 50% 50%
+
+    .fa-youtube
+      color: #FF0000
+    .fa-reddit
+      color: #FF4500
+    .fa-github
+      color: $black
+    
+    .columns
+      margin-bottom: 20px
+
+    .column
+      display: flex
+      flex-direction: column
+
+    .box
+      flex-direction: column
+      padding: 30px
+      height: 100%
+      box-shadow: 0px 0px 40px rgba(115, 134, 160, 0.25)
+      display: flex
+      justify-content: center
+      &:hover
+        box-shadow:  0px 0px 40px rgba(115, 134, 160, 0.5)
+      h5
+        align-self: center
+        font-size: 22px
+        line-height: 26px
+        margin-bottom: 30px
+      span
+        font-size: 11px
+
+  .stat-box
+    padding: 40px 65px
+    box-shadow: 0px 0px 40px rgba(115, 134, 160, 0.25)
+
+    .column:first-child
+      @include mobile
+        padding-bottom: 40px
+
+    .fa-github
+      color: $black
+
+    h2
+      margin: 0 0 60px
+
+    h4
+      font-size: 32px
+      font-weight: bolder
+      margin-top: 15px
+      color: $black
+      strong
+        color: $black
+
+    .level
+      border-bottom: #4C73F7 3px solid
+      margin-bottom: -3px
+      img
+        position: relative
+        bottom: -3px
+    
+    .action-buttons
+      margin: 50px 0 0
+
+  .feature-docs
+    margin-top: -200px
+    padding-top: 300px
+
+    @include from($widescreen)
+      .container .columns.is-multiline
+        margin: 0 8.333%
+    .columns.is-multiline
+      .column
+        display: flex
+      
+
+    .box
+      color: $black
+      &:hover
+        box-shadow:  4px 8px 12px rgba(115, 134, 160, 0.25)
+      img
+        margin: -10px 0
+      h4
+        line-height: 36px
+        font-size: 26px
+      p
+        font-size: 20px
+        line-height: 26px
+        margin: 35px 0
+    .action-buttons
+      margin: 100px 0 50px
+
+
+  .feature-side-blocks
+    .bg-crud
+      background: url('../images/bg-crud.png') no-repeat 100% 50%
+      @include until($widescreen)
+        background-position-x: 150%
+      @include until($desktop)
+        background: none
+        text-align: center
+    .bg-filter
+      background: url('../images/bg-filter.png') no-repeat 0% 50%
+      @include until($widescreen)
+        background-position-x: -200px
+      @include until($desktop)
+        background: none
+        text-align: center
+    .column
+      justify-content: center
+      display: flex
+      flex-direction: column
+      @include from($desktop)
+        height: 700px
+    .container
+      margin-top: 50px
+      margin-bottom: 50px
+    
+    .action-buttons
+      margin: 30px 0
+
+  .support-block
+    padding: 80px 0 350px
+    background: #fff
+    margin-bottom: -200px
+    .column
+      display: flex
+      flex-direction: column
+      .box
+        flex-grow: 1
+    .img
+      text-align: center
+      border-bottom: 1px solid #D8D8D8
+      margin: 0 -20px 20px
+    h4
+      font-weight: bolder
+      font-size: 26px
+      line-height: 48px
+    .text
+      padding: 0 10px 20px
+    .form
+      background: #4268F6
+      padding: 40px
+      border-radius: 10px
+
+  .button.is-success
+    width: 170px
+    height: 50px
+
+  .form
+    color: #fff
+    .success-msg
+      display: none
+      img
+        width: 150px
+        margin: 100px 0
+
+    &.completed
+      .success-msg
+        display: block
+      .form-fields
+        display: none
+    h2
+      color: #fff
+      margin-bottom: 30px
+    .label
+      font-size: 20px
+    .field
+      margin-bottom: 40px
+      color: #fff
+      label
+        color: #fff
+        font-weight: bold
+      input
+        border-radius: 4px
+        height: 54px
+    .checkbox
+      display: block
+      padding: 8px 0
+      font-size: 16px
+      &:hover
+        color: #fff
+      input
+        margin-right: 5px
+    .interested
+      .label
+        color: #fff
+      padding: 0 0 20px
+    textarea
+      height: 80px
+    .notice
+      font-size: 14px
+      font-weight: lighter
+      padding: 10px 30px
+
+
+  .curved-footer
+    background: #4268F6
+    padding: 110px 500px
+    margin: 0 -500px
+    border-top-left-radius: 50%
+    border-top-right-radius: 50%
+
+    color: #fff
+
+    .the-part
+      position: relative
+      h2
+        font-size: 90px
+        line-height: 120px
+        opacity: 0.08
+        color: #fff
+        @include until($desktop)
+          font-size: 70px
+
+      h4
+        font-size: 56px
+        line-height: 65px
+        position: absolute
+        left: 0
+        top: 0
+        right: 0
+        padding: 80px 0
+
+  .button.is-link
+    background: transparent
+    span
+      border-bottom: 1px solid #fff
+    &:hover span
+      border-bottom: none
+
+  .top
+    border-bottom: 1px solid rgba(255,255,255, 0.2)
+    padding-bottom: 120px
+    text-align: center
+  
+  .bottom
+    font-size: 14px
+    padding: 65px 0 0
+    @include until($tablet)
+      padding: 20px
+    strong
+      color: #fff
+    p
+      padding: 6px 0
+    a
+      color: #fff
+
+    .sb
+      padding-top: 40px
+    .logo
+      padding-bottom: 30px
+    
+    .button.is-success
+      margin-top: 40px
+      height: 54px
+
+    .form
+      margin-top: 30px

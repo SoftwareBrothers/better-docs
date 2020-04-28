@@ -1,0 +1,75 @@
+<?js 
+  self = this
+?>
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            <?js if(betterDocs.logo) { ?> 
+                <a class="image" href="index.html">
+                    <img src="<?js= betterDocs.logo ?>" alt="logo">
+                </a>
+            <?js } ?>
+            <?js if(betterDocs.name) { ?> 
+                <a href="index.html">
+                    <h1 class="navbar-item"><?js= betterDocs.name?></h1>
+                </a>
+            <?js } ?>
+        </div>
+        <div class="menu">
+            <?js if(betterDocs.navButtons && betterDocs.navButtons.length) { ?> 
+                <div class="top-buttons">
+                    <?js betterDocs.navButtons.forEach(function(nav) { ?>
+                        <a  href="<?js= nav.href ?>"
+                            target="<?js= nav.target ? '_blank' : '' ?>"
+                            class="button <?js= nav.className ?>"
+                        ?>
+                            <?js= nav.label ?>
+                        </a>
+                    <?js }); ?>
+                </div>
+                <?js } ?>
+            <div class="navigation">
+                <a
+                    href="<?js= betterDocs.landing ? 'docs.html' : 'index.html' ?>"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        <?js if (this.tutorials.length) { ?>
+                            <?js this.tutorials.forEach(function(tutorial) { ?>
+                                <a class="dropdown-item" href="<?js= self.tutorialToUrl(tutorial.name) ?>">
+                                    <?js= tutorial.title ?>
+                                </a>
+                            <?js }); ?>
+                        <?js } ?>
+                        </div>
+                    </div>
+                </div>
+                <?js if(betterDocs.navLinks && betterDocs.navLinks.length) { ?> 
+                    <?js betterDocs.navLinks.forEach(function(link) { ?>
+                        <a
+                            class="link user-link <?js= link.className ? link.className : '' ?>"
+                            href="<?js= link.href ?>"
+                        >
+                            <?js= link.label ?>
+                        </a>
+                    <?js }) ?>
+                <?js } ?>
+                
+            </div>
+        </div>
+    </div>
+</div>

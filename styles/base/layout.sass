@@ -1,5 +1,66 @@
+html
+  height: 100%
+  width: 100%
+
 body
   font-family: $base-font-family
   font-size: $base-font-size
   position: relative
+  height: 100%
+  width: 100%
+  overflow-x: hidden
+
+  &.small-header
+    .top-nav
+      height: $main-nav-height-mobile
+    #main
+      padding-top: $main-nav-height-mobile
+
+.top-nav
+  height: $main-nav-height
+  @include until($desktop)
+    height: $main-nav-height-mobile
+  
+#main
+  height: 100%
+  display: flex
+  flex-direction: row
+  background: $bg
+  padding-top: $main-nav-height
+  overflow-x: hidden
+  width: 100%
+  @include until($desktop)
+    padding-top: $main-nav-height-mobile
+  & > .sidebar
+    padding: 40px 30px
+    flex-grow: 0
+    flex-shrink: 0
+    width: 240px
+    border-right: 1px solid $border
+    height: 100%
+    overflow: auto
+    
+    &.tutorials
+      width: 320px
+  
+  & > .core
+    padding: 28px
+    height: 100%
+    overflow: auto
+    flex-grow: 1
+    @include until($tablet)
+      padding: 0px
+    & > .content
+      background: $white
+      padding: 40px
+      border-radius: 4px
+      box-shadow: 0 0 40px 0 rgba(115,134,160,0.24)
+  & > .side-nav
+    width: 240px
+    padding: 40px 20px
+    flex-grow: 0
+    flex-shrink: 0
+    height: 100%
+    border-left: 1px solid $border
+    overflow: auto
   

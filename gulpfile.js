@@ -1,5 +1,5 @@
-const DOCS_COMMAND = process.env.DOCS_COMMAND || 'npm run docs'
-const DOCS_OUTPUT = process.env.DOCS_OUTPUT || "../docs"
+const DOCS_COMMAND = process.env.DOCS_COMMAND || 'yarn docs'
+const DOCS_OUTPUT = process.env.DOCS_OUTPUT || '../docs'
 
 const gulp = require('gulp')
 const sass = require('gulp-sass')
@@ -10,7 +10,7 @@ const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
 const concat = require('gulp-concat')
 const path = require('path')
-const browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync').create()
 
 gulp.task('sass', () => {
   gulp.src('styles/app.sass')

@@ -1,9 +1,11 @@
 .sidebar
   padding-bottom: 120px
 
-  #search
-    margin-bottom: rem(20px)
-
+  .search-wrapper
+    // margin-bottom: rem(20px)
+    margin: -20px -15px 21px
+    input
+      border-radius: 0
   a
     color: $grey
     overflow-wrap: break-word
@@ -26,16 +28,16 @@
       margin-top: 40px
 
 #sidebarNav.sticky
-  right: 0
-  transition: right 0.5s
+  left: 0
+  transition: left 0.5s
 
 #sidebarNav
   @include until($desktop)
     z-index: 100
     top: 0
-    right: -300px
+    left: -300px
     position: fixed
-    transition: right 0.5s
+    transition: left 0.5s
     padding: 28px
     width: 300px
     bottom: 0

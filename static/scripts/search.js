@@ -4,7 +4,7 @@
   input.addEventListener('keyup', () => {
     // loop over each targets and hide the not corresponding ones
     targets.forEach(target => {
-      if (!target.innerText.includes(input.value)) {
+      if (!target.innerText.toLowerCase().includes(input.value.toLowerCase())) {
         target.style.display = 'none'
 
         /**

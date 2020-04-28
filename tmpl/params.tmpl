@@ -74,43 +74,44 @@
         }
     });
 ?>
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            <?js if (params.hasName) {?>
+            <th>Name</th>
+            <?js } ?>
 
-<table class="params">
-    <thead>
-    <tr>
-        <?js if (params.hasName) {?>
-        <th>Name</th>
-        <?js } ?>
+            <th>Type</th>
 
-        <th>Type</th>
+            <?js if (params.hasAttributes) {?>
+            <th>Attributes</th>
+            <?js } ?>
 
-        <?js if (params.hasAttributes) {?>
-        <th>Attributes</th>
-        <?js } ?>
+            <?js if (params.hasDefault) {?>
+            <th>Default</th>
+            <?js } ?>
 
-        <?js if (params.hasDefault) {?>
-        <th>Default</th>
-        <?js } ?>
+            <th class="last">Description</th>
+        </tr>
+        </thead>
 
-        <th class="last">Description</th>
-    </tr>
-    </thead>
+        <tbody>
+        <?js
+            var self = this;
+            var level = 0;
+            params.forEach(function(param) {
+                if (!param) { return; }
+                var paramData = {
+                    params: params,
+                    param: param,
+                    level: level
+                }
+        ?>
 
-    <tbody>
-    <?js
-        var self = this;
-        var level = 0;
-        params.forEach(function(param) {
-            if (!param) { return; }
-            var paramData = {
-                params: params,
-                param: param,
-                level: level
-            }
-    ?>
+            <?js= self.partial('param.tmpl', paramData) ?>
 
-        <?js= self.partial('param.tmpl', paramData) ?>
-
-    <?js }); ?>
-    </tbody>
-</table>
+        <?js }); ?>
+        </tbody>
+    </table>
+</div>

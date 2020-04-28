@@ -2,53 +2,54 @@
 var data = obj;
 var self = this;
 ?>
+<div class="table-container">
+  <table class="params table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th class="last">Default</th>
+    </tr>
+    </thead>
 
-<table class="params">
-  <thead>
-  <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Required</th>
-      <th>Description</th>
-      <th class="last">Default</th>
-  </tr>
-  </thead>
+    <tbody>
+    <?js
+        var self = this;
+        var level = 0;
+        data.props.forEach(function(propType) {
+    ?>
+          <tr class="deep-level-0">
+            <td class="name"><code><?js= propType.name ?></code></td>
+            <td>
+              <?js= propType.type ?>
+            </td>
+            <td><?js= propType.required ? 'Yes' : 'No' ?></td>
+            <td><?js= propType.description ?></td>
+            <td><?js= propType.defaultValue ?></td>
+          </tr>
+          <?js if(propType.type.value) {
+            var keys = Object.keys(propType.type.value);
+            keys.forEach(function(key) {
+              var subType = propType.type.value[key]
+          ?>
+          <tr class="deep-level-1">
+            <td class="name"><code><?js= key ?></code></td>
+            <td>
+              <?js if(subType.value){ ?>
+                <?js= JSON.stringify(subType.value) ?>
+              <?js } else { ?>
+                <?js= subType.name ?>
+              <?js } ?>
+            </td>
+            <td><?js= subType.required ? 'Yes' : 'No' ?></td>
+            <td><?js= subType.description ?></td>
+            <td><?js= subType.defaultValue ? JSON.stringify(subType.defaultValue.value) : '' ?></td>
+          </tr>
 
-  <tbody>
-  <?js
-      var self = this;
-      var level = 0;
-      data.props.forEach(function(propType) {
-  ?>
-        <tr class="deep-level-0">
-          <td class="name"><code><?js= propType.name ?></code></td>
-          <td>
-            <?js= propType.type ?>
-          </td>
-          <td><?js= propType.required ? 'Yes' : 'No' ?></td>
-          <td><?js= propType.description ?></td>
-          <td><?js= propType.defaultValue ?></td>
-        </tr>
-        <?js if(propType.type.value) {
-          var keys = Object.keys(propType.type.value);
-          keys.forEach(function(key) {
-            var subType = propType.type.value[key]
-        ?>
-        <tr class="deep-level-1">
-          <td class="name"><code><?js= key ?></code></td>
-          <td>
-            <?js if(subType.value){ ?>
-              <?js= JSON.stringify(subType.value) ?>
-            <?js } else { ?>
-              <?js= subType.name ?>
-            <?js } ?>
-          </td>
-          <td><?js= subType.required ? 'Yes' : 'No' ?></td>
-          <td><?js= subType.description ?></td>
-          <td><?js= subType.defaultValue ? JSON.stringify(subType.defaultValue.value) : '' ?></td>
-        </tr>
-
-        <?js })} ?>
-  <?js }); ?>
-  </tbody>
-</table>
+          <?js })} ?>
+    <?js }); ?>
+    </tbody>
+  </table>
+</div>

@@ -7,106 +7,61 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
     betterDocs = {}
 }
 
+var self = this
+var isTutorial = subtitle === 'Tutorial'
+
 var search = env.conf.templates && env.conf.templates.search
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <?js= betterDocs.trackingCode ?>
-    <meta charset="utf-8">
-    <title>JSDoc: <?js= title ?></title>
+<?js= this.partial('head.tmpl', { betterDocs, title }) ?>
 
-    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="./build/entry.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
-    <?js if(betterDocs.css) { ?>
-        <link type="text/css" rel="stylesheet" href="<?js= betterDocs.css ?>">
-    <?js } ?>
-</head>
-
-<body>
+<body class="<?js= self.smallHeader ? 'layout small-header' : 'layout'?>">
     <div id="stickyNavbarOverlay"></div>
-    <div class="top-navbar">
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <?js if(betterDocs.logo) { ?>
-                        <img src="<?js= betterDocs.logo ?>" alt="logo">
-                    <?js } ?>
-                    <?js if(betterDocs.name) { ?>
-                        <h1 class="navbar-item"><?js= betterDocs.name?></h1>
-                    <?js } else { ?>
-                        <h1 class="navbar-item">Documentation</h1>
-                    <?js } ?>
-                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
+    <?js= this.partial('topnav.tmpl', { betterDocs }) ?>
+    <div id="main">
+        <div
+            class="sidebar <?js= isTutorial ? 'tutorials' : '' ?>"
+            id="sidebarNav"
+        >
+            <?js if(search) { ?>
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
                 </div>
-                <?js if(betterDocs.navigation && betterDocs.navigation.length) { ?>
-                <div class="navbar-menu">
-                    <div class="navbar-end">
-                    <?js betterDocs.navigation.forEach(function(nav) { ?>
-                        <div class="navbar-item">
-                            <a href="<?js= nav.href ?>" target="_blank">
-                                <?js= nav.label ?>
-                            </a>
-                        </div>
-                    <?js }); ?>
-                    </div>
-                </div>
+            <?js } ?>
+            <nav>
+                <?js if (isTutorial) { ?>
+                    <?js= this.tutorialsNav ?>
+                <?js } else { ?>
+                    <?js= this.nav ?>
                 <?js } ?>
             </nav>
         </div>
-    </div>
-    <div class="container">
-        <div class="columns">
-            <div class="column is-3" id="sidebarNav">
-                <div class="sidebar">
-                <?js if(search) { ?>
-                    <input id="search" type="text" placeholder="Search Documentations">
-                <?js } ?>
-                    <nav>
-                        <?js= this.nav ?>
-                    </nav>
-                </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p><?js= subtitle ?></p>
+                    <h1><?js= title ?></h1>
+                </header>
+                <?js= content ?>
             </div>
-            <div class="column is-9-desktop">
-                <div class="content" id="main-content-wrapper">
-                    <header class="page-title">
-                        <p><?js= subtitle ?></p>
-                        <h1><?js= title ?></h1>
-                    </header>
-
-                    <?js= content ?>
+            <?js if (betterDocs.hideGenerator !== true) { ?>
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc <?js= env.version.number ?></a><?js if(env.conf.templates && env.conf.templates.default && env.conf.templates.default.includeDate) { ?> on <?js= (new Date()) ?><?js } ?></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
                 </div>
-            </div>
+            </footer>
+            <?js } ?>
+        </div>
+        <div id="side-nav" class="side-nav">
         </div>
     </div>
-
-<?js if (betterDocs.hideGenerator !== true) { ?>
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc <?js= env.version.number ?></a><?js if(env.conf.templates && env.conf.templates.default && env.conf.templates.default.includeDate !== false) { ?> on <?js= (new Date()) ?><?js } ?></p>
-        <p class="sidebar-created-by">
-            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
-            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
-        </p>
-    </div>
-</footer>
-<?js } ?>
-
 <script src="scripts/app.min.js"></script>
 <script>PR.prettyPrint();</script>
 <script src="scripts/linenumber.js"> </script>

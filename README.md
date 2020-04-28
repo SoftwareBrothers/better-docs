@@ -593,6 +593,7 @@ Example configuration file with settings for both `default` and `better-docs` te
         "better-docs": {
             "name": "AdminBro Documentation",
             "logo": "images/logo.png",
+            "title": "", // HTML title
             "css": "style.css",
             "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
 	    "hideGenerator": false,
