@@ -6,6 +6,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## Version 1.4.13 - 2020-04-28
+
+### Added
+
+- [#27] - search ability
+
+## Version 1.4.12 - 2020-04-28
+
+### Fixed
+
+- update peerDependencies to more up to date version
+
+## Version 1.4.11 - 2020-04-28
+
+### Added
+
+- support for flow type
+
+## Version 1.4.10 - 2020-04-28
+
+### Fixed
+
+- [#30] fix line links in source code view
+
+## Version 1.4.9 - 2020-04-28
+
+### Added
+
+- add the ability to include a stylesheet via templates.default.staticFiles and then include it in the final theme via templates[better-docs].css
+
+## Version 1.4.8 - 2020-04-28
+
+### Fixed
+
+- [#43] - fixed windows issue
+
 ## [1.4.7] - 2019-10-18
 
 ### Fixed

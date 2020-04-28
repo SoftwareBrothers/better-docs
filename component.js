@@ -72,7 +72,7 @@ var parseReact = function (filePath, doclet) {
     props: Object.entries(docGen.props || {}).map(([key, prop]) => ({
       name: key,
       description: prop.description,
-      type: prop.type.name,
+      type: prop.type ? prop.type.name : prop.flowType.name,
       required: typeof prop.required === 'boolean' && prop.required,
       defaultValue: prop.defaultValue
         ? (prop.defaultValue.computed ? 'function()' : prop.defaultValue.value)
@@ -92,7 +92,7 @@ var parseVue = function (filePath, doclet) {
     props: Object.values(docGen.props || {}).map(prop => ({
       name: prop.name,
       description: prop.description,
-      type: prop.type.name,
+      type: prop.type ? prop.type.name : prop.flowType.name,
       required: typeof prop.required === 'boolean' && prop.required,
       defaultValue: prop.defaultValue
         ? (prop.defaultValue.func ? 'function()' : prop.defaultValue.value)
