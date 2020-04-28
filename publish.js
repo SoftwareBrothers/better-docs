@@ -656,11 +656,23 @@ exports.publish = function(taffyData, opts, tutorials) {
         }
     });
 
+    view.smallHeader = !conf.betterDocs.navButtons
+
     members = helper.getMembers(data);
     if (opts.tutorials) {
         // sort tutorials
-        const tutorialsFile = JSON.parse(fs.readFileSync(`${opts.tutorials}/tutorials.json`))
-        members.tutorials = Object.keys(tutorialsFile).map(key => tutorials._tutorials[key]);
+        try {
+            const tutorialsFile = JSON.parse(fs.readFileSync(`${opts.tutorials}/tutorials.json`))
+            members.tutorials = Object.keys(tutorialsFile).map(key => tutorials._tutorials[key]);
+            view.smallHeader = false
+        } catch (error) {
+            // tutorials.json doesn't exist
+            if (error.code !== "ENOENT") {
+                throw error
+            }
+            members.tutorials = tutorials.children
+        }
+        
     } else {
         members.tutorials = tutorials.children
     }
