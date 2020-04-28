@@ -93,7 +93,8 @@
                 <div class="members">
                 <?js doc.component.slots.forEach(function(slot) { ?>
                     <div class="member">
-                        <h4 class="name">
+                        <h4 class="name" id="slot-<?js= slot.name ?>">
+                            <?js= self.partial('name-link.tmpl', {id: ['slot', slot.name].join('-')}) ?>
                             <span class="code-name"><?js= slot.name ?></span>
                         </h4>
                         <div class="description">

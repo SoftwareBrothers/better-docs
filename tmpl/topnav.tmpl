@@ -16,7 +16,9 @@
                 </a>
             <?js } ?>
             <?js if(betterDocs.name) { ?> 
-                <h1 class="navbar-item"><?js= betterDocs.name?></h1>
+                <a href="index.html">
+                    <h1 class="navbar-item"><?js= betterDocs.name?></h1>
+                </a>
             <?js } ?>
         </div>
         <div class="menu">
@@ -33,7 +35,10 @@
                 </div>
                 <?js } ?>
             <div class="navigation">
-                <a href="docs.html" class="link">
+                <a
+                    href="<?js= betterDocs.landing ? 'docs.html' : 'index.html' ?>"
+                    class="link"
+                >
                     API Documentation
                 </a>
                 <div class="dropdown is-hoverable is-right">

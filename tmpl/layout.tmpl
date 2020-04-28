@@ -27,7 +27,9 @@ var search = env.conf.templates && env.conf.templates.search
             id="sidebarNav"
         >
             <?js if(search) { ?>
-                <input id="search" type="text" placeholder="Search Documentations" class="input">
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
             <?js } ?>
             <nav>
                 <?js if (isTutorial) { ?>

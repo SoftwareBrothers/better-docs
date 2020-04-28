@@ -10,6 +10,12 @@ body
   width: 100%
   overflow-x: hidden
 
+  &.small-header
+    .top-nav
+      height: $main-nav-height-mobile
+    #main
+      padding-top: $main-nav-height-mobile
+
 .top-nav
   height: $main-nav-height
   @include until($desktop)
