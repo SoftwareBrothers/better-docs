@@ -3,13 +3,13 @@
 ?>
 
 <div class="top-nav">
-    <div class="inner level">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
         <div class="logo">
-            <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
             <?js if(betterDocs.logo) { ?> 
                 <a class="image" href="index.html">
                     <img src="<?js= betterDocs.logo ?>" alt="logo">
@@ -17,14 +17,12 @@
             <?js } ?>
             <?js if(betterDocs.name) { ?> 
                 <h1 class="navbar-item"><?js= betterDocs.name?></h1>
-            <?js } else { ?>
-                <h1 class="navbar-item">API</h1>
             <?js } ?>
         </div>
         <div class="menu">
-            <?js if(betterDocs.navigation && betterDocs.navigation.length) { ?> 
+            <?js if(betterDocs.navButtons && betterDocs.navButtons.length) { ?> 
                 <div class="top-buttons">
-                    <?js betterDocs.navigation.forEach(function(nav) { ?>
+                    <?js betterDocs.navButtons.forEach(function(nav) { ?>
                         <a  href="<?js= nav.href ?>"
                             target="<?js= nav.target ? '_blank' : '' ?>"
                             class="button <?js= nav.className ?>"
@@ -55,9 +53,17 @@
                         </div>
                     </div>
                 </div>
-                <a class="dropdown-trigger link">
-                    <i class="fab fa-github fa-3x"></i>
-                </a>
+                <?js if(betterDocs.navLinks && betterDocs.navLinks.length) { ?> 
+                    <?js betterDocs.navLinks.forEach(function(link) { ?>
+                        <a
+                            class="link user-link <?js= link.className ? link.className : '' ?>"
+                            href="<?js= link.href ?>"
+                        >
+                            <?js= link.label ?>
+                        </a>
+                    <?js }) ?>
+                <?js } ?>
+                
             </div>
         </div>
     </div>

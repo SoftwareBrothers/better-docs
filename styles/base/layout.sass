@@ -1,18 +1,30 @@
 html
   height: 100%
+  width: 100%
 
 body
   font-family: $base-font-family
   font-size: $base-font-size
   position: relative
   height: 100%
+  width: 100%
+  overflow-x: hidden
+
+.top-nav
+  height: $main-nav-height
+  @include until($desktop)
+    height: $main-nav-height-mobile
   
 #main
   height: 100%
   display: flex
   flex-direction: row
   background: $bg
-  padding-top: 120px
+  padding-top: $main-nav-height
+  overflow-x: hidden
+  width: 100%
+  @include until($desktop)
+    padding-top: $main-nav-height-mobile
   & > .sidebar
     padding: 40px 30px
     flex-grow: 0
@@ -30,6 +42,8 @@ body
     height: 100%
     overflow: auto
     flex-grow: 1
+    @include until($tablet)
+      padding: 0px
     & > .content
       background: $white
       padding: 40px
@@ -43,3 +57,4 @@ body
     height: 100%
     border-left: 1px solid $border
     overflow: auto
+  

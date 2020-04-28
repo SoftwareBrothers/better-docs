@@ -1,21 +1,36 @@
 .top-nav
   background: $white
-  padding: $space-md $space-xxl
+  padding: $space-md $space-xl
   box-shadow: 0 0 40px 0 $shadow
   position: fixed
   top: 0
   left: 0
   right: 0
   z-index: 5
-  height: 120px
+  @include until($tablet)
+    padding: $space-md
+
+  .inner
+    display: flex
+    align-items: center
+    
+
+  #hamburger
+    margin-left: 0
+
+  @include until($tablet)
+    .logo
+      display: none
   
-  .branding
+  .menu
     flex-grow: 1
   
   .menu .top-buttons
     text-align: right
     margin-bottom: $space-md
     margin-top: $space-xs
+    @include until($desktop)
+      display: none
     .button
       margin-left: $space-lg
   
@@ -26,10 +41,14 @@
       border: none
       display: inline-block
       padding: $space-sm $space-md
-      color: $grey
+      color: $black
       margin-right: $space-xs
       line-height: $space-xxl
       height: $space-xxl
       vertical-align: middle
-      &:hover
-        color: $black
+      height: 46px
+      &:hover:not(.no-hover)
+        border-bottom: 2px solid $black
+      @include until($tablet)
+        &.user-link
+          display: none

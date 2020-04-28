@@ -21,10 +21,10 @@ $().ready(() => {
       section.find('.members h4.name').each((i, el) => {
         const navLink = $(el)
         const name = navLink.find('.code-name')
-          .clone().children().remove().end().text();
+          .clone().children().remove().end().text()
         const href = navLink.find('a').attr('href')
         const link = $(`<a href="${href}">${name}</a>`)
-        list.append($(`<li></li>`).append(link))
+        list.append($('<li></li>').append(link))
         links.push({ link, offset: navLink.offset().top})
       })
       wrapper.append(list)
@@ -33,7 +33,7 @@ $().ready(() => {
       section.find('.members h4.name').each((i, el) => {
         const navLink = $(el)
         const name = navLink.find('.code-name')
-          .clone().children().remove().end().text();
+          .clone().children().remove().end().text()
         const href = navLink.find('a').attr('href')
         const link = $(`<a href="${href}">${name}</a>`)
         wrapper.append(link)
@@ -48,7 +48,7 @@ $().ready(() => {
     const position = core.scrollTop()
     let activeSet = false
     for (let index = (links.length-1); index >= 0; index--) {
-      const link = links[index];
+      const link = links[index]
       link.link.removeClass('is-active')
       if ((position + OFFSET) >= link.offset) {
         if (!activeSet) {
@@ -68,7 +68,7 @@ $().ready(() => {
 
   links.forEach(link => {
     link.link.click(() => {
-      core.animate({ scrollTop: link.offset - OFFSET + 1 }, 500);
+      core.animate({ scrollTop: link.offset - OFFSET + 1 }, 500)
     })
   })
 })

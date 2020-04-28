@@ -1,6 +1,14 @@
 body.landing
   & > .top-nav
     box-shadow: none
+    transition: margin-top 0.3s
+    &.hidden
+      transition: margin-top 0.3s
+      margin-top: (-$main-nav-height - 10px)
+      @include until($desktop)
+        margin-top: (-$main-nav-height-mobile - 10px)
+    &.sticky
+      box-shadow: 0 0 20px 0 rgba(0,0,255,0.5)
     & .inner
       margin: 0 auto
       max-width: 1226px
@@ -16,6 +24,14 @@ body.landing
         color: $grey100
     & .menu .navigation a.link
       color: $white
+      &:hover
+        border-color: $white
+
+    .image img
+      content:url("../images/logo.svg")
+    
+    #hamburger
+      display: none
 
   #main
     display: block
@@ -24,17 +40,15 @@ body.landing
   .main-hero
     background: $primary100
     color: $white
-    padding: 300px 460px 160px
+    padding: 300px 40% 160px
     border-bottom-left-radius: 50%
     border-bottom-right-radius: 50%
-    margin: -250px -250px 0
+    margin: -250px -30% 0
     text-align: center
     .action-buttons
       margin: 60px 0
       vertical-align: middle
       span
-        line-height: 40px
-        margin: 0 20px
         color: $white
     h3
       font-size: 24px
@@ -44,24 +58,28 @@ body.landing
       font-size: 52px
       line-height: 65px
       font-weight: lighter
+      max-width: 900px
+      margin-left: auto
+      margin-right: auto
     strong
       color: $white
+  
   .gif-box
+    margin-top: -140px
     text-align: center
-    img
-      max-width: 1018px
-      margin: -150px auto 0px
 
   .grey-logos
     text-align: center
-    padding: 10px 0 76px
-    img
-      margin: 0 73px
+    margin-bottom: 50px
+    .column
+      display: flex
+      align-items: center
+      justify-content: center
 
   .white-oval
     background: $white
-    padding: 110px 300px
-    margin: 0 -300px
+    padding: 110px 500px 100px
+    margin: 0 -500px
     text-align: center
     border-bottom-left-radius: 50%
     border-bottom-right-radius: 50%
@@ -73,6 +91,9 @@ body.landing
     line-height: 48px
     color: $black
     margin-bottom: 15px
+    &+p
+      color: $grey80
+      font-size: 16px
   
   h4
     font-weight: bold
@@ -85,6 +106,8 @@ body.landing
   .todo-actions
     text-align: left
     padding: 100px 0 100px 100px
+    @include until($widescreen)
+      padding-top: 20px
     h4
       margin-bottom: 60px
       position: relative
@@ -95,7 +118,7 @@ body.landing
         top: 0
         height: 30px
         width: 30px
-        background: url('/images/check.svg') no-repeat 50% 50%
+        background: url('../images/check.svg') no-repeat 50% 50%
   .action-buttons span
     line-height: 36px
     margin: 0 10px
@@ -104,8 +127,8 @@ body.landing
 
   .credentials
     text-align: center
-    padding: 100px 0 100px
-    background: url('/images/map.svg') no-repeat 50% 50%
+    padding: 100px 0
+    background: url('../images/map.svg') no-repeat 50% 50%
 
     .fa-youtube
       color: #FF0000
@@ -142,6 +165,10 @@ body.landing
     padding: 40px 65px
     box-shadow: 0px 0px 40px rgba(115, 134, 160, 0.25)
 
+    .column:first-child
+      @include mobile
+        padding-bottom: 40px
+
     .fa-github
       color: $black
 
@@ -152,6 +179,9 @@ body.landing
       font-size: 32px
       font-weight: bolder
       margin-top: 15px
+      color: $black
+      strong
+        color: $black
 
     .level
       border-bottom: #4C73F7 3px solid
@@ -167,6 +197,14 @@ body.landing
     margin-top: -200px
     padding-top: 300px
 
+    @include from($widescreen)
+      .container .columns.is-multiline
+        margin: 0 8.333%
+    .columns.is-multiline
+      .column
+        display: flex
+      
+
     .box
       color: $black
       &:hover
@@ -174,7 +212,7 @@ body.landing
       img
         margin: -10px 0
       h4
-        line-height: 48px
+        line-height: 36px
         font-size: 26px
       p
         font-size: 20px
@@ -186,14 +224,25 @@ body.landing
 
   .feature-side-blocks
     .bg-crud
-      background: url('/images/bg-crud.png') no-repeat 100% 50%
+      background: url('../images/bg-crud.png') no-repeat 100% 50%
+      @include until($widescreen)
+        background-position-x: 150%
+      @include until($desktop)
+        background: none
+        text-align: center
     .bg-filter
-      background: url('/images/bg-filter.png') no-repeat 0% 50%
+      background: url('../images/bg-filter.png') no-repeat 0% 50%
+      @include until($widescreen)
+        background-position-x: -200px
+      @include until($desktop)
+        background: none
+        text-align: center
     .column
-      height: 700px
       justify-content: center
       display: flex
       flex-direction: column
+      @include from($desktop)
+        height: 700px
     .container
       margin-top: 50px
       margin-bottom: 50px
@@ -225,8 +274,23 @@ body.landing
       padding: 40px
       border-radius: 10px
 
+  .button.is-success
+    width: 170px
+    height: 50px
+
   .form
     color: #fff
+    .success-msg
+      display: none
+      img
+        width: 150px
+        margin: 100px 0
+
+    &.completed
+      .success-msg
+        display: block
+      .form-fields
+        display: none
     h2
       color: #fff
       margin-bottom: 30px
@@ -263,8 +327,8 @@ body.landing
 
   .curved-footer
     background: #4268F6
-    padding: 110px 300px
-    margin: 0 -300px
+    padding: 110px 500px
+    margin: 0 -500px
     border-top-left-radius: 50%
     border-top-right-radius: 50%
 
@@ -273,10 +337,12 @@ body.landing
     .the-part
       position: relative
       h2
-        font-size: 120px
+        font-size: 90px
         line-height: 120px
         opacity: 0.08
         color: #fff
+        @include until($desktop)
+          font-size: 70px
 
       h4
         font-size: 56px
@@ -291,15 +357,19 @@ body.landing
     background: transparent
     span
       border-bottom: 1px solid #fff
+    &:hover span
+      border-bottom: none
 
   .top
-    border-bottom: 1px solid #D8D8D8
+    border-bottom: 1px solid rgba(255,255,255, 0.2)
     padding-bottom: 120px
     text-align: center
   
   .bottom
     font-size: 14px
     padding: 65px 0 0
+    @include until($tablet)
+      padding: 20px
     strong
       color: #fff
     p

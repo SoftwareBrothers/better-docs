@@ -1,4 +1,5 @@
 .button
+  transition: all 0.2s
   border-radius: 4px
   padding: $space-md $space-xl
   height: 40px
@@ -7,6 +8,8 @@
   &:hover
     color: $hoverBg
     border-color: $hoverBg
+    transition: all 0.2s
+
   &.is-primary
     background-color: $primary100
     &:hover
@@ -18,6 +21,9 @@
         border-color: $hoverBg
         color: $hoverBg
         background: transparent
+  
+  &.is-success
+    background: #69D6D4
 
   &.is-white.is-outlined
     background: transparent
