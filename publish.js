@@ -313,33 +313,51 @@ function attachModuleSymbols(doclets, modules) {
 }
 
 function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
+    const subCategories = items.reduce((memo, item) => {
+        const subCategory = item.subCategory || ''
+        memo[subCategory] = memo[subCategory] || []
+        return {
+            ...memo,
+            [subCategory]: [...memo[subCategory], item]
+        }
+    }, {})
+
+    const subCategoryNames = Object.keys(subCategories)
+    
     var nav = '';
 
-    if (items.length) {
-        var itemsNav = '';
-
-        items.forEach(function(item) {
-            var displayName;
-
-            if ( !hasOwnProp.call(item, 'longname') ) {
-                itemsNav += '<li>' + linktoFn('', item.name) + '</li>';
-            }
-            else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
-                if (env.conf.templates.default.useLongnameInNav) {
-                    displayName = item.longname;
-                } else {
-                    displayName = item.name;
+    subCategoryNames.forEach((subCategoryName) => {
+        const subCategoryItems = subCategories[subCategoryName]
+        if (subCategoryItems.length) {
+            var itemsNav = '';
+    
+            subCategoryItems.forEach(function(item) {
+                var displayName;
+    
+                if ( !hasOwnProp.call(item, 'longname') ) {
+                    itemsNav += '<li>' + linktoFn('', item.name) + '</li>';
                 }
-                itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>';
-
-                itemsSeen[item.longname] = true;
+                else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
+                    if (env.conf.templates.default.useLongnameInNav) {
+                        displayName = item.longname;
+                    } else {
+                        displayName = item.name;
+                    }
+                    itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>';
+    
+                    itemsSeen[item.longname] = true;
+                }
+            });
+            
+            if (itemsNav !== '') {
+                var heading = itemHeading
+                if (subCategoryName) {
+                    heading = heading + ' / ' + subCategoryName
+                }
+                nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>';
             }
-        });
-
-        if (itemsNav !== '') {
-            nav += '<h3>' + itemHeading + '</h3><ul>' + itemsNav + '</ul>';
         }
-    }
+    })
 
     return nav;
 }
@@ -419,6 +437,9 @@ function buildNav(members) {
     types.forEach(function(type) {
         if (!members[type]) { return }
         members[type].forEach(function(element) {
+            if (element.access && element.access === 'private') {
+                return;
+            }
             if (element.category) {
                 if (!categorised[element.category]){ categorised[element.category] = []; }
                 if (!categorised[element.category][type]){ categorised[element.category][type] = []; }

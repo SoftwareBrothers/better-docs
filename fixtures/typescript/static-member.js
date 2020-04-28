@@ -8,6 +8,11 @@ class ClassName {
    * Static member
    */
   static somethingIs: number
+
+  someMethod() {
+    const a = {g: 1}
+    return a?.g
+  }
 }
 `
 

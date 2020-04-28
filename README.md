@@ -22,6 +22,11 @@ This is how it looks:
 
 Example documentation can be found here: https://softwarebrothers.github.io/example-design-system/index.html
 
+# OpenSource SoftwareBrothers community
+
+- [Join the community](https://join.slack.com/t/adminbro/shared_invite/zt-czfb79t1-0U7pn_KCqd5Ts~lbJK0_RA) to get help and be inspired.
+- subscribe to our [newsletter](http://opensource.softwarebrothers.co)
+
 # Installation
 
 ```sh
@@ -91,7 +96,7 @@ Furhtermore it:
 
 * Converts all your commented `type` aliases to `@typedef`
 * Converts all your commented `interface` definitions to `@interface`,
-* Converts descriptions for your public, protected, static class members 
+* Converts descriptions for your public, protected, static class members
 
 so they can be printed by JSDoc automatically.
 
@@ -277,7 +282,7 @@ To document components simply add `@component` in your JSDoc documentation:
 ```jsx
 /**
  * Some documented component
- * 
+ *
  * @component
  */
 const Documented = (props) => {
@@ -333,7 +338,7 @@ In this case, props will be taken from `props` property.
 ```jsx
 /**
  * Some documented component
- * 
+ *
  * @component
  * @example
  * const text = 'some example text'
@@ -405,7 +410,7 @@ Also you can use multiple components which are documented with `@component` tag 
 /**
  * Component 1
  * @component
- * 
+ *
  */
 const Component1 = (props) => {...}
 
@@ -585,6 +590,7 @@ Example configuration file with settings for both `default` and `better-docs` te
         "better-docs": {
             "name": "AdminBro Documentation",
             "logo": "images/logo.png",
+            "css": "style.css",
             "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
 	    "hideGenerator": false,
             "navigation": [
@@ -648,7 +654,7 @@ The script should launch the browser and refresh it whenever you change somethin
 
 # Setting up the jsdoc in your project
 
-If you want to see how to setup jsdoc in your project - take a look at these brief tutorials: 
+If you want to see how to setup jsdoc in your project - take a look at these brief tutorials:
 
 - JSDoc - https://www.youtube.com/watch?v=Yl6WARA3IhQ
 - better-docs and Mermaid: https://www.youtube.com/watch?v=UBMYogTzsBk
@@ -664,5 +670,5 @@ better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and ma
 
 We’re an open, friendly team that helps clients from all over the world to transform their businesses and create astonishing products.
 
-* We are available to [hire](https://softwarebrothers.co/contact).
+* We are available for [hire](https://softwarebrothers.co/contact).
 * If you want to work for us - check out the [career page](https://softwarebrothers.co/career).
