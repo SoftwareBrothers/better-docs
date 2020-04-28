@@ -9,11 +9,9 @@ This is how it looks:
     <td>
       <a href='./readme/class.png'><img src="./readme/class.png" style="width: 300px"/></a>
     </td>
-  </tr><tr>
     <td>
       <a href='./readme/with-mermaid.png'><img src="./readme/with-mermaid.png" style="width: 300px"/></a>
     </td>
-  </tr><tr>
     <td>
       <a href='./readme/component.png'><img src="./readme/component.png" style="width: 300px"/></a>
     </td>
