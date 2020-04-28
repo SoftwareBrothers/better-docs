@@ -217,7 +217,7 @@ class ClassName {
 
 # @category plugin
 
-better-docs also allows you to nest your documentation into categories in the sidebar menu.
+better-docs also allows you to nest your documentation into categories and subcategories in the sidebar menu.
 
 ## Usage
 
@@ -234,12 +234,13 @@ To add a plugin - update `plugins` section in your `jsdoc.json` file:
 ...
 ```
 
-and then you can use `@category` tag in your code:
+and then you can use `@category` and/or `@subcategory` tag in your code:
 
 ```
 /**
  * Class description
  * @category Category
+ * @subcategory All
  */
 class YourClass {
   ....
