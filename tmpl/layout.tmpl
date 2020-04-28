@@ -6,6 +6,8 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
 } else {
     betterDocs = {}
 }
+
+var search = env.conf.templates && env.conf.templates.search
 ?>
 
 <!DOCTYPE html>
@@ -72,6 +74,9 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
         <div class="columns">
             <div class="column is-3" id="sidebarNav">
                 <div class="sidebar">
+                <?js if(search) { ?>
+                    <input id="search" type="text" placeholder="Search Documentations">
+                <?js } ?>
                     <nav>
                         <?js= this.nav ?>
                     </nav>
@@ -105,5 +110,8 @@ if(env.conf.templates && env.conf.templates.betterDocs) {
 <script src="scripts/app.min.js"></script>
 <script>PR.prettyPrint();</script>
 <script src="scripts/linenumber.js"> </script>
+<?js if(search) { ?>
+<script src="scripts/search.js"> </script>
+<?js } ?>
 </body>
 </html>
