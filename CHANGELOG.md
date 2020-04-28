@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## Version 1.4.9 - 2020-04-28
+
+### Added
+
+- add the ability to include a stylesheet via templates.default.staticFiles and then include it in the final theme via templates[better-docs].css
+
 ## Version 1.4.8 - 2020-04-28
 
 ### Fixed
