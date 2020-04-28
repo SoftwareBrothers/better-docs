@@ -42,6 +42,10 @@ $().ready(() => {
     }
   })
 
+  if (!$.trim(wrapper.text())) {
+    return wrapper.hide()
+  }
+
   const core = $('#main-content-wrapper')
   
   const selectOnScroll = () => {
