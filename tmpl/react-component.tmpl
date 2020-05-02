@@ -1,8 +1,6 @@
 <?js
-var example = obj;
-var self = this;
-var uniqId = Math.random().toString(36).substring(2) 
-               + (new Date()).getTime().toString(36);
+var { example, number} = obj;
+var uniqId = ['component', number].join('')
 ?>
 
 <div id='<?js= uniqId ?>'></div>

@@ -3,13 +3,13 @@
     var component = obj.component
     var self = this;
 
-    data.forEach(function(example) {
+    data.forEach(function(example, number) {
         if (example.caption) {
     ?>
         <p class="code-caption"><?js= example.caption ?></p>
     <?js } ?>
     <?js if (component && component.type === 'react') { ?>
-        <?js= self.partial('react-component.tmpl', example) ?>
+        <?js= self.partial('react-component.tmpl', { example, number}) ?>
     <?js } else if (component && component.type === 'vue') { ?>
         <?js= self.partial('vue-component.tmpl', example) ?>
     <?js } else { ?>
