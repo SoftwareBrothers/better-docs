@@ -1,0 +1,107 @@
+name: CI/CD
+on: push
+jobs:
+  setup:
+    name: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: test
+        run: yarn test
+
+  notify: 
+    name: Notify
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - test
+      - setup
+      - publish
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v1
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+
+  publish:
+    name: Publish
+    if: contains(github.ref, 'refs/tags')
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - uses: filipstefansson/set-npm-token-action@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish beta
+        if: contains(github.ref, 'beta')
+        run: yarn publish --tag beta
+      - name: Publish
+        if: "!contains(github.ref, 'beta')"
+        run: yarn publish
+      - name: Generate Changelog
+        # this command extracts info about particular version from the changelog 
+        run: |
+          awk -v ver=${GITHUB_REF##*/} '
+          /^## Version / { if (p) { exit }; if ($3 == ver) { p=1; next} } p && NF
+          ' CHANGELOG.md > changelog-message.txt
+      - name: Release
+        with:
+          body_path: changelog-message.txt
+          prerelease: contains(github.ref, 'beta')
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      
