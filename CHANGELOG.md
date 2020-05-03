@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changelog maintained after version 1.3.0
 
+## Version v2.0.1 - 2020-05-03
+
+### Fixed
+
+- fix `css` parameter in better-docs theme properties.
+
 ## Version 2.0.0 - 2020-04-29
 
 ### Changed
