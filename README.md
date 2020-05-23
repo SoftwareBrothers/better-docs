@@ -598,7 +598,7 @@ Example configuration file with settings for both `default` and `better-docs` te
             "css": "style.css",
             "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
 	    "hideGenerator": false,
-            "navigation": [
+            "navLinks": [
                 {
                     "label": "Github",
                     "href": "https://github.com/SoftwareBrothers/admin-bro"
