@@ -617,12 +617,10 @@ Example configuration file with settings for both `default` and `better-docs` te
 
 ### typedef(import(...))
 
-better-docs also has one extra plugin for handling typescript'like types imports like:
+better-docs also has one extra plugin for handling typescript'like types imports like (it has to be one-liner):
 
 ```
-/**
- * @typedef {import('./some-other-file').ExportedType} ExportedType
- */
+/** @typedef {import('./some-other-file').ExportedType} ExportedType */
 ```
 
 It simply removes that from the code so JSDoc wont throw an error. In order to use it add this plugin to your plugins section:
