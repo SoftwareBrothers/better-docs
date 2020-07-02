@@ -8,7 +8,8 @@
     "gulp": "./node_modules/.bin/gulp",
     "test": "mocha --recursive './*spec.js' './typescript/*spec.js'",
     "build": "babel src --out-dir lib",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json",
+    "release": "semantic-release"
   },
   "author": "Wojciech Krysiak",
   "license": "MIT",
