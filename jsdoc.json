@@ -17,7 +17,8 @@
         "destination": "docs/",
         "recurse": true,
         "verbose": true,
-        "template": "./"
+        "template": "./",
+        "tutorials": "./fixtures/tutorials"
     },
     "templates": {
         "better-docs": {

@@ -689,6 +689,7 @@ exports.publish = function(taffyData, opts, tutorials) {
   view.linkto = linkto
   view.resolveAuthorLinks = resolveAuthorLinks
   view.tutorialToUrl = helper.tutorialToUrl
+  view.tutoriallink = tutoriallink;
   view.htmlsafe = htmlsafe
   view.outputSourceFiles = outputSourceFiles
 
