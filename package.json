@@ -1,6 +1,6 @@
 {
   "name": "better-docs",
-  "version": "2.1.0",
+  "version": "2.0.3",
   "description": "JSdoc theme",
   "repository": "github:SoftwareBrothers/better-docs",
   "main": "publish.js",
@@ -57,7 +57,7 @@
     "react-frame-component": "^4.1.1",
     "typescript": "^3.7.5",
     "underscore": "^1.9.1",
-    "vue-docgen-api": "^4.26.0",
+    "vue-docgen-api": "^3.22.0",
     "vue2-ace-editor": "^0.0.13"
   },
   "husky": {
