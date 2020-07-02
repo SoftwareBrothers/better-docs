@@ -71,7 +71,6 @@ jobs:
 
   publish:
     name: Publish
-    if: contains(github.ref, 'refs/tags')
     needs: test
     runs-on: ubuntu-latest
     steps:
