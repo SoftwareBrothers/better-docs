@@ -92,7 +92,7 @@ It performs 4 operations:
 * First of all it transpiles all .ts and .tsx files to .js, so that all comments used by you are treated
 as a regular JSDoc comments.
 
-Furhtermore it:
+Furthermore it:
 
 * Converts all your commented `type` aliases to `@typedef`
 * Converts all your commented `interface` definitions to `@interface`,
@@ -181,7 +181,7 @@ export default interface ActionJSON {
   showFilter: boolean;
   /**
    * Action component. When set to false action will be invoked immediately after clicking it,
-   * to put in another words: tere wont be an action view
+   * to put in another words: there wont be an action view
    */
   component?: string | false | null;
 }
@@ -404,7 +404,7 @@ You can put as many `@example` tags as you like in one component and "caption" e
 
 ## Mixing components in preview
 
-Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the seccond component you want to use the first one as a wrapper like this:
+Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the second component you want to use the first one as a wrapper like this:
 
 ```javascript
 // component-1.js
@@ -552,7 +552,7 @@ First of all, let me state that better-docs extends the `default` template. That
 
 [BETA]: You must explicitly set the `search` option of the `default` template to `true` to enable search
 
-To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc confuguration file`.
+To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc configuration file`.
 
 Example configuration file with settings for both `default` and `better-docs` templates:
 
@@ -673,7 +673,7 @@ better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and ma
 <img src="https://softwarebrothers.co/assets/images/software-brothers-logo-full.svg" width=240>
 
 
-We’re an open, friendly team that helps clients from all over the world to transform their businesses and create astonishing products.
+We're an open, friendly team that helps clients from all over the world to transform their businesses and create astonishing products.
 
 * We are available for [hire](https://softwarebrothers.co/contact).
 * If you want to work for us - check out the [career page](https://softwarebrothers.co/career).
