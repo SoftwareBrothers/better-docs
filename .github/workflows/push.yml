@@ -81,27 +81,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - uses: filipstefansson/set-npm-token-action@v1
+      - uses: actions/cache@v1
+        id: yarn-cache
         with:
-          token: ${{ secrets.NPM_TOKEN }}
-      - name: Publish beta
-        if: contains(github.ref, 'beta')
-        run: yarn publish --tag beta
-      - name: Publish
-        if: "!contains(github.ref, 'beta')"
-        run: yarn publish
-      - name: Generate Changelog
-        # this command extracts info about particular version from the changelog 
-        run: |
-          awk -v ver=${GITHUB_REF##*/} '
-          /^## Version / { if (p) { exit }; if ($3 == ver) { p=1; next} } p && NF
-          ' CHANGELOG.md > changelog-message.txt
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+      - name: Install
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
       - name: Release
-        with:
-          body_path: changelog-message.txt
-          prerelease: contains(github.ref, 'beta')
-        uses: softprops/action-gh-release@v1
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn release
 
       
