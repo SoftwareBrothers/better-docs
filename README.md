@@ -627,7 +627,7 @@ It simply removes that from the code so JSDoc wont throw an error. In order to u
 
 ```
   "plugins": [
-        "node_modules/better-docs/typedef-imports"
+        "node_modules/better-docs/typedef-import"
     ],
 ```
 
