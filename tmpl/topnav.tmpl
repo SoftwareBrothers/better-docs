@@ -41,6 +41,7 @@
                 >
                     API Documentation
                 </a>
+                <?js if (this.tutorials.length) { ?>
                 <div class="dropdown is-hoverable is-right">
                     <a class="dropdown-trigger link">
                         Tutorials
@@ -48,16 +49,15 @@
                     </a>
                     <div class="dropdown-menu">
                         <div class="dropdown-content">
-                        <?js if (this.tutorials.length) { ?>
-                            <?js this.tutorials.forEach(function(tutorial) { ?>
-                                <a class="dropdown-item" href="<?js= self.tutorialToUrl(tutorial.name) ?>">
-                                    <?js= tutorial.title ?>
-                                </a>
-                            <?js }); ?>
-                        <?js } ?>
+                        <?js this.tutorials.forEach(function(tutorial) { ?>
+                            <a class="dropdown-item" href="<?js= self.tutorialToUrl(tutorial.name) ?>">
+                                <?js= tutorial.title ?>
+                            </a>
+                        <?js }); ?>
                         </div>
                     </div>
                 </div>
+                <?js } ?>
                 <?js if(betterDocs.navLinks && betterDocs.navLinks.length) { ?> 
                     <?js betterDocs.navLinks.forEach(function(link) { ?>
                         <a
