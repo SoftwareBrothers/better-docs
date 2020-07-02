@@ -613,6 +613,26 @@ Example configuration file with settings for both `default` and `better-docs` te
 }
 ```
 
+## Extras
+
+### typedef(import(...))
+
+better-docs also has one extra plugin for handling typescript'like types imports like:
+
+```
+/**
+ * @typedef {import('./some-other-file').ExportedType} ExportedType
+ */
+```
+
+It simply removes that from the code so JSDoc wont throw an error. In order to use it add this plugin to your plugins section:
+
+```
+  "plugins": [
+        "node_modules/better-docs/typedef-imports"
+    ],
+```
+
 # Setting up for the development
 
 If you want to change the theme locally follow the steps:
