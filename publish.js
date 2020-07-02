@@ -345,7 +345,22 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
           } else {
             displayName = item.name
           }
-          itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>'
+          itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''))
+
+          if (item.children && item.children.length) {
+            itemsNav += '<ul>'
+            item.children.forEach(child => {
+              if (env.conf.templates.default.useLongnameInNav) {
+                displayName = child.longname
+              } else {
+                displayName = child.name
+              }
+              itemsNav += '<li>' + linktoFn(child.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>'
+            })
+            itemsNav += '</ul>'
+          }
+
+          itemsNav += '</li>'
     
           itemsSeen[item.longname] = true
         }
@@ -695,7 +710,9 @@ exports.publish = function(taffyData, opts, tutorials) {
 
   // once for all
   view.nav = buildNav(members, null, conf.betterDocs)
+  
   view.tutorialsNav = buildNav(members, ['tutorials'], conf.betterDocs)
+
   bundler(members.components, outdir, conf)
   attachModuleSymbols( find({ longname: {left: 'module:'} }), members.modules )
 
