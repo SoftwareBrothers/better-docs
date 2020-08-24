@@ -25,7 +25,7 @@ module.exports = function bundle (Components, out, config) {
       import Vue from 'vue/dist/vue.js';\n
       window.Vue = Vue;\n
 
-      import VueWrapper from '${path.relative(absoluteOut, path.join(__dirname, VUE_WRAPPER))}';\n
+      import VueWrapper from '${pathCrossEnv(path.relative(absoluteOut, path.join(__dirname, VUE_WRAPPER)))}';\n
       window.VueWrapper = VueWrapper;\n
     `
   }
@@ -80,7 +80,7 @@ module.exports = function bundle (Components, out, config) {
   fs.writeFileSync(entry, entryFile)
   console.log('Bundling components')
   const outDist = path.join(out, 'build')
-  const cmd = `NODE_ENV=development parcel build ${entry} --out-dir ${outDist}`
+  const cmd = `${process.platform === 'win32' ? 'SET ' : ''}NODE_ENV=development parcel build ${entry} --out-dir ${outDist}`
   console.log(`running: ${cmd}`)
   try {
     execSync(cmd)
