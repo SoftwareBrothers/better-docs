@@ -1,6 +1,6 @@
 {
   "name": "better-docs",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "JSdoc theme",
   "repository": "github:SoftwareBrothers/better-docs",
   "main": "publish.js",
