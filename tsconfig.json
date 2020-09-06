@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+      "outDir": "./lib",
+      "target": "es2016",
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "jsx": "preserve",
+      "declaration": true,
+      "declarationDir": "./types",
+      "strictNullChecks": true,
+      "strictPropertyInitialization": true,
+      "strictFunctionTypes": true,
+      "strictBindCallApply": true,
+      "noImplicitThis": true,
+      "moduleResolution": "node",
+      "rootDir": "./src",
+      "types": [
+          "mocha",
+          "node"
+        ]
+  },
+  "include": [
+      "./src/**/*", "components",
+  ],
+  "exclude": []
+}

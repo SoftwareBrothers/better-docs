@@ -10,6 +10,7 @@
  * cleanly. The serialized version of these classes is persisted in various
  * account data locations for future lookups.
  * @category Application services
+ * @subcategory App
  */
 export class MatrixBridge {
   /**

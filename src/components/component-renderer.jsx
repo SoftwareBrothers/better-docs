@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DefaultWrapper = (props) => (
+const DefaultWrapper = props => (
   <div>{props.children}</div>
 )
 
@@ -17,7 +17,7 @@ class ComponentRenderer extends React.Component {
   componentDidCatch(error) {
     console.log(error.message)
   }
-  
+
   render() {
     const { children } = this.props
     return (

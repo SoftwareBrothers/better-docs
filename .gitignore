@@ -93,3 +93,5 @@ Thumbs.db
 .cache
 
 docs
+build
+types

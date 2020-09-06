@@ -41,6 +41,17 @@
                 >
                     API Documentation
                 </a>
+                <?js if (this.sections && Object.keys(this.sections).length) { ?>
+                    <?js Object.keys(this.sections).sort(function(prev, next) { return prev.order - next.order }).forEach(function(section) { ?>
+                        <a
+                            href="<?js= self.sections[section].href ?>"
+                            class="link"
+                        >
+                            <?js= self.sections[section].title ?>
+                        </a>
+                    <?js }); ?>
+                <?js } ?>
+
                 <?js if (this.tutorials.length) { ?>
                 <div class="dropdown is-hoverable is-right">
                     <a class="dropdown-trigger link">

@@ -1,14 +1,15 @@
-exports.handlers = {
-  newDoclet: function({ doclet }) {
-    if (doclet.tags && doclet.tags.length > 0) {
-      const categoryTag = doclet.tags.find(tag => tag.title === 'category')
-      if (categoryTag) {
-        doclet.category = categoryTag.value
-      }
-      const subCategoryTag = doclet.tags.find(tag => tag.title === 'subcategory')
-      if (subCategoryTag) {
-        doclet.subCategory = subCategoryTag.value
-      }
-    }
-  }
+/**
+ * Obsolete category plugin - it has been moved to "navigation"
+ */
+exports.defineTags = function (dictionary) {
+  dictionary.defineTag('category', {
+    onTagged(doclet, tag) {
+      doclet.category = tag.value
+    },
+  })
+  dictionary.defineTag('subcategory', {
+    onTagged(doclet, tag) {
+      doclet.subCategory = tag.value
+    },
+  })
 }

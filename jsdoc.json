@@ -1,14 +1,11 @@
 {
-    "tags": {
-        "allowUnknownTags": "all"
-    },
     "source": {
         "include": ["fixtures/typescript"],
         "includePattern": "\\.(jsx|js|ts|tsx)$"
     },
     "plugins": [
         "plugins/markdown",
-        "category",
+        "navigation",
         "component",
         "typescript"
     ],
@@ -18,7 +15,8 @@
         "recurse": true,
         "verbose": true,
         "template": "./",
-        "tutorials": "./fixtures/tutorials"
+        "tutorials": "./fixtures/tutorials",
+        "sections": "./fixtures/sections-json"
     },
     "templates": {
         "better-docs": {
