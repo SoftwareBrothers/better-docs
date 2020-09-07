@@ -2,6 +2,7 @@ import { RecordError } from '../adapters/base-record'
 
 /**
  * Error which is thrown when there are validation errors with records
+ * @ogTitle Some title from tag
  * @category Errors
  */
 class ValidationError extends Error {

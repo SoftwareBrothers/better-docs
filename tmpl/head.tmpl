@@ -1,5 +1,11 @@
 <?js 
   self = this
+  let tags = ['image', 'title', 'description', 'url', 'type', 'locale']
+  let ogTags = {}
+  
+  tags.forEach(function (tag) {
+    ogTags[tag] = (doc && doc.ogTags && doc.ogTags[tag] || betterDocs.ogTags && betterDocs.ogTags[tag])
+  })
 ?>
 <head>
   <?js= betterDocs.trackingCode ?>
@@ -25,5 +31,10 @@
   <?js if (betterDocs.head) { ?>
     <?js= betterDocs.head ?>
   <?js } ?>
+  <?js Object.keys(ogTags).forEach( function(tagName) { ?>
+    <?js if (ogTags[tagName]) { ?>
+      <meta property="og:<?js= tagName ?>" content="<?js= ogTags[tagName] ?>" />
+    <?js } ?>
+  <?js }) ?>
 </head>
 

@@ -21,7 +21,10 @@
     "templates": {
         "better-docs": {
             "name": "AdminBro Documentation",
-            "logo": "images/logo.png"
+            "logo": "images/logo.png",
+            "ogTags": {
+                "title": "some title"
+            }
         }
     }
 }

@@ -13,12 +13,16 @@ export type NavLink = {
 
 export type OgTags = {
   /**
-   * @ogTitle
-   * @ogDescription
-   * @ogImage
+   * Default value for @ogTitle tag
    */
-  title: string;
+  title?: string;
+  /**
+   * Default value for @ogDescription tags
+   */
   description: string;
+  /**
+   * Default value for @ogImage tags
+   */
   image: string;
 }
 

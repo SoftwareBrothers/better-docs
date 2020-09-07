@@ -16,7 +16,7 @@ var search = env.conf.templates && env.conf.templates.search
 
 <!DOCTYPE html>
 <html lang="en">
-<?js= this.partial('head.tmpl', { betterDocs, title }) ?>
+<?js= this.partial('head.tmpl', { betterDocs, title, doc }) ?>
 
 <body class="<?js= self.smallHeader ? 'layout small-header' : 'layout'?>">
     <div id="stickyNavbarOverlay"></div>
