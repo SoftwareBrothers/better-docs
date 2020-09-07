@@ -3,6 +3,9 @@
     "title": "First"
   },
   "designsystem": {
-    "title": "Design System"
+    "title": "Design System",
+    "ogTags": {
+      "title": "title from section"
+    }
   }
 }

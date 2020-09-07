@@ -13,17 +13,29 @@ export type NavLink = {
 
 export type OgTags = {
   /**
-   * Default value for @ogTitle tag
+   * Value for @ogTitle tag
    */
   title?: string;
   /**
-   * Default value for @ogDescription tags
+   * Value for @ogDescription tag
    */
-  description: string;
+  description?: string;
   /**
-   * Default value for @ogImage tags
+   * Value for @ogImage tag
    */
-  image: string;
+  image?: string;
+  /**
+   * Value for @ogLocale tag
+   */
+  locale?: string;
+  /**
+   * Value for @ogUrl tag
+   */
+  url?: string;
+  /**
+   * Value for @ogType tag
+   */
+  type?: string;
 }
 
 export type BetterDocsConfig = {
@@ -39,6 +51,9 @@ export type BetterDocsConfig = {
    * Page Title
    */
   title?: string;
+  /**
+   * Default OgTags
+   */
   ogTags: OgTags;
   /**
    * Component config

@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { OgTags } from '../better-docs.type'
 
 export const SECTIONS_CONFIG_FILE_NAME = 'sections.json'
 
@@ -16,6 +17,7 @@ export type SectionNav = {
 export type SectionsJSON = {
   [name: string]: {
     title: string;
+    ogTags: OgTags;
   };
 }
 
@@ -54,6 +56,7 @@ export type SectionConfig = {
   title?: string;
   homePath?: string;
   homeBody?: string;
+  ogTags?: OgTags;
 }
 
 /**
@@ -89,7 +92,7 @@ const loadConfig = (sectionConfigPath?: string): Record<string, SectionConfig> |
   return files.filter(file => path.parse(file).ext === '.md').reduce((memo, file) => {
     const name = buildKey(path.parse(file).name)
     const config = jsonConfig[name]
-    const { title } = config || {}
+    const { title, ogTags } = config || {}
     const homePath = path.join(sectionConfigPath, file)
     const homeBody = fs.readFileSync(homePath, 'utf8')
 
@@ -97,6 +100,7 @@ const loadConfig = (sectionConfigPath?: string): Record<string, SectionConfig> |
       ...memo,
       [name]: {
         title,
+        ogTags,
         homePath,
         homeBody,
       },
@@ -131,9 +135,13 @@ export function decorateSections(
 
     // on which place should it go to navigation. By default some big number
     let order = 1000 + index
+    let ogTags
 
     if (configSection) {
       href = buildFileName(sectionName)
+      // eslint-disable-next-line prefer-destructuring
+      ogTags = configSection.ogTags
+
       if (configSection.title) {
         ({ title } = configSection)
       }
@@ -149,6 +157,7 @@ export function decorateSections(
         title,
         href,
         order,
+        ogTags,
         homeBody: configSection?.homeBody,
         homePath: configSection?.homePath,
       },

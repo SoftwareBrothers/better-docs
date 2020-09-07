@@ -635,6 +635,7 @@ exports.publish = function (taffyData, opts, tutorials) {
           readme,
           subtitle: '',
           sections: decoratedSections,
+          docs: [section],
         }
 
         view.layout = 'layout.tmpl'
