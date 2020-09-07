@@ -10,8 +10,9 @@
     "test:ts": "mocha -r ts-node/register  --recursive '**/*/*.spec.ts'",
     "build": "babel src/components --out-dir lib/components",
     "build:ts": "tsc",
-    "build:css": "npm run gulp build",
-    "check:all": "yarn test && yarn test:ts && yarn build && yarn build:ts",
+    "build:css": "yarn run gulp build",
+    "build:all": "yarn build:css && yarn build:ts && yarn build",
+    "check:all": "yarn test && yarn test:ts && yarn build:all",
     "docs": "jsdoc -c jsdoc.json",
     "release": "semantic-release"
   },
