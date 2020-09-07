@@ -91,7 +91,7 @@ const loadConfig = (sectionConfigPath?: string): Record<string, SectionConfig> |
     const config = jsonConfig[name]
     const { title } = config || {}
     const homePath = path.join(sectionConfigPath, file)
-    const homeBody = fs.readFileSync(homePath)
+    const homeBody = fs.readFileSync(homePath, 'utf8')
 
     return {
       ...memo,
@@ -134,10 +134,10 @@ export function decorateSections(
 
     if (configSection) {
       href = buildFileName(sectionName)
-      nav = `<h2><a href="${href}">${title}</a></h2>${nav}`
       if (configSection.title) {
         ({ title } = configSection)
       }
+      nav = `<h2><a href="${href}">${title}</a></h2>${nav}`
       order = Object.keys(config).indexOf(name)
     }
 

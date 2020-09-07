@@ -33,9 +33,7 @@ gulp.task('js', () => {
     .pipe(gulp.dest('static/scripts'))
 })
 
-gulp.task('docs', function() {
-  return run(`cd .. && ${DOCS_COMMAND}`).exec()
-})
+gulp.task('docs', () => run(`cd .. && ${DOCS_COMMAND}`).exec())
 
 gulp.task('watch', () => {
   gulp.watch('styles/**/*.sass', ['sass', 'docs'])
@@ -45,7 +43,7 @@ gulp.task('watch', () => {
   if (process.env.DOCS) {
     const array = [
       ...process.env.DOCS.split(','),
-      ...process.env.DOCS.split(',').map(src => '!' + src.replace('**/*', 'node_modules/**/*'))
+      ...process.env.DOCS.split(',').map(src => `!${src.replace('**/*', 'node_modules/**/*')}`),
     ]
     console.log(array)
     gulp.watch(array, ['docs'])
@@ -55,10 +53,12 @@ gulp.task('watch', () => {
 gulp.task('sync', () => {
   browserSync.init({
     server: {
-      baseDir: DOCS_OUTPUT
-    }
+      baseDir: DOCS_OUTPUT,
+    },
   })
   gulp.watch(`${DOCS_OUTPUT}/*`).on('change', browserSync.reload)
 })
 
 gulp.task('default', ['sass', 'js', 'docs', 'watch', 'sync'])
+
+gulp.task('build', ['sass', 'js'])

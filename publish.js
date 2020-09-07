@@ -7,11 +7,15 @@ const path = require('jsdoc/path')
 const { taffy } = require('taffydb')
 const util = require('util')
 
+const { getParser } = require('jsdoc/util/markdown')
 const bundler = require('./bundler')
 const { Template } = require('./lib/rendered/template')
 
 const { htmlsafe, linkto, resolveAuthorLinks, tutoriallink, hashToLink, needsSignature } = require('./lib/helpers')
 const { buildNav } = require('./lib/navigation/build-nav')
+
+
+const markdownParser = getParser()
 
 let data
 let view
@@ -624,13 +628,16 @@ exports.publish = function (taffyData, opts, tutorials) {
   const renderSections = (decoratedSections) => {
     Object.values(decoratedSections).forEach((section) => {
       if (section.homeBody) {
+        let readme = markdownParser(section.homeBody)
+        readme = helper.resolveLinks(readme)
         const sectionPageData = {
           title: section.title,
-          readme: section.homeBody,
+          readme,
           subtitle: '',
           sections: decoratedSections,
         }
 
+        view.layout = 'layout.tmpl'
         const html = view.render('mainpage.tmpl', sectionPageData, section.name)
         fs.writeFileSync(path.join(outdir, section.href), html, 'utf8')
       }

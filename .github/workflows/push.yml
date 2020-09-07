@@ -53,6 +53,8 @@ jobs:
         run: yarn test:ts
       - name: TypeScript
         run: yarn build:ts
+      - name: CSS
+        run: yarn build:css
       - name: Components
         run: yarn build
       - name: Release
