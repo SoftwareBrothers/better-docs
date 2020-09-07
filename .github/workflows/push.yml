@@ -14,7 +14,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '8.x'
+          node-version: '10.x'
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -36,7 +36,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '8.x'
+          node-version: '10.x'
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -61,6 +61,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: yarn release
 
   notify: 
@@ -70,7 +71,6 @@ jobs:
     needs:
       - test
       - setup
-      - publish
     steps:
       - uses: technote-space/workflow-conclusion-action@v1
       - uses: 8398a7/action-slack@v3

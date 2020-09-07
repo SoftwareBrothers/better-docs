@@ -14,6 +14,13 @@
     "@semantic-release/release-notes-generator",
     "@semantic-release/npm",
     "@semantic-release/github",
-    "@semantic-release/git"
+    "@semantic-release/git",
+    [
+      "semantic-release-slack-bot",
+      {
+        "notifyOnSuccess": true,
+        "notifyOnFail": true
+      }
+    ]
   ]
 }
