@@ -95,3 +95,6 @@ Thumbs.db
 docs
 build
 types
+lib
+static/scripts/app.min.js
+static/styles/app.min.css
