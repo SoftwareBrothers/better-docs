@@ -10,22 +10,18 @@ const Bold = styled.div`
 
 /**
  * Some documented component
- * 
+ *
  * @component
  * @example <caption>Default example</caption>
  * const text = 'Meva'
  * return (
- *   <Documented2>
- *     <Documented text={text} />
- *   </Documented2>
+ *   <Documented text={text} />
  * )
- * 
+ *
  * @example <caption>Ala ma kota</caption>
  * const text = 'some example text 2'
  * return (
- *   <Documented2>
- *     <Documented text={text} header={'sime'} />
- *   </Documented2>
+ *   <Documented text={text} header={'sime'} />
  * )
  */
 const Documented = (props) => {
