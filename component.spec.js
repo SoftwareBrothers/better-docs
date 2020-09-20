@@ -3,8 +3,8 @@ const { expect } = require('chai')
 
 const { parseVue, parseReact } = require('./component')
 
-const VUE_PATH = path.join(__dirname, 'fixtures/component.vue')
-const REACT_PATH = path.join(__dirname, 'fixtures/component.jsx')
+const VUE_PATH = path.join(__dirname, 'fixtures/components/component.vue')
+const REACT_PATH = path.join(__dirname, 'fixtures/components/component.jsx')
 
 describe('@component', function () {
   describe('.parseVue', function () {
@@ -16,7 +16,7 @@ describe('@component', function () {
     it('returns displayName', function () {
       expect(this.output.displayName).to.equal('grid')
     })
-    
+
     it('returns prop types', function () {
       expect(this.output.props).to.have.lengthOf(5)
       expect(this.output.props[0]).to.deep.equal({
@@ -24,7 +24,7 @@ describe('@component', function () {
         name: 'msg',
         required: true,
         type: 'string|number',
-        defaultValue: 'function()'
+        defaultValue: 'function()',
       })
       expect(this.output.props[1]).to.have.property('defaultValue', '\'something\'')
     })
@@ -55,7 +55,7 @@ describe('@component', function () {
         name: 'text',
         required: false,
         type: 'string',
-        defaultValue: '\'Hello World\''
+        defaultValue: '\'Hello World\'',
       })
     })
   })

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path'
 import fs from 'fs'
+import { fillComponentPreview } from './fill-component-preview'
 
 import { JSDocTag } from '../jsdoc.type'
 
@@ -19,5 +20,5 @@ export const load = (loadTag: JSDocTag, docletFilePath: string): string => {
 
   const body = fs.readFileSync(filePath, 'utf-8')
 
-  return mdParser(body)
+  return fillComponentPreview(body, mdParser)
 }

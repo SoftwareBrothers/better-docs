@@ -50,6 +50,10 @@
 
 <article>
     <div class="container-overview">
+    <?js if (doc.loadedDescription) { ?>
+        <div class="class-description"><?js= doc.loadedDescription ?></div>
+    <?js } ?>
+
     <?js if (doc.kind === 'module' && doc.modules) { ?>
         <?js if (doc.description) { ?>
             <div class="description"><?js= doc.description ?></div>

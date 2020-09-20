@@ -10,11 +10,7 @@ exports.defineTags = (dictionary) => {
     onTagged: (doclet, tag) => {
       const text = load(tag, doclet.meta.path)
 
-      if (doclet.classdesc) {
-        doclet.classdesc = [doclet.classdesc, text].join('\n')
-      } else if (doclet.description) {
-        doclet.description = [doclet.description, text].join('\n')
-      }
+      doclet.loadedDescription = text
     },
   })
 }
