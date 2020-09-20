@@ -1,12 +1,17 @@
 {
     "source": {
-        "include": ["fixtures/typescript"],
+        "include": [
+            "fixtures/typescript",
+            "fixtures/examples",
+            "fixtures/components"
+        ],
         "includePattern": "\\.(jsx|js|ts|tsx)$"
     },
     "plugins": [
         "plugins/markdown",
         "navigation",
         "component",
+        "load",
         "typescript"
     ],
     "opts": {
@@ -20,8 +25,7 @@
     },
     "templates": {
         "better-docs": {
-            "name": "AdminBro Documentation",
-            "logo": "images/logo.png",
+            "name": "AdminBro",
             "ogTags": {
                 "title": "some title"
             }

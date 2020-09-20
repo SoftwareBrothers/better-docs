@@ -19,7 +19,8 @@ body
 .top-nav
   height: $main-nav-height
   @include until($desktop)
-    height: $main-nav-height-mobile
+    min-height: $main-nav-height-mobile
+    height: auto
   
 #main
   height: 100%

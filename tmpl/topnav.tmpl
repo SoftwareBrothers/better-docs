@@ -35,23 +35,6 @@
                 </div>
                 <?js } ?>
             <div class="navigation">
-                <a
-                    href="<?js= betterDocs.landing ? 'docs.html' : 'index.html' ?>"
-                    class="link"
-                >
-                    API Documentation
-                </a>
-                <?js if (this.sections && Object.keys(this.sections).length) { ?>
-                    <?js Object.keys(this.sections).sort(function(prev, next) { return prev.order - next.order }).forEach(function(section) { ?>
-                        <a
-                            href="<?js= self.sections[section].href ?>"
-                            class="link"
-                        >
-                            <?js= self.sections[section].title ?>
-                        </a>
-                    <?js }); ?>
-                <?js } ?>
-
                 <?js if (this.tutorials.length) { ?>
                 <div class="dropdown is-hoverable is-right">
                     <a class="dropdown-trigger link">
@@ -69,6 +52,22 @@
                     </div>
                 </div>
                 <?js } ?>
+                <a
+                    href="<?js= betterDocs.landing ? 'docs.html' : 'index.html' ?>"
+                    class="link"
+                >
+                    API
+                </a>
+                <?js if (this.sections && Object.keys(this.sections).length) { ?>
+                    <?js Object.keys(this.sections).sort(function(prev, next) { return prev.order - next.order }).forEach(function(section) { ?>
+                        <a
+                            href="<?js= self.sections[section].href ?>"
+                            class="link"
+                        >
+                            <?js= self.sections[section].title ?>
+                        </a>
+                    <?js }); ?>
+                <?js } ?>
                 <?js if(betterDocs.navLinks && betterDocs.navLinks.length) { ?> 
                     <?js betterDocs.navLinks.forEach(function(link) { ?>
                         <a
@@ -79,7 +78,6 @@
                         </a>
                     <?js }) ?>
                 <?js } ?>
-                
             </div>
         </div>
     </div>

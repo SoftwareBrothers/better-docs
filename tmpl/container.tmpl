@@ -124,12 +124,24 @@
         var classes = self.find({kind: 'class', memberof: doc.longname});
         if (!isGlobalPage && classes && classes.length) {
     ?>
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl><?js classes.forEach(function(c) { ?>
-            <dt><?js= self.linkto(c.longname, c.name) ?></dt>
-            <dd><?js if (c.summary) { ?><?js= c.summary ?><?js } ?></dd>
-        <?js }); ?></dl>
+        <div class="vertical-section">
+            <h1 class="subsection-title">Classes</h1>
+            <div class="members class-members">
+                <?js classes.forEach(function(c) { ?>
+                    <div class="class-member">
+                        <h4 class="name" id="<?js= c.longname ?>">
+                            <div class="is-hidden"><?js= self.linkto(c.longname) ?></div>
+                            <span class="code-name">
+                                <?js= c.name ?>
+                            </span>
+                        </h4>
+                        <?js if (c.summary) { ?><?js= c.summary ?><?js } ?>
+                        <?js= self.linkto(c.longname, "See Details", "button") ?>
+                    </div>
+                <?js }); ?>
+            </div>
+        </div>
+        <dl></dl>
     <?js } ?>
 
     <?js
