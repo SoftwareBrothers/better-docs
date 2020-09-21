@@ -31,8 +31,8 @@ const text = [
 ].join('\n')
 
 
-describe.only('.fillComponentPreview', () => {
-  it('chanes ```reactComponent ``` to react code', () => {
-    expect(fillComponentPreview(text)).to.contain('sth')
-  })
-})
+// describe.only('.fillComponentPreview', () => {
+//   it('chanes ```reactComponent ``` to react code', () => {
+//     expect(fillComponentPreview(text)).to.contain('sth')
+//   })
+// })

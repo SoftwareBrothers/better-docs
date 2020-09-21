@@ -1,7 +1,4 @@
 import React from 'react'
-
-import brace from 'brace'
-import AceEditor from 'react-ace'
 import Frame, { FrameContextConsumer } from 'react-frame-component'
 
 import 'brace/mode/jsx'
