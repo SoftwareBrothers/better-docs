@@ -294,6 +294,10 @@ exports.publish = function (taffyData, opts, tutorials) {
   conf.default = conf.default || {}
   conf.betterDocs = conf.betterDocs || conf['better-docs'] || {}
 
+  if (typeof conf.betterDocs.softwareBrothers === 'undefined') {
+    conf.betterDocs.softwareBrothers = true
+  }
+
   templatePath = path.normalize(opts.template)
   view = new Template(path.join(templatePath, 'tmpl'))
 

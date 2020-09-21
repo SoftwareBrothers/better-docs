@@ -592,6 +592,7 @@ Example configuration file with settings for both `default` and `better-docs` te
             }
         },
         "better-docs": {
+            "softwareBrothers": "slightly-paranoid",
             "name": "AdminBro Documentation",
             "logo": "images/logo.png",
             "title": "", // HTML title

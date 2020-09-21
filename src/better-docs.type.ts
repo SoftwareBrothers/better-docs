@@ -81,4 +81,9 @@ export type BetterDocsConfig = {
    * Navigation links
    */
   navLinks: Array<NavLink>;
+
+  /**
+   * Indicates if SoftwareBrothers logo should be seen in the UI
+   */
+  softwareBrothers?: false | true | 'slightly-paranoid' | 'paranoid';
 }

@@ -2,6 +2,7 @@ const OFFSET = 150
 
 $().ready(() => {
   const wrapper = $('#side-nav')
+  const wrapperMenu = wrapper.find('.side-menu')
 
   /**
    * @type  {Array<{link: El, offset: number}>}
@@ -16,28 +17,31 @@ $().ready(() => {
     const section = $(el)
     const sectionName = section.find('> h1').text()
     if (sectionName) {
-      wrapper.append($('<h3/>').text(sectionName))
+      wrapperMenu.append($('<h3/>').text(sectionName))
       const list = $('<ul></ul>')
       section.find('.members h4.name').each((i, el) => {
         const navLink = $(el)
         const name = navLink.find('.code-name')
-          .clone().children().remove().end().text()
+          .clone().children().remove()
+          .end()
+          .text()
         const href = navLink.find('a').attr('href')
         const link = $(`<a href="${href}" />`).text(name)
         list.append($('<li></li>').append(link))
-        links.push({ link, offset: navLink.offset().top})
+        links.push({ link, offset: navLink.offset().top })
       })
-      wrapper.append(list)
-    }
-    else {
+      wrapperMenu.append(list)
+    } else {
       section.find('.members h4.name').each((i, el) => {
         const navLink = $(el)
         const name = navLink.find('.code-name')
-          .clone().children().remove().end().text()
+          .clone().children().remove()
+          .end()
+          .text()
         const href = navLink.find('a').attr('href')
         const link = $(`<a href="${href}" />`).text(name)
-        wrapper.append(link)
-        links.push({ link, offset: navLink.offset().top})
+        wrapperMenu.append(link)
+        links.push({ link, offset: navLink.offset().top })
       })
     }
   })
@@ -47,11 +51,11 @@ $().ready(() => {
   }
 
   const core = $('#main-content-wrapper')
-  
+
   const selectOnScroll = () => {
     const position = core.scrollTop()
     let activeSet = false
-    for (let index = (links.length-1); index >= 0; index--) {
+    for (let index = (links.length - 1); index >= 0; index--) {
       const link = links[index]
       link.link.removeClass('is-active')
       if ((position + OFFSET) >= link.offset) {
@@ -70,7 +74,7 @@ $().ready(() => {
 
   selectOnScroll()
 
-  links.forEach(link => {
+  links.forEach((link) => {
     link.link.click(() => {
       core.animate({ scrollTop: link.offset - OFFSET + 1 }, 500)
     })
