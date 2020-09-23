@@ -17,6 +17,12 @@ exports.defineTags = (dictionary) => {
     },
   })
 
+  dictionary.defineTag('new', {
+    onTagged: (doclet, tag) => {
+      doclet.new = tag.value
+    },
+  })
+
   availableOgTags.forEach((tagName) => {
     dictionary.defineTag(`og${tagName.toUpperCase()}`, {
       onTagged: (doclet, tag) => {

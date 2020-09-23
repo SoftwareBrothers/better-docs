@@ -27,6 +27,12 @@ $().ready(() => {
           .text()
         const href = navLink.find('a').attr('href')
         const link = $(`<a href="${href}" />`).text(name)
+        if (navLink.find('.tag-new').length) {
+          link.addClass('new')
+        }
+        if (navLink.find('.tag-deprecated').length) {
+          link.addClass('deprecated')
+        }
         list.append($('<li></li>').append(link))
         links.push({ link, offset: navLink.offset().top })
       })

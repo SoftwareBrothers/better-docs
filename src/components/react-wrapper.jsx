@@ -1,8 +1,6 @@
 import React from 'react'
 import Frame, { FrameContextConsumer } from 'react-frame-component'
 
-import 'brace/mode/jsx'
-import 'brace/theme/monokai'
 import ComponentRenderer from './component-renderer'
 
 import Editor from './editor'

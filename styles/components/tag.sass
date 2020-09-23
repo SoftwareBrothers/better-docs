@@ -1,7 +1,7 @@
 .tag
   text-transform: uppercase
 
-body pre .tag
+body pre .tag, body pre .number
   text-transform: none
   align-items: normal
   background-color: inherit
@@ -15,3 +15,19 @@ body pre .tag
   padding-left: 0
   padding-right: 0
   white-space: pre-wrap
+  margin-right: 0
+  margin-left: 0
+
+a.new:after
+  content: 'new'
+  font-size: 10px
+  background: $red-active
+  padding: 1px 4px
+  color: $white
+  border-radius: 15px
+  margin-left: 2px
+  display: inline-block
+  vertical-align: middle
+
+a.deprecated
+  text-decoration: line-through

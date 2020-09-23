@@ -6,3 +6,14 @@
     padding-left: 16px
     margin-top: 10px
   
+  .tag-deprecated.important
+    background: $red-active
+    color: $white
+    border-left: 0px;
+    & + dd
+      margin-left: 0
+      border-bottom: 1px solid $red-active
+      padding-bottom: 14px
+
+  .tag-new.important
+    border-color: $red-active

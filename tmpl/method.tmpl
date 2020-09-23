@@ -24,6 +24,12 @@ var self = this;
                 <?js= (kind === 'class' ? 'new ' : '') + name + (data.signature || '') ?>
             <?js } ?>
         </span>
+        <?js if (data.new) { ?>
+            <span class="tag-new" />
+        <?js } ?>
+        <?js if (data.deprecated) { ?>
+            <span class="tag-deprecated" />
+        <?js } ?>
     </h4>
     <?js } ?>
 

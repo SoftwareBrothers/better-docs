@@ -81,6 +81,13 @@ if (data.defaultvalue && (data.defaultvaluetype === 'object' || data.defaultvalu
         ?>
     <?js } ?>
 
+    <?js if (data.new) { ?>
+        <dt class="important tag-new">New:</dt><?js
+            if (data.new === true) { ?><dd class="yes-def tag-new"><ul class="dummy"><li>Yes</li></ul></dd><?js }
+            else { ?><dd><ul class="dummy"><li><?js= data.new ?></li></ul></dd><?js }
+        ?>
+    <?js } ?>
+
     <?js if (data.author && author.length) {?>
     <dt class="tag-author">Author:</dt>
     <dd class="tag-author">

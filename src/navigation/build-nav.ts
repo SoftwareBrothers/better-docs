@@ -1,3 +1,4 @@
+import { JSDocTag, DocLet } from '../jsdoc.type'
 import { linkto, tutoriallink } from '../helpers'
 import { decorateSections, SectionNav, SectionInStore } from '../sections/decorate'
 
@@ -22,7 +23,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn, env) {
     if (subCategoryItems.length) {
       let itemsNav = ''
 
-      subCategoryItems.forEach((item) => {
+      subCategoryItems.forEach((item: DocLet) => {
         let displayName
 
         if (!hasOwnProperty.call(item, 'longname')) {
@@ -33,7 +34,22 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn, env) {
           } else {
             displayName = item.name
           }
-          itemsNav += `<li>${linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''))}`
+
+          const cssClasses: Array<string> = []
+          if (item.deprecated) {
+            cssClasses.push('deprecated')
+          }
+
+          if (item.new) {
+            cssClasses.push('new')
+          }
+
+
+          itemsNav += `<li>${linktoFn(
+            item.longname,
+            displayName.replace(/\b(module|event):/g, ''),
+            cssClasses.join(' '),
+          )}`
 
           if (item.children && item.children.length) {
             itemsNav += '<ul>'

@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 
 import Editor from 'react-simple-code-editor'
 import Highlight, { defaultProps } from 'prism-react-renderer'
-import theme from 'prism-react-renderer/themes/nightOwl'
+import theme from 'prism-react-renderer/themes/nightOwlLight'
 
 const styles = {
   root: {
