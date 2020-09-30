@@ -7,7 +7,7 @@ const REACT_WRAPPER = process.env.IS_DEV ? 'src/components/react-wrapper.jsx' : 
 
 const pathCrossEnv = path => (process.platform !== 'win32' ? path : path.replace(/\\/g, '/'))
 
-module.exports = function bundle(Components, out, config) {
+module.exports = function bundle(Components, functions, out, config) {
   if (!Components.length) {
     return
   }
@@ -18,6 +18,7 @@ module.exports = function bundle(Components, out, config) {
   let init = `
     window.reactComponents = {};\n
     window.vueComponents = {};\n
+    window.Components = {};\n
   `
   if (vueComponents.length) {
     init += `
@@ -28,6 +29,7 @@ module.exports = function bundle(Components, out, config) {
       window.VueWrapper = VueWrapper;\n
     `
   }
+
   if (reactComponents.length) {
     const reactWrapperRelPath = pathCrossEnv(
       path.relative(absoluteOut, path.join(__dirname, REACT_WRAPPER)),
@@ -50,6 +52,23 @@ module.exports = function bundle(Components, out, config) {
     import './styles/iframe.css';\n
   `
 
+  let functionImports = ''
+
+  if (functions && functions.length) {
+    functionImports = functions.map((fnDocLet, i) => {
+      const { name: displayName, meta } = fnDocLet
+      const { path: filePath, filename } = meta
+      const relativePath = pathCrossEnv(path.relative(absoluteOut, path.join(filePath, filename)))
+      const name = `FnComponent${i}`
+      return [
+        `import ${name} from '${relativePath}';`,
+        `Components['${displayName}'] = ${name};`,
+      ].join('\n')
+    }).join('\n\n')
+
+    functionImports = `${functionImports}\n\n`
+  }
+
   if (config.betterDocs.component) {
     if (config.betterDocs.component.wrapper) {
       const absolute = path.resolve(config.betterDocs.component.wrapper)
@@ -65,7 +84,7 @@ module.exports = function bundle(Components, out, config) {
     }
   }
 
-  const entryFile = init + Components.map((c, i) => {
+  const entryFile = init + functionImports + Components.map((c, i) => {
     const { displayName, filePath, type } = c.component
     const relativePath = pathCrossEnv(path.relative(absoluteOut, filePath))
     const name = `Component${i}`

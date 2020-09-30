@@ -44,7 +44,6 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn, env) {
             cssClasses.push('new')
           }
 
-
           itemsNav += `<li>${linktoFn(
             item.longname,
             displayName.replace(/\b(module|event):/g, ''),
@@ -114,8 +113,16 @@ function buildGroupNav(members, title, env) {
     globalNav = ''
 
     members.globals.forEach((g) => {
+      const cssClasses: Array<string> = []
+      if (g.deprecated) {
+        cssClasses.push('deprecated')
+      }
+
+      if (g.new) {
+        cssClasses.push('new')
+      }
       if (g.kind !== 'typedef' && !hasOwnProperty.call(seen, g.longname)) {
-        globalNav += `<li>${linkto(g.longname, g.name)}</li>`
+        globalNav += `<li>${linkto(g.longname, g.name, cssClasses.join(' '))}</li>`
       }
       seen[g.longname] = true
     })

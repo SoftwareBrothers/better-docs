@@ -22,6 +22,20 @@ class Wrapper extends React.Component {
     this.executeScript(example)
   }
 
+  componentDidMount() {
+    this.heightInterval = setInterval(() => {
+      this.computeHeight()
+    }, 1000)
+  }
+
+  componentDidUpdate() {
+    this.computeHeight()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.heightInterval)
+  }
+
   executeScript(source) {
     const { uniqId } = this.props
     const script = document.createElement('script')
@@ -35,6 +49,7 @@ class Wrapper extends React.Component {
     }
     const wrapper = `window.component['${uniqId}'] = (() => {
       ${Object.keys(reactComponents).map(k => `const ${k} = reactComponents['${k}'];`).join('\n')}
+      ${Object.keys(Components).map(k => `const ${k} = Components['${k}'];`).join('\n')}
       try {
         ${source}
       } catch (error) {
@@ -72,20 +87,6 @@ class Wrapper extends React.Component {
         height: this.iframeRef.current.node.contentDocument.body.offsetHeight + padding,
       })
     }
-  }
-
-  componentDidUpdate() {
-    this.computeHeight()
-  }
-
-  componentDidMount() {
-    this.heightInterval = setInterval(() => {
-      this.computeHeight()
-    }, 1000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.heightInterval)
   }
 
   render() {

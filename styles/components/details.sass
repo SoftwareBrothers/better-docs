@@ -1,12 +1,12 @@
 .details
-  margin-top: 20px
+  margin-top: 40px
   dt
     font-size: 20px
     border-left: 2px solid $blue
     padding-left: 16px
     margin-top: 10px
   
-  .tag-deprecated.important
+  .tag-deprecated
     background: $red-active
     color: $white
     border-left: 0px;
@@ -15,5 +15,12 @@
       border-bottom: 1px solid $red-active
       padding-bottom: 14px
 
-  .tag-new.important
+  .tag-new
     border-color: $red-active
+
+
+  dt.tag-see + dd.tag-see
+    margin-bottom: 40px
+
+  .important + dd
+    margin-bottom: 40px

@@ -31,4 +31,16 @@ exports.defineTags = (dictionary) => {
       },
     })
   })
+
+  dictionary.defineTag('debug', {
+    onTagged: (doclet, tag) => {
+      console.log({ doclet })
+    },
+  })
+
+  dictionary.defineTag('bundle', {
+    onTagged: (doclet) => {
+      doclet.bundle = true
+    },
+  })
 }

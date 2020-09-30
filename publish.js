@@ -501,7 +501,9 @@ exports.publish = function (taffyData, opts, tutorials) {
 
   view.tutorialsNav = buildNav(members, ['tutorials'], conf.betterDocs, env).global
 
-  bundler(members.components, outdir, conf)
+  const bundleFunctions = helper.find(data, { bundle: { isUndefined: false } })
+
+  bundler(members.components, bundleFunctions, outdir, conf)
   attachModuleSymbols(find({ longname: { left: 'module:' } }), members.modules)
 
   // generate the pretty-printed source files first so other pages can link to them
