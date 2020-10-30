@@ -6,6 +6,7 @@ var fs = require('jsdoc/fs')
 var helper = require('jsdoc/util/templateHelper')
 var logger = require('jsdoc/util/logger')
 var path = require('jsdoc/path')
+var inline = require('jsdoc/tag/inline');
 var taffy = require('taffydb').taffy
 var template = require('jsdoc/template')
 var util = require('util')
@@ -15,7 +16,44 @@ var bundler = require('./bundler')
 const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe
-var linkto = helper.linkto
+linkto = helper.linkto;
+if (env.conf.templates.betterDocs.linkTagToNewTab) {
+  //Override this function so we can automatically open inline link tags to URL's in a new tab
+  var linkto = function(longname, linkText, cssClass, fragmentId){
+  
+    if(inline.isInlineTag(longname) && (/(http|ftp)s?:\/\//).test(longname)){
+      //This is an external link, so let's add a target to the anchor so it will open in another window
+      let link = longname.match(/^.*\{@link\s?([^\s]+)[\s?]+(.+)?.*\}.*/);
+      if(link && link.length > 1){
+        let text = link[1];
+        if(link[2].trim()){
+          text = link[2].trim();
+        }
+        return util.format('<a target="_new" href="%s"%s>%s</a>',
+          encodeURI(link[1].trim()),
+          cssClass ? util.format(' class="%s"', cssClass) : '',
+          text
+        );
+      }
+    }
+    return helper.linkto(longname, linkText, cssClass, fragmentId);
+  };
+  
+  const resolveLinks = helper.resolveLinks;
+  helper.resolveLinks = str => {
+    str = inline.replaceInlineTags(str, {
+      link: (string, {completeTag, text, tag}) => {
+        if((/(http|ftp)s?:\/\//).test(completeTag)){
+          return string.replace( completeTag, linkto(completeTag) );
+        }else{
+          return string;
+        }
+      }
+    }).newString;
+    return resolveLinks(str);
+  };
+}
+
 var resolveAuthorLinks = helper.resolveAuthorLinks
 var hasOwnProp = Object.prototype.hasOwnProperty
 
@@ -199,6 +237,17 @@ function addSignatureTypes(f) {
 
 function addAttribs(f) {
   var attribs = helper.getAttribs(f)
+  
+  //For the @lifecycle tag when using the lifecycle plugin
+  if(f.hasOwnProperty('lifecycle') && f.lifecycle){
+    attribs.push('React Lifecycle');
+  }
+  
+  //For the @renders tag when using the lifecycle plugin
+  if(f.hasOwnProperty('renders') && f.renders){
+    attribs.push('Causes Render');
+  }
+  
   var attribsString = buildAttribsString(attribs)
 
   f.attribs = util.format('<span class="type-signature">%s</span>', attribsString)
@@ -388,6 +437,9 @@ function linktoExternal(longName, name) {
 }
 
 function buildGroupNav (members, title) {
+  if (env.conf.templates.betterDocs.useNestedCategories) {
+    return buildGroupNavNested(members, title);
+  }
   var globalNav
   var seenTutorials = {}
   var nav = ''
@@ -474,6 +526,168 @@ function buildNav(members, navTypes = null, betterDocs) {
   })
 
   return nav
+}
+
+/**
+ *
+ * Build the navigation for a given set of members which belong to the category defined in the title
+ * 
+ * @param {object} items The members that will be used to create the sidebar.
+ * @param {array<object>} items.classes
+ * @param {array<object>} items.components
+ * @param {array<object>} items.externals
+ * @param {array<object>} items.globals
+ * @param {array<object>} items.mixins
+ * @param {array<object>} items.modules
+ * @param {array<object>} items.namespaces
+ * @param {array<object>} items.tutorials
+ * @param {array<object>} items.events
+ * @param {array<object>} items.interfaces
+ * @param {String} title The name of the group to build the navigation for
+ * 
+ * @return {string} The HTML for a groups navigation in the sidebar.
+ * 
+ */
+function buildGroupNavNested (members, title) {
+  var globalNav;
+  var seenTutorials = {};
+  var nav = '';
+  var seen = {};
+  //define our types so we can just loop through them
+  let types = {
+    tutorials: {name: 'Tutorials', seen: seenTutorials, link: linktoTutorial},
+    modules: {name: 'Modules', seen: {}, link: linkto},
+    externals: {name: 'Externals', seen: seen, link: linktoExternal},
+    namespaces: {name: 'Namespaces', seen: seen, link: linkto},
+    classes: {name: 'Classes', seen: seen, link: linkto},
+    interfaces: {name: 'Interfaces', seen: seen, link: linkto},
+    events: {name: 'Events', seen: seen, link: linkto},
+    mixins: {name: 'Mixins', seen: seen, link: linkto},
+    components: {name: 'Components', seen: seen, link: linkto},
+  };
+  //organize the members according to their category and then type
+  let categorized = {};
+  Object.keys(types).forEach(type => {
+    if(members[type]){
+      members[type].forEach(member => {
+        let subCat = member.subCategory || '';
+        categorized[subCat] = categorized[subCat] || {};
+        categorized[subCat][type] = categorized[subCat][type] || [];
+        categorized[subCat][type].push(member);
+      });
+    }
+  });
+  
+  nav += '<div class="category'+(title ? ' nested' : '')+'">';
+  if (title) {
+    nav += '<h2>' + title + '</h2><ul class="subcategories">';
+  }
+  Object.keys(categorized).forEach(subCat => {
+    if(title && subCat){
+      if (env.conf.templates.betterDocs.useNavFolding) {
+        nav += '<li class="'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'" data-cat="'+title+'">'+
+        '<a href="javascript:void(0);" class="category-opener" data-subcat="'+subCat+'">'+
+        '  <i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+
+        '  <h3 class="subCat">'+subCat+'</h3>'+
+        '</a>'+
+        '<ul class="types">';
+      }else{
+        nav += '<li><h3>'+subCat+'</h3><ul>';
+      }
+    }
+    Object.keys(categorized[subCat]).forEach(type => {
+      nav += title ? '<li data-subcat="'+subCat+'">' : '';
+      nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat);
+      nav += title ? '</li>' : '';
+    });
+    nav += '</ul></li>';
+  });
+  if(title){
+    nav += '</ul></div>';
+  }
+  
+  if (members.globals && members.globals.length) {
+    globalNav = ''
+
+    members.globals.forEach(function(g) {
+      if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+        globalNav += '<li>' + linkto(g.longname, g.name) + '</li>'
+      }
+      seen[g.longname] = true
+    })
+
+    if (!globalNav) {
+      // turn the heading into a link so you can actually get to the global page
+      nav += '<h3>' + linkto('global', 'Global') + '</h3>'
+    }
+    else {
+      if (env.conf.templates.betterDocs.useNavFolding) {
+        nav += ''+
+        '<div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+
+          '<a href="javascript:void(0);" class="member-opener" data-member="Global">'+
+          '<i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+
+          '<h3>Global</h3><ul data-member="Global">' + globalNav + '</ul>';
+      }else{
+        nav += '<h3>Global</h3><ul>' + globalNav + '</ul>'
+      }
+      
+      
+      
+      
+      
+    }
+  }
+  
+  return nav;
+}
+
+/**
+ * Build the memberNav with the subcategories nested under the categories, and the
+ * member types nested under the subcategories
+ *
+ * @param {array<object>}   items             A list of members for a specific category, subcategory, and member type
+ * @param {string}          itemHeading       The name of the member type heading for these items
+ * @param {object}          itemsSeen         An object containing the members that have already been placed in the navigation indexed by the longname
+ * @param {function}        linktoFn          A function that is used to build a link to a specific member's page
+ */
+function buildMemberNavNested(items, itemHeading, itemsSeen, linktoFn, catHeading, subCatHeading) {
+  let nav = '';
+  if(items){
+    let hNum = catHeading && subCatHeading ? '4' : '3';
+    let heading = '<h'+hNum+'>'+itemHeading+'</h'+hNum+'>';
+    if (env.conf.templates.betterDocs.useNavFolding) {
+      nav += ''+
+      '<div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+
+        '<a href="javascript:void(0);" class="member-opener" data-member="'+itemHeading+'">'+
+        '<i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>';
+    }
+    nav += heading;
+    if (env.conf.templates.betterDocs.useNavFolding) {
+      nav += '</a>';
+    }
+    nav += '<ul data-member="'+itemHeading+'">';
+    items.forEach(item => {
+      nav += '<li>';
+      let displayName;
+      if ( !hasOwnProp.call(item, 'longname') ) {
+        nav += linktoFn('', item.name);
+      }else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
+        if (env.conf.templates.default.useLongnameInNav) {
+          displayName = item.longname;
+        } else {
+          displayName = item.name;
+        }
+        nav += linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''));
+        itemsSeen[item.longname] = true;
+      }
+      nav += '</li>';
+    });
+    nav += '</ul>';
+    if(env.conf.templates.betterDocs.useNavFolding){
+      nav += '</div>';
+    }
+  }
+  return nav;
 }
 
 /**

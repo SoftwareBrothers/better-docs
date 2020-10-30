@@ -122,6 +122,9 @@
 
     <?js
         var classes = self.find({kind: 'class', memberof: doc.longname});
+        classes = classes.filter(elem => {
+            return elem.longname != doc.longname;
+        });
         if (!isGlobalPage && classes && classes.length) {
     ?>
         <h3 class="subsection-title">Classes</h3>
@@ -190,12 +193,29 @@
             </div>
         </div>
     <?js } ?>
+    
+    <?js
+        var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
+        if (methods && methods.length && methods.forEach) {
+            methods = methods.filter(function(m) {
+                return m.access !== 'private' && m.lifecycle;
+            });
+    ?>
+        <div class='vertical-section'>
+            <h1>Lifecycle Methods</h1>
+            <div class="members">
+            <?js methods.forEach(function(m) { ?>
+                <div class="member"><?js= self.partial('lifecycle.tmpl', m) ?></div>
+            <?js }); ?>
+            </div>
+        </div>
+    <?js } ?>
 
     <?js
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (methods && methods.length && methods.forEach) {
             methods = methods.filter(function(m) {
-                return m.access !== 'private';
+                return m.access !== 'private' && !m.lifecycle;
             });
     ?>
         <div class='vertical-section'>

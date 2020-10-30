@@ -1,9 +1,14 @@
 <?js
     var data = obj;
+    if(env.conf.templates && env.conf.templates.betterDocs) {
+        betterDocs = env.conf.templates.betterDocs
+    } else {
+        betterDocs = {}
+    }
     var props = data.subprops || data.properties;
 
     /* sort subprops under their parent props (like opts.classname) */
-    var parentProp = null;
+    /*var parentProp = null;
     props.forEach(function(prop, i) {
         if (!prop) { return; }
         if ( parentProp && prop.name && prop.name.indexOf(parentProp.name + '.') === 0 ) {
@@ -14,6 +19,55 @@
         }
         else {
             parentProp = prop;
+        }
+    });*/
+    
+    /* rewrite the nesting build, since the above implementation ony goes to a depth of 1 */
+    let maxDepth=betterDocs.maxPropertyDepth !== undefined ? betterDocs.maxPropertyDepth : 1;
+    let parentProp=null;
+    let depth = 0;
+    props.forEach(function(prop, i) {
+        if (!prop) { return; }
+        let origPropName = prop.name;
+        if(parentProp && prop.name && prop.name.indexOf(parentProp.name + '.') === 0 ){
+            let parents = prop.name.split('.');
+            let propName = parents.splice(parents.length-1, 1)[0];
+            let subprops = parentProp.subprops || [];
+            let theParent=parentProp;
+            
+            depth=1;
+            for(var x=0; x<parents.length; x++){
+                let parentName = parents[x];
+                let subpropIndex = subprops.findIndex(subprop => {
+                    return subprop.name == parentName;
+                });
+                if(subpropIndex >= 0){
+                    if(depth < maxDepth){
+                        theParent = subprops[subpropIndex];
+                        subprops = theParent.subprops || [];
+                        depth++;
+                    }else{
+                        let prefix = '';
+                        for(y=x; y<parents.length; y++){
+                            prefix += parents[y]+'.';
+                        }
+                        //prefix = prefix.substr(0, prefix.length-1);
+                        propName = prefix+propName;
+                        
+                    }
+                }
+            }
+            if(theParent && maxDepth > 0){
+                prop.name = propName;
+                theParent.subprops = theParent.subprops || [];
+                theParent.subprops.push(prop);
+                props[i] = null;
+                
+            }
+            //props[i] = null;
+        }else{
+            depth = 0
+            parentProp=prop;
         }
     });
 
@@ -50,6 +104,28 @@
         
                 if (typeof subprop.defaultvalue !== 'undefined' && !data.isEnum) {
                     props.hasDefault = true;
+                }
+                
+                /* dive through the rest of the subprops nesting to find out if we have attributes, name, or defaults */
+                let subprops = subprop.subprops;
+                let depth = 1;
+                while(subprops && depth < maxDepth && (!props.hasAttributes || !props.hasName || !props.hasDefault)){
+                    subprops.forEach(function(subsubprop) {
+                        if (!subsubprop) { return; }
+                        if (subsubprop.optional || subsubprop.nullable) {
+                            props.hasAttributes = true;
+                        }
+                
+                        if (subsubprop.name) {
+                            props.hasName = true;
+                        }
+                
+                        if (typeof subsubprop.defaultvalue !== 'undefined' && !data.isEnum) {
+                            props.hasDefault = true;
+                        }
+                    })
+                    subprops.subprops;
+                    depth++;
                 }
             })
         }

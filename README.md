@@ -1,6 +1,8 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component** and **@optional** plugins.
+Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**, and **@optional** plugins.
+This template also implements several helpful options to better control the behavior of the generated web documentation such as, nested categorization with accordian style
+folding, and automatically opening external `{@link ...}` tags in a new browser tab.
 
 This is how it looks:
 
@@ -59,6 +61,54 @@ in your `jsdoc.json` file, set the template:
 "opts": {
   "template": "node_modules/better-docs"
 }
+```
+
+# Options
+
+better-docs has several template options which are helpful in controlling the way documentation behaves.
+
+- `useNestedCategories` - Used in conjunction with the @category plugin. Determines if the navigation should nest into `@category` -> `@subcategory` -> type. defaults to false
+- `isReactNative` - Used in conjunction with the @category plugin. When set to true the live preview is diabled since it won't work, which speeds up building the docs and removes errors. Defaults to false
+- `maxPropertyDepth` - Used to limit the depth that properties display when objects are defined. Defaults to 2. For example:
+```
+//maxPropertyDepth is set to 2
+@property {Object} myObject
+@property {Object} myObject.property1
+@property {Object} myObject.property1.depth3
+@property {Object} myObject.property1.depth4
+@property {Object} myObject.property2
+@property {Object} myObject.property2.anotherProp2
+
+//Renders as
+// myObject
+//   - property1
+//      - depth3
+//      - depth3.depth4      <--- maxPropertyDepth of 2 limits the nesting
+//   - property2
+//      - anotherProp2
+```
+- `useNavFolding` - When true, you are able to fold the contents of the navigation - The folded state of each item persists across pages. Defaults to false
+- `usePropertyFolding` - When true, you are able to fold nested object properties. Defaults to false.
+- `foldingDefaultClosed` - Used When `useNavFolding` and/or `usePropertyFolding` are set to true. If this option is set to true the folding begins closed.
+- `linkTagToNewTab` - When set to true, all `{@link http[s]://}` tags will automatically open in a new tab
+
+
+## Usage
+
+All options can be set in the `jsdoc.json` file:
+
+```json
+...
+"opts": {
+  "useNestedCategories": true,
+  "isReactNative": true,
+  "maxPropertyDepth": 10,
+  "useNavFolding": true,
+  "usePropertyFolding": true,
+  "foldingDefaultClosed": true,
+  "linkTagToNewTab":true,
+}
+...
 ```
 
 # TypeScript support
@@ -543,6 +593,46 @@ So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your 
             "...": "...",
         }
     }
+}
+```
+
+# @lifecycle plugin
+
+better-docs creates the `@lifecycle` tag, which will label tagged methods and sort them into their own categories in the right navigation.
+
+This plugin also implements the `@renders` tag so you can tag methods which cause the component to render. This tag simply adds a label to the method.
+
+**Note** This plug requires the use of the `@component` plugin
+
+## Usage
+
+To add the `@lifecycle` plugin - update `plugins` section in your `jsdoc.json` file:
+
+```
+...
+"tags": {
+    "allowUnknownTags": ["lifecycle", "renders"] //or true
+},
+"plugins": [
+    "node_modules/better-docs/lifecycle"
+],
+...
+```
+
+and then you can use `@lifecycle` and/or `@renders` tag in your code:
+
+```
+class YourClass {
+  ....
+  /**
+  * This is an example method
+  * 
+  * @lifecycle
+  * @renders
+  */
+  yourMethod(){
+  
+  }
 }
 ```
 

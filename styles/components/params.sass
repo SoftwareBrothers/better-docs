@@ -8,13 +8,26 @@ table.params, table.props
       padding: 13px 26px
   tr
     border-bottom: 1px solid $border
+    
+    &.show
+      display:table-row
+      
+    &.hide
+      display: none
   td
     padding: 13px 26px
-  td.name code
-    background: transparent
-    padding: 0
-    font-size: 15px
-    color: $main-nav
+  td.name
+    code
+      background: transparent
+      padding: 0
+      font-size: 15px
+      color: $main-nav
+    .property-opener
+      text-decoration: none
+      color: $main-nav
+      & > i
+      display: inline-block
+        
 
   @for $i from 1 through 10
     tr.deep-level-#{$i}

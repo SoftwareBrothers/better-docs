@@ -11,23 +11,49 @@
     overflow-wrap: break-word
     &:hover, &.active
       color: $red-active
-  h3
+  h3, .category.nested .types h4
     margin: rem(24px) 0 rem(6px)
     color: $main-nav
     font-size: 12px
     text-transform: uppercase
+  .member-opener
+    h3, h4
+      display: inline-block
+    i
+      margin-right: 5px;
   ul
     padding: 0 0 rem(4px) rem(16px)
     li
       padding: rem(3px) 0
   li > ul
     padding: 0 0 0px 25px
-
+    
   .category
+    &.nested
+      .subcategories
+        > li
+          &.opened .types
+            display: block;
+          &.closed .types
+            display: none;
+          h3.subCat
+            text-transform: none;
+            font-size: rem(15px);
+            display: inline-block;
+            margin-top: rem(15px);
+          > a > i
+            margin-right: rem(5px);
+          .types > li
+            h3, h4
+              margin-top: rem(10px);
     h2
       color: #000
       font-size: 20px
       margin-top: 40px
+    .member-container.closed > ul
+      display: none
+    .member-container.opened > ul
+      display: block  
 
 #sidebarNav.sticky
   left: 0
