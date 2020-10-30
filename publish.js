@@ -17,7 +17,7 @@ const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe
 linkto = helper.linkto;
-if (env.conf.templates.betterDocs.linkTagToNewTab) {
+if (env.conf.templates["better-docs"].linkTagToNewTab) {
   //Override this function so we can automatically open inline link tags to URL's in a new tab
   var linkto = function(longname, linkText, cssClass, fragmentId){
   
