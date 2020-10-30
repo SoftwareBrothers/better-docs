@@ -122,7 +122,7 @@ function restoreSubcatFolding(){
     $('.sidebar .category.nested .subcategories [data-cat].closed [data-subcat="'+subCat+'"]').click();
   });
   
-  foldState.closed.forEach(elem => {
+  foldState.closed.forEach(subCat => {
     //let the click handler close this element, so everything stays consistent
     $('.sidebar .category.nested .subcategories [data-cat].opened [data-subcat="'+subCat+'"]').click();
   });
