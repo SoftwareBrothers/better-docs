@@ -99,14 +99,17 @@ All options can be set in the `jsdoc.json` file:
 
 ```json
 ...
-"opts": {
-  "useNestedCategories": true,
-  "isReactNative": true,
-  "maxPropertyDepth": 10,
-  "useNavFolding": true,
-  "usePropertyFolding": true,
-  "foldingDefaultClosed": true,
-  "linkTagToNewTab":true,
+"templates": {
+  ...
+  "better-docs": {
+    "useNestedCategories": true,
+    "isReactNative": true,
+    "maxPropertyDepth": 10,
+    "useNavFolding": true,
+    "usePropertyFolding": true,
+    "foldingDefaultClosed": true,
+    "linkTagToNewTab":true,
+  }
 }
 ...
 ```
@@ -602,7 +605,7 @@ better-docs creates the `@lifecycle` tag, which will label tagged methods and so
 
 This plugin also implements the `@renders` tag so you can tag methods which cause the component to render. This tag simply adds a label to the method.
 
-**Note** This plug requires the use of the `@component` plugin
+**Note** This plugin requires the use of the `@component` plugin
 
 ## Usage
 
