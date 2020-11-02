@@ -200,6 +200,7 @@
             methods = methods.filter(function(m) {
                 return m.access !== 'private' && m.lifecycle;
             });
+            if (methods && methods.length){
     ?>
         <div class='vertical-section'>
             <h1>Lifecycle Methods</h1>
@@ -209,7 +210,7 @@
             <?js }); ?>
             </div>
         </div>
-    <?js } ?>
+    <?js }} ?>
 
     <?js
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
@@ -217,6 +218,7 @@
             methods = methods.filter(function(m) {
                 return m.access !== 'private' && !m.lifecycle;
             });
+            if (methods && methods.length){
     ?>
         <div class='vertical-section'>
             <h1>Methods</h1>
@@ -226,7 +228,7 @@
             <?js }); ?>
             </div>
         </div>
-    <?js } ?>
+    <?js }} ?>
 
     <?js
         var typedefs = self.find({kind: 'typedef', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
