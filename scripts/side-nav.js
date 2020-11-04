@@ -11,6 +11,30 @@ $().ready(() => {
   if (!$('.vertical-section').length) {
     wrapper.hide()
   }
+  
+  if(subsectionsInSideNav){
+    //Add subsections to the side navigation
+    $('.subsection').each((i, el) => {
+      const subsection = $(el)
+      const type=subsection.attr('data-type');
+      if(subsectionsInSideNav.indexOf(type) >= 0){
+        const subsectionName = subsection.find('> .subsection-title').text();
+        if(subsectionName){
+          wrapper.append($('<h4/>').text(subsectionName))
+          const list = $('<ul></ul>')
+          subsection.find('dl dt a').each((i, el) => {
+            const navLink = $(el)
+            const name = navLink.clone().children().remove().end().text();
+            const href = navLink.attr('href')
+            const link = $(`<a href="${href}" />`).text(name)
+            list.append($('<li></li>').append(link))
+            //links.push({ link, offset: navLink.offset().top})
+          })
+          wrapper.append(list)
+        }
+      }
+    });
+  }
 
   $('.vertical-section').each((i, el) => {
     const section = $(el)
@@ -41,6 +65,8 @@ $().ready(() => {
       })
     }
   })
+  
+  
 
   if (!$.trim(wrapper.text())) {
     return wrapper.hide()

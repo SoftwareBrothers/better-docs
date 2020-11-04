@@ -91,6 +91,13 @@ better-docs has several template options which are helpful in controlling the wa
 - `usePropertyFolding` - When true, you are able to fold nested object properties. Defaults to false.
 - `foldingDefaultClosed` - Used When `useNavFolding` and/or `usePropertyFolding` are set to true. If this option is set to true the folding begins closed.
 - `linkTagToNewTab` - When set to true, all `{@link http[s]://}` tags will automatically open in a new tab
+- `subsectionsInSideNav` - An array of all the subsections to add to the right navigation. Defaults to []; Valid values are
+  - `augments` - Extends
+  - `requires` - Requires
+  - `classes` - Classes
+  - `interfaces` - Interfaces
+  - `mixins` - Mixins
+  - `namespaces` - Namespaces
 
 
 ## Usage
@@ -109,6 +116,7 @@ All options can be set in the `jsdoc.json` file:
     "usePropertyFolding": true,
     "foldingDefaultClosed": true,
     "linkTagToNewTab":true,
+    "subsectionsInSideNav": ["augments","requires","classes","interfaces","mixins","namespaces"],
   }
 }
 ...
