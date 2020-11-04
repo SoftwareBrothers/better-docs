@@ -24,9 +24,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
     if(inline.isInlineTag(longname) && (/(http|ftp)s?:\/\//).test(longname)){
       //This is an external link, so let's add a target to the anchor so it will open in another window
       let link = longname.match(/^.*\{@link\s?([^\s]+)[\s+]?(.+)?.*\}.*/);
-      if(longname.indexOf('events.html') >= 0){
-        console.log(longname, link);
-      }
+
       if(link && link.length > 1){
         let text = link[1];
         if(link[2] && link[2].trim()){
