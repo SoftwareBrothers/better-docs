@@ -20,7 +20,7 @@ linkto = helper.linkto;
 if (env.conf.templates["better-docs"].linkTagToNewTab) {
   //Override this function so we can automatically open inline link tags to URL's in a new tab
   var linkto = function(longname, linkText, cssClass, fragmentId){
-  
+    
     if(inline.isInlineTag(longname) && (/(http|ftp)s?:\/\//).test(longname)){
       //This is an external link, so let's add a target to the anchor so it will open in another window
       let link = longname.match(/^.*\{@link\s?([^\s]+)[\s+]?(.+)?.*\}.*/);
@@ -41,15 +41,21 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
   };
   
   const resolveLinks = helper.resolveLinks;
+  const doReplace = (string, {completeTag, text, tag}) => {
+    
+    //UNescape URL's that got escaped (inside a <code>?)
+    let linkTag = completeTag.replace(text, text.replace(/\\\\\//g, '/'));
+    if((/(http|ftp)s?:\/\//).test(linkTag)){
+      return string.replace( completeTag, linkto(linkTag) );
+    }else{
+      return string;
+    }
+  };
   helper.resolveLinks = str => {
     str = inline.replaceInlineTags(str, {
-      link: (string, {completeTag, text, tag}) => {
-        if((/(http|ftp)s?:\/\//).test(completeTag)){
-          return string.replace( completeTag, linkto(completeTag) );
-        }else{
-          return string;
-        }
-      }
+      link: doReplace,
+      linkcode: doReplace,
+      linkplain: doReplace,
     }).newString;
     return resolveLinks(str);
   };
