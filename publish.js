@@ -16,48 +16,117 @@ var bundler = require('./bundler')
 const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe
-linkto = helper.linkto;
+var linkto = helper.linkto;
 if (env.conf.templates["better-docs"].linkTagToNewTab) {
-  //Override this function so we can automatically open inline link tags to URL's in a new tab
-  var linkto = function(longname, linkText, cssClass, fragmentId){
-    
-    if(inline.isInlineTag(longname) && (/(http|ftp)s?:\/\//).test(longname)){
-      //This is an external link, so let's add a target to the anchor so it will open in another window
-      let link = longname.match(/^.*\{@link\s?([^\s]+)[\s+]?(.+)?.*\}.*/);
-
-      if(link && link.length > 1){
-        let text = link[1];
-        if(link[2] && link[2].trim()){
-          text = link[2].trim();
+  //Only override these functions if the configurations request it.
+  
+  //create a regex that will extract the parts of the link tag
+  const linkRegex = new RegExp(/^.*\{@link\s?([^\s]+)[\s+]?(.+)?.*\}.*/);
+  
+  //Parse the tag into it's constituant parts
+  const parseLink = (longname) => {
+    let matches = linkRegex.exec(longname);
+    let text = longname;
+    let link = longname;
+    let external = false;
+    //will only operate on @link tags
+    if(matches && matches.length > 1){
+        text = matches[1].trim();
+        link = matches[1].trim();
+        
+        //UNescape URL's that got escaped (inside a <code>?) and now look like http(s):\\/\\/
+        if((/(http|ftp)s?:/).test(longname)){
+          external = true;
+          link = link.replace(text, text.replace(/\\\\\//ig, '/'));
         }
-        return util.format('<a target="_new" href="%s"%s>%s</a>',
-          encodeURI(link[1].trim()),
-          cssClass ? util.format(' class="%s"', cssClass) : '',
-          text
-        );
-      }
+        if(matches[2] && matches[2].trim()){
+          text = matches[2].trim();
+        }
     }
-    return helper.linkto(longname, linkText, cssClass, fragmentId);
+    return {
+      text: text,
+      link: link,
+      external: external,
+      inline: inline.isInlineTag(longname)
+    };
+  };
+  const origLinkto = helper.linkto;
+  //Override this function so we can automatically open inline link tags to URL's in a new tab
+  linkto = helper.linkto = function(longname, linkText, cssClass, fragmentId){
+    let parsed = parseLink(longname);
+    if(parsed.inline && parsed.external){
+      //This is an external link, so let's add a target to the anchor so it will open in another window
+      return util.format('<a target="_new" href="%s"%s>%s</a>',
+        encodeURI(parsed.link),
+        cssClass ? util.format(' class="%s"', cssClass) : '',
+        htmlsafe(parsed.text)
+      );
+    }else{
+      if(!linkText && parsed.text && parsed.text != longname){
+        linkText = parsed.text;
+      }
+      let link = longname;
+      if(parsed.link && parsed.link != longname){
+        link = parsed.link;
+      }
+      let rtn = origLinkto(link, linkText, cssClass, fragmentId);
+      return rtn;
+    }
+  };
+  //save the original resolveLinks so we can use it after we are done with our alterations
+  const resolveLinks = helper.resolveLinks;
+  var visited=[];
+  //replace the inline tag with an actual link
+  const doReplace = (string, {completeTag, text, tag}) => {
+    let tagIndex = string.indexOf(completeTag);
+    if(visited.indexOf(tagIndex) >= 0){
+      visited.push(tagIndex);
+      let parsed = parseLink(completeTag);
+      //Only operate on external links, and let the original resolveLinks handle the others later.
+      if(parsed.external){
+        let linkText = parsed.text && parsed.text != completeTag ? parsed.text : null;
+        let theLink = linkto(completeTag, linkText);
+    
+        return string.replace( completeTag, theLink );
+      }else{
+        //if we return an unaltered string, then the processing of inline link tags will stop
+        //so we'll add a space to the end, and then remove them before calling the original resolveLinks
+        return string+' ';
+      }
+    }else{
+      //we don't want to get stuck in a loop continuously trying to parse the same tag
+      //but we can't return the same string or we'll never visit subsequent links
+      //so we'll replace the tag with an unknown tag, which will be put back to a link AFTER we've
+      //processed the whole file.
+      return string.replace( completeTag, completeTag.replace('{@'+tag, '{@betterdocsreplaced'+tag) );
+    }
+  };
+  const restoreBetterDocsReplaced = (string, {completeTag, text, tag}) => {
+    let type = tag.replace('betterdocsreplaced','');
+    return string.replace( completeTag, completeTag.replace('{@'+tag, '{@'+type) );
   };
   
-  const resolveLinks = helper.resolveLinks;
-  const doReplace = (string, {completeTag, text, tag}) => {
-    
-    //UNescape URL's that got escaped (inside a <code>?)
-    let linkTag = completeTag.replace(text, text.replace(/\\\\\//g, '/'));
-    if((/(http|ftp)s?:\/\//).test(linkTag)){
-      return string.replace( completeTag, linkto(linkTag) );
-    }else{
-      return string;
-    }
-  };
-  helper.resolveLinks = str => {
-    str = inline.replaceInlineTags(str, {
+  helper.resolveLinks = string => {
+    //let's handle the link tags that we are going to operate on
+    let processors = {
       link: doReplace,
       linkcode: doReplace,
       linkplain: doReplace,
-    }).newString;
-    return resolveLinks(str);
+    };
+    string = inline.replaceInlineTags(string, processors).newString;
+    
+    //now let's put back the betterdocsreplaced tags that we added in doReplace
+    let betterDocsProcessors = {};
+    Object.keys(processors).forEach(name => {
+      betterDocsProcessors['betterdocsreplaced'+name] = restoreBetterDocsReplaced;
+    });
+    string = inline.replaceInlineTags(string, betterDocsProcessors).newString;
+    
+    //Empty our visited so we're ready for the next file.
+    visited=[];
+    //Now let the original resolveLinks handle whatever we didn't
+    //doReplace may have added spaces to the end of the string, so we'll remove them with a trim()
+    return resolveLinks(string.trim());
   };
 }
 
