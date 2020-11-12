@@ -25,6 +25,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
   
   //Parse the tag into it's constituant parts
   const parseLink = (longname) => {
+    if(longname.indexOf('NavigationEvents') >= 0) console.log(longname);
     let matches = linkRegex.exec(longname);
     let text = longname;
     let link = longname;
@@ -54,6 +55,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
   //Override this function so we can automatically open inline link tags to URL's in a new tab
   linkto = helper.linkto = function(longname, linkText, cssClass, fragmentId){
     let parsed = parseLink(longname);
+    
     if(parsed.inline && parsed.external){
       //This is an external link, so let's add a target to the anchor so it will open in another window
       return util.format('<a target="_new" href="%s"%s>%s</a>',
@@ -79,7 +81,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
   //replace the inline tag with an actual link
   const doReplace = (string, {completeTag, text, tag}) => {
     let tagIndex = string.indexOf(completeTag);
-    if(visited.indexOf(tagIndex) >= 0){
+    if(visited.indexOf(tagIndex) < 0){
       visited.push(tagIndex);
       let parsed = parseLink(completeTag);
       //Only operate on external links, and let the original resolveLinks handle the others later.
@@ -98,6 +100,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
       //but we can't return the same string or we'll never visit subsequent links
       //so we'll replace the tag with an unknown tag, which will be put back to a link AFTER we've
       //processed the whole file.
+
       return string.replace( completeTag, completeTag.replace('{@'+tag, '{@betterdocsreplaced'+tag) );
     }
   };
