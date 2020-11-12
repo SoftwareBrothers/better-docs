@@ -25,7 +25,6 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
   
   //Parse the tag into it's constituant parts
   const parseLink = (longname) => {
-    if(longname.indexOf('NavigationEvents') >= 0) console.log(longname);
     let matches = linkRegex.exec(longname);
     let text = longname;
     let link = longname;
