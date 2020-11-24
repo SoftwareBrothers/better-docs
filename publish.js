@@ -651,8 +651,10 @@ function buildGroupNavNested (members, title) {
       members[type].forEach(member => {
         let subCat = member.subCategory || '';
         categorized[subCat] = categorized[subCat] || {};
-        categorized[subCat][type] = categorized[subCat][type] || [];
-        categorized[subCat][type].push(member);
+        if(type != 'events' || (type == 'events' && !member.memberof)){
+          categorized[subCat][type] = categorized[subCat][type] || [];
+          categorized[subCat][type].push(member);
+        }
       });
     }
   });
@@ -713,7 +715,7 @@ function buildGroupNavNested (members, title) {
       if(typeKeys.length > 1){
         nav += title ? "        <li data-subcat=\""+subCat+"\">\n" : '';
       }
-      nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat, typeKeys.length > 1);
+      nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat, !title || typeKeys.length > 1);
       if(typeKeys.length > 1){
         nav += title ? "        </li><!-- /members for '"+subCat+"\"' -->\n" : '';
       }
