@@ -666,8 +666,6 @@ function buildGroupNavNested (members, title) {
   let hasNonEmptySubcats=(hasEmptySubcats && categorizedKeys.length > 1) || (!hasEmptySubcats && categorizedKeys.length > 0);
   categorizedKeys.forEach(subCat => {
     let typeKeys = Object.keys(categorized[subCat]);
-    
-    nav+= "<script>console.log('"+title+"','"+subCat+"', JSON.parse('"+JSON.stringify(typeKeys)+"'))</script>";
   });
   
   
