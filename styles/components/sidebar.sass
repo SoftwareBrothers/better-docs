@@ -34,8 +34,13 @@
         i, h2{display: inline-block;}
       
       .subcategories
-        &.opened{display: block;}
-        &.closed{display: none;}
+        &.opened
+          display: block;
+        &.closed
+          display: none;
+        &.is-mixed > li:not([data-cat])
+          padding: 0 0 0 25px;
+          margin-top: 1rem;
         > li
           &.opened .types
             display: block;

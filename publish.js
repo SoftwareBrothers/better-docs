@@ -657,6 +657,21 @@ function buildGroupNavNested (members, title) {
     }
   });
   
+  //determine if this subcategory list is a mixed list of subcategories and members
+  
+  
+  
+  let categorizedKeys = Object.keys(categorized);
+  let hasEmptySubcats=categorizedKeys.indexOf('') >= 0;
+  let hasNonEmptySubcats=(hasEmptySubcats && categorizedKeys.length > 1) || (!hasEmptySubcats && categorizedKeys.length > 0);
+  categorizedKeys.forEach(subCat => {
+    let typeKeys = Object.keys(categorized[subCat]);
+    
+    nav+= "<script>console.log('"+title+"','"+subCat+"', JSON.parse('"+JSON.stringify(typeKeys)+"'))</script>";
+  });
+  
+  
+  
   nav += "\n\n<div class=\"category"+(title ? ' nested' : '')+"\">\n";
   if (title) {
     if (env.conf.templates.betterDocs.useNavFolding) {
@@ -671,9 +686,16 @@ function buildGroupNavNested (members, title) {
     if (env.conf.templates.betterDocs.useNavFolding) {
       nav += ' '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened');
     }
+    if(hasEmptySubcats && hasNonEmptySubcats){
+      nav+= ' is-mixed';
+    }
+    
     nav += "\" data-cat=\""+title+"\">\n";
   }
-  Object.keys(categorized).forEach(subCat => {
+  
+  
+  categorizedKeys.forEach(subCat => {
+    
     if(title && subCat){
       if (env.conf.templates.betterDocs.useNavFolding) {
         nav += "    <li class=\""+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+"\" data-cat=\""+title+"\">\n"+
@@ -695,14 +717,17 @@ function buildGroupNavNested (members, title) {
       }
       nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat, typeKeys.length > 1);
       if(typeKeys.length > 1){
-        nav += title ? "        </li>\n" : '';
+        nav += title ? "        </li><!-- /members for '"+subCat+"\"' -->\n" : '';
       }
     });
-    nav += "      </ul>\n"+
-    "    </li>\n";
+    if(title && subCat){
+      nav += "      </ul> <!-- /types for subcategory '"+subCat+"' -->\n"+
+      "    </li>\n";
+    }
+    
   });
   if(title){
-    nav += "  </ul>\n"+
+    nav += "  </ul><!-- /subcategories for '"+title+"' -->\n"+
     "</div>";
   }
   
