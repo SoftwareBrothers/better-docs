@@ -30,7 +30,12 @@
     
   .category
     &.nested
+      .category-opener
+        i, h2{display: inline-block;}
+      
       .subcategories
+        &.opened{display: block;}
+        &.closed{display: none;}
         > li
           &.opened .types
             display: block;

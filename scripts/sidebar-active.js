@@ -2,8 +2,10 @@ $().ready(() => {
   //If we are using navigation folding, then listen to click events and restore
   //the folded state
   if(useNavFolding){
+    initCatFolding();
     initSubcatFolding();
     initMemberFolding();
+    restoreCatFolding();
     restoreSubcatFolding();
     restoreMemberFolding();
   }
@@ -15,6 +17,53 @@ $().ready(() => {
   //register scroll event to keep track of the scroll position
   initSideNavScrollState();
 });
+
+function initCatFolding(){
+  $('.use-nav-folding .sidebar .category.nested > .category-opener').on('click', function(){
+    let a = $(this);
+    let parent = a.parent();
+    let ul = parent.find('ul.subcategories');
+    let icon = a.find('i').first();
+    
+    let catFoldState = window.localStorage.getItem('catFoldState');
+    if(!catFoldState){
+      catFoldState = {opened:[], closed:[]};
+    }else{
+      catFoldState = JSON.parse(catFoldState);
+    }
+    let cat = a.attr('data-cat');
+    let selector = ' > a.category-opener[data-cat="'+cat+'"]';
+    
+    if(ul.hasClass('opened')){
+      //closing
+      ul.removeClass('opened').addClass('closed');
+      icon.removeClass('fa-caret-down').addClass('fa-caret-right');
+      
+      let index = catFoldState.opened.indexOf(selector);
+      if(index >= 0){
+        catFoldState.opened.splice(index, 1);
+      }
+
+      if(catFoldState.closed.indexOf(selector) < 0){
+        catFoldState.closed.push(selector);
+      }
+    }else{
+      //opening
+      ul.removeClass('closed').addClass('opened');
+      icon.removeClass('fa-caret-right').addClass('fa-caret-down');
+      
+      if(catFoldState.opened.indexOf(selector) < 0){
+        catFoldState.opened.push(selector);
+      }
+      let index = catFoldState.closed.indexOf(selector);
+      if(index >= 0){
+        catFoldState.closed.splice(index, 1);
+      }
+    }
+    
+    window.localStorage.setItem('catFoldState', JSON.stringify(catFoldState));
+  });
+}
 
 function initSubcatFolding(){
   $('.use-nav-folding .sidebar .category.nested .subcategories > li > a').on('click', function(){
@@ -107,6 +156,34 @@ function initMemberFolding(){
     
     window.localStorage.setItem('memberFoldState', JSON.stringify(memberFoldState));
   });
+}
+
+function restoreCatFolding(){
+  let catFoldState = window.localStorage.getItem('catFoldState');
+    if(!catFoldState){
+      catFoldState = {opened:[], closed:[]};
+    }else{
+      catFoldState = JSON.parse(catFoldState);
+    }
+    
+    
+    catFoldState.opened.forEach(selector => {
+      let cat = $('.sidebar .category '+selector);
+      //This cat should be opened
+      if(cat.length > 0 && !cat.parents('.category').first().find('.subcategories').first().hasClass('opened')){
+        //cat is not opened. Trigger a click to let the event handler open it
+        cat.click();
+      }
+    });
+    
+    catFoldState.closed.forEach(selector => {
+      let cat = $('.sidebar .category '+selector);
+      //This member should be closed
+      if(cat.length > 0 && !cat.parents('.category').first().find('.subcategories').first().hasClass('closed')){
+        //member is not closed. Trigger a click to let the event handler close it
+        cat.click();
+      }
+    });
 }
 
 function restoreSubcatFolding(){

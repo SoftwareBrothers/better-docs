@@ -642,6 +642,7 @@ function buildGroupNavNested (members, title) {
     events: {name: 'Events', seen: seen, link: linkto},
     mixins: {name: 'Mixins', seen: seen, link: linkto},
     components: {name: 'Components', seen: seen, link: linkto},
+    globals: {name: 'Global', seen: seen, link: linkto},
   };
   //organize the members according to their category and then type
   let categorized = {};
@@ -656,65 +657,86 @@ function buildGroupNavNested (members, title) {
     }
   });
   
-  nav += '<div class="category'+(title ? ' nested' : '')+'">';
+  nav += "\n\n<div class=\"category"+(title ? ' nested' : '')+"\">\n";
   if (title) {
-    nav += '<h2>' + title + '</h2><ul class="subcategories">';
+    if (env.conf.templates.betterDocs.useNavFolding) {
+      nav += "  <a href=\"javascript:void(0);\" class=\"category-opener\" data-cat=\""+title+"\">\n"+
+      "    <i class=\"fas fa-caret-"+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+"\"></i>\n  ";
+    }
+    nav += "  <h2>" + title + "</h2>\n";
+    if (env.conf.templates.betterDocs.useNavFolding) {
+      nav += "  </a>\n";
+    }
+    nav += '  <ul class="subcategories';
+    if (env.conf.templates.betterDocs.useNavFolding) {
+      nav += ' '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened');
+    }
+    nav += "\" data-cat=\""+title+"\">\n";
   }
   Object.keys(categorized).forEach(subCat => {
     if(title && subCat){
       if (env.conf.templates.betterDocs.useNavFolding) {
-        nav += '<li class="'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'" data-cat="'+title+'">'+
-        '<a href="javascript:void(0);" class="category-opener" data-subcat="'+subCat+'">'+
-        '  <i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+
-        '  <h3 class="subCat">'+subCat+'</h3>'+
-        '</a>'+
-        '<ul class="types">';
+        nav += "    <li class=\""+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+"\" data-cat=\""+title+"\">\n"+
+        "      <a href=\"javascript:void(0);\" class=\"category-opener\" data-subcat=\""+subCat+"\">\n"+
+        "        <i class=\"fas fa-caret-"+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+"\"></i>\n"+
+        "        <h3 class=\"subCat\">"+subCat+"</h3>\n"+
+        "      </a>\n"+
+        "      <ul class=\"types\">\n";
       }else{
-        nav += '<li><h3>'+subCat+'</h3><ul>';
+        nav += "    <li>\n"+
+        "      <h3>"+subCat+"</h3>\n"+
+        "      <ul>\n";
       }
     }
-    Object.keys(categorized[subCat]).forEach(type => {
-      nav += title ? '<li data-subcat="'+subCat+'">' : '';
-      nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat);
-      nav += title ? '</li>' : '';
+    let typeKeys = Object.keys(categorized[subCat]);
+    typeKeys.forEach(type => {
+      if(typeKeys.length > 1){
+        nav += title ? "        <li data-subcat=\""+subCat+"\">\n" : '';
+      }
+      nav += buildMemberNavNested(categorized[subCat][type] || [], types[type].name, types[type].seen, types[type].link, title, subCat, typeKeys.length > 1);
+      if(typeKeys.length > 1){
+        nav += title ? "        </li>\n" : '';
+      }
     });
-    nav += '</ul></li>';
+    nav += "      </ul>\n"+
+    "    </li>\n";
   });
   if(title){
-    nav += '</ul></div>';
+    nav += "  </ul>\n"+
+    "</div>";
   }
   
-  if (members.globals && members.globals.length) {
-    globalNav = ''
-
-    members.globals.forEach(function(g) {
-      if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
-        globalNav += '<li>' + linkto(g.longname, g.name) + '</li>'
-      }
-      seen[g.longname] = true
-    })
-
-    if (!globalNav) {
-      // turn the heading into a link so you can actually get to the global page
-      nav += '<h3>' + linkto('global', 'Global') + '</h3>'
-    }
-    else {
-      if (env.conf.templates.betterDocs.useNavFolding) {
-        nav += ''+
-        '<div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+
-          '<a href="javascript:void(0);" class="member-opener" data-member="Global">'+
-          '<i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+
-          '<h3>Global</h3><ul data-member="Global">' + globalNav + '</ul>';
-      }else{
-        nav += '<h3>Global</h3><ul>' + globalNav + '</ul>'
-      }
-      
-      
-      
-      
-      
-    }
-  }
+  //if (members.globals && members.globals.length) {
+  //  globalNav = ''
+  //
+  //  members.globals.forEach(function(g) {
+  //    if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+  //      globalNav += '<li>' + linkto(g.longname, g.name) + '</li>'
+  //    }
+  //    seen[g.longname] = true
+  //  })
+  //
+  //  if (!globalNav) {
+  //    // turn the heading into a link so you can actually get to the global page
+  //    nav += '<h3>' + linkto('global', 'Global') + '</h3>'
+  //  }
+  //  else {
+  //    if (env.conf.templates.betterDocs.useNavFolding) {
+  //      nav += ''+
+  //      '<div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+
+  //        '<a href="javascript:void(0);" class="member-opener" data-member="Global">'+
+  //        '<i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+
+  //        '<h3>Global</h3><ul data-member="Global">' + globalNav + '</ul>';
+  //    }else{
+  //      nav += '<h3>Global</h3><ul>' + globalNav + '</ul>'
+  //    }
+  //    
+  //    
+  //    
+  //    
+  //    
+  //  }
+  //}
   
   return nav;
 }
@@ -727,25 +749,30 @@ function buildGroupNavNested (members, title) {
  * @param {string}          itemHeading       The name of the member type heading for these items
  * @param {object}          itemsSeen         An object containing the members that have already been placed in the navigation indexed by the longname
  * @param {function}        linktoFn          A function that is used to build a link to a specific member's page
+ * @param {string}          catHeading
+ * @param {string}          subCatHeading
+ * @param {bool}            useItemHeading    Determines if the items should use a heading. Set to false when not nesting items in their itemHeading.
  */
-function buildMemberNavNested(items, itemHeading, itemsSeen, linktoFn, catHeading, subCatHeading) {
+function buildMemberNavNested(items, itemHeading, itemsSeen, linktoFn, catHeading, subCatHeading, useItemHeading) {
   let nav = '';
   if(items){
-    let hNum = catHeading && subCatHeading ? '4' : '3';
-    let heading = '<h'+hNum+'>'+itemHeading+'</h'+hNum+'>';
-    if (env.conf.templates.betterDocs.useNavFolding) {
-      nav += ''+
-      '<div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+
-        '<a href="javascript:void(0);" class="member-opener" data-member="'+itemHeading+'">'+
-        '<i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>';
+    if(useItemHeading){
+      let hNum = catHeading && subCatHeading ? '4' : '3';
+      let heading = "             <h"+hNum+">"+itemHeading+"</h"+hNum+">\n";
+      if (env.conf.templates.betterDocs.useNavFolding) {
+        nav += ''+
+        '          <div class="member-container '+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'closed' : 'opened')+'">'+"\n"+
+        '            <a href="javascript:void(0);" class="member-opener" data-member="'+itemHeading+'">'+"\n"+
+        '              <i class="fas fa-caret-'+(env.conf.templates.betterDocs.foldingDefaultClosed ? 'right' : 'down')+'"></i>'+"\n";
+      }
+      nav += heading;
+      if (env.conf.templates.betterDocs.useNavFolding) {
+        nav += "            </a>\n";
+      }
+      nav += '            <ul data-member="'+itemHeading+'">'+"\n";
     }
-    nav += heading;
-    if (env.conf.templates.betterDocs.useNavFolding) {
-      nav += '</a>';
-    }
-    nav += '<ul data-member="'+itemHeading+'">';
     items.forEach(item => {
-      nav += '<li>';
+      nav += "              <li>";
       let displayName;
       if ( !hasOwnProp.call(item, 'longname') ) {
         nav += linktoFn('', item.name);
@@ -758,11 +785,13 @@ function buildMemberNavNested(items, itemHeading, itemsSeen, linktoFn, catHeadin
         nav += linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''));
         itemsSeen[item.longname] = true;
       }
-      nav += '</li>';
+      nav += "</li>\n";
     });
-    nav += '</ul>';
-    if(env.conf.templates.betterDocs.useNavFolding){
-      nav += '</div>';
+    if(useItemHeading){
+      nav += "            </ul>\n";
+    }
+    if(useItemHeading && env.conf.templates.betterDocs.useNavFolding){
+      nav += "          </div>\n";
     }
   }
   return nav;
