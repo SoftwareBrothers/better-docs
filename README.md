@@ -1,6 +1,6 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**, and **@optional** plugins.
+Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**, **@table**, and **@optional** plugins.
 This template also implements several helpful options to better control the behavior of the generated web documentation such as, nested categorization with accordian style
 folding, and automatically opening external `{@link ...}` tags in a new browser tab.
 
@@ -645,6 +645,46 @@ class YourClass {
   
   }
 }
+```
+
+# @table plugin
+
+better-docs creates the `@table` tag, which is a logical separator of members for defining tables in a database. Using this tag will separate those members
+tagged with `@table` into it's own section in the documentation, making the docs less cluttered and easier to read.
+
+## Usage
+
+To add the `@table` plugin - update `plugins` section in your `jsdoc.json` file:
+
+```
+...
+"tags": {
+    "allowUnknownTags": ["table"] //or true
+},
+"plugins": [
+    "node_modules/better-docs/table"
+],
+...
+```
+
+and then you can use the `@table` tag in your code:
+
+```
+  /**
+  * @summary Definition of YourTable
+  *
+  * This is an example typedef for defining the `YourTable` database table
+  * 
+  * @typedef {object} YourTable
+  * @table
+  *
+  * @property {string} name='YourTable'       The name of the table
+  * @property {object} fields                 All the fields in the `YourTable` database table
+  * @property {object} fields.id              The `id` field
+  * @property {bool}   fields.nullable=false  The `id` field is not nullable
+  * ...
+  * 
+  */
 ```
 
 # Customization

@@ -187,11 +187,13 @@
         var members = self.find({kind: 'member', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
 
         // symbols that are assigned to module.exports are not globals, even though they're not a memberof anything
-        if (isGlobalPage && members && members.length && members.forEach) {
+        if (members && members.length && members.forEach) {
             members = members.filter(function(m) {
-                return m.longname
+                return (!isGlobalPage && !m.table)
+                    || (m.longname
                     && m.longname.indexOf('module:') !== 0
-                    && m.access !== 'private';
+                    && m.access !== 'private'
+                    && !m.table);
             });
         }
         if (members && members.length && members.forEach) {
@@ -200,6 +202,32 @@
             <h1>Members</h1>
             <div class="members">
             <?js members.forEach(function(p) { ?>
+                <div class="member"><?js= self.partial('members.tmpl', p) ?></div>
+            <?js }); ?>
+            </div>
+        </div>
+    <?js } ?>
+    
+    <?js
+        var tables = self.find({kind: 'member', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
+
+        // we're only selecting members with the @table tag
+        if (tables && tables.length && tables.forEach) {
+            tables = tables.filter(function(m) {
+                return (!isGlobalPage && m.table)
+                    || (m.longname
+                    && m.longname.indexOf('module:') !== 0
+                    && m.access !== 'private'
+                    && m.table);
+            });
+        }
+        
+        if (tables && tables.length && tables.forEach) {
+    ?>
+        <div class='vertical-section'>
+            <h1>Tables</h1>
+            <div class="members">
+            <?js tables.forEach(function(p) { ?>
                 <div class="member"><?js= self.partial('members.tmpl', p) ?></div>
             <?js }); ?>
             </div>
