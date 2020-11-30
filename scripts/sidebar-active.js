@@ -1,21 +1,21 @@
 $().ready(() => {
   //If we are using navigation folding, then listen to click events and restore
   //the folded state
-  if(useNavFolding){
-    initCatFolding();
-    initSubcatFolding();
-    initMemberFolding();
-    restoreCatFolding();
-    restoreSubcatFolding();
-    restoreMemberFolding();
-  }
-  
-  //Set the active sidebar link based on the url
-  restoreSideNavActiveState();
-  //set the scroll position of the sidebar back to where it was
-  restoreSideNavScrollState();
-  //register scroll event to keep track of the scroll position
-  initSideNavScrollState();
+  //if(useNavFolding){
+  //  initCatFolding();
+  //  initSubcatFolding();
+  //  initMemberFolding();
+  //  restoreCatFolding();
+  //  restoreSubcatFolding();
+  //  restoreMemberFolding();
+  //}
+  //
+  ////Set the active sidebar link based on the url
+  //restoreSideNavActiveState();
+  ////set the scroll position of the sidebar back to where it was
+  //restoreSideNavScrollState();
+  ////register scroll event to keep track of the scroll position
+  //initSideNavScrollState();
 });
 
 function initCatFolding(){

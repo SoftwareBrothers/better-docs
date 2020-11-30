@@ -1,14 +1,6 @@
 $(window).on('load', () => {
     if(window.location.hash){
-        //If the browser doesn't take us to the right place, then manually scroll there.
-        let currentPos = $('#main-content-wrapper').scrollTop();
-        let anchorPos = $('a.href-link[href="'+window.location.hash+'"]').offset().top;
-        let margin = Math.round(anchorPos*0.05);
-        let posMin = anchorPos-margin+currentPos;
-        let posMax = anchorPos+margin+currentPos;
-        if(anchorPos >= posMin && anchorPos <= posMax){
-            $('a:not(.href-link)[href="'+window.location.hash+'"]').click();
-        }
+        scrollToHash(window.location.hash);
     }
     if(usePropertyFolding){
         $('table.props .property-opener, table.params .property-opener').on('click', function(e){
@@ -18,6 +10,18 @@ $(window).on('load', () => {
         });
     }
 });
+
+function scrollToHash(hash){
+    //If the browser doesn't take us to the right place, then manually scroll there.
+    let currentPos = $('#main-content-wrapper').scrollTop();
+    let anchorPos = Math.round($('a.href-link[href="'+hash+'"]').offset().top);
+    let margin = OFFSET ? OFFSET : Math.round($('#main-content-wrapper').outerHeight()*0.05);
+    let posMin = anchorPos-margin+currentPos;
+    let posMax = anchorPos+margin+currentPos;
+    if(anchorPos >= posMin && anchorPos <= posMax){
+        $('a:not(.href-link)[href="'+hash+'"]').click();
+    }
+}
 
 function togglePropertyFold(row){
     //let row = $(this).parents('tr').first();

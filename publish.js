@@ -71,6 +71,39 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
         link = parsed.link;
       }
       let rtn = origLinkto(link, linkText, cssClass, fragmentId);
+      
+      let skip = [
+        'null',
+        'object',
+        'string',
+        'bool',
+        'boolean',
+        'function',
+        'int',
+        'float',
+        'number',
+        'undefined',
+        'promise',
+        '*',
+        'uint8array',
+        'arraybufferview',
+        'arraybuffer',
+        'date',
+      ];
+      
+      if(skip.indexOf(longname.toLowerCase()) < 0 && rtn.indexOf('<a') < 0){
+        let found=false;
+        skip.forEach(type => {
+          if('Array.<'+type+'>' == longname){
+            found=true;
+          }
+        });
+        if(!found){
+          console.log('Invalid link to '+longname, linkText);
+        }
+        
+      }
+      
       return rtn;
     }
   };
