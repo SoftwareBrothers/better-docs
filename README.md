@@ -1,8 +1,9 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**, **@table**, and **@optional** plugins.
-This template also implements several helpful options to better control the behavior of the generated web documentation such as, nested categorization with accordian style
-folding, and automatically opening external `{@link ...}` tags in a new browser tab.
+Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**,
+**@table**, **@optional**, **@inheritDesc**, **@inheritSummary**, and **@inheritParams** plugins. This template also implements several helpful options to
+better control the behavior of the generated web documentation such as, nested categorization with accordian style folding, automatically opening external
+`{@link ...}` tags in a new browser tab, and inheriting documentation from parent(s) in extended classes.
 
 This is how it looks:
 
@@ -91,7 +92,7 @@ better-docs has several template options which are helpful in controlling the wa
 - `usePropertyFolding` - When true, you are able to fold nested object properties. Defaults to false.
 - `foldingDefaultClosed` - Used When `useNavFolding` and/or `usePropertyFolding` are set to true. If this option is set to true the folding begins closed.
 - `linkTagToNewTab` - When set to true, all `{@link http[s]://}` tags will automatically open in a new tab
-- `subsectionsInSideNav` - An array of all the subsections to add to the right navigation. Defaults to []; Valid values are
+- `subsectionsInSideNav` - An array of all the subsections to add to the **right** navigation. Defaults to []; Valid values are
   - `augments` - Extends
   - `requires` - Requires
   - `classes` - Classes
@@ -327,7 +328,8 @@ Similar as before to add a plugin - you have to update the `plugins` section in 
 ...
 ```
 
-Since __component__ plugin uses [parcel](https://parceljs.org) as a bundler you have to install it globally. To do this run:
+When the `isReactNative` template option is not set to `true`, the __component__ plugin will use [parcel](https://parceljs.org) as a bundler so you have to
+install it globally. To do this run:
 
 ```
 # if you use npm
@@ -615,7 +617,7 @@ This plugin also implements the `@renders` tag so you can tag methods which caus
 
 **Note** This plugin requires the use of the `@component` plugin
 
-## Usage
+## Installation
 
 To add the `@lifecycle` plugin - update `plugins` section in your `jsdoc.json` file:
 
@@ -650,9 +652,11 @@ class YourClass {
 # @table plugin
 
 better-docs creates the `@table` tag, which is a logical separator of members for defining tables in a database. Using this tag will separate those members
-tagged with `@table` into it's own section in the documentation, making the docs less cluttered and easier to read.
+tagged with `@table` into it's own section in the documentation, making the docs less cluttered and easier to read. You will define a table's schema as a
+`@typedef` just as you do any other typedef, including the `@table` table tag to indicate that this typedef should be documented in the "Tables" section.
+This table definition will be rendered the same as any other `@typedef`, except it will be grouped into a "Table" section with any other tables.
 
-## Usage
+## Installation
 
 To add the `@table` plugin - update `plugins` section in your `jsdoc.json` file:
 
@@ -678,14 +682,346 @@ and then you can use the `@table` tag in your code:
   * @typedef {object} YourTable
   * @table
   *
-  * @property {string} name='YourTable'       The name of the table
-  * @property {object} fields                 All the fields in the `YourTable` database table
-  * @property {object} fields.id              The `id` field
-  * @property {bool}   fields.nullable=false  The `id` field is not nullable
+  * @property {string} name='YourTable'               The name of the table
+  * @property {object} indexes                        A list of all the indexes for this table
+  * @property {object} indexes.myIndex                The myIndex index
+  * @property {object} indexes.myIndex.primary=false  myIndex is not a primary key
+  * ...
+  * @property {object} fields                         All the fields in the `YourTable` database table
+  * @property {object} fields.id                      The `id` field
+  * @property {bool}   fields.id.nullable=false       The `id` field is not nullable
   * ...
   * 
   */
 ```
+
+# inheritable Plugin
+
+better-docs creates several tags that allow you to inhert documentation in a child class from it's parent making it quick and easy to reuse documentation
+without the need to repeat it in child classes. This speeds up the documentation process, and keeps param definitions consistent.
+
+- `@inheritDesc <additional description>` - The `@inheritDesc` tag can either be used in conjunction with [@desc](https://jsdoc.app/tags-description.html),
+  or replace it entirely. Additionally, providing a value will append that value to the description from the inherited doclet.
+
+- `@inheritSummary <additional summary>` - The `@inheritSummary` tag can either be used in conjunction with [@summary](https://jsdoc.app/tags-summary.html),
+  or replace it entirely to inherit the summary from the parent doclet. Additionally, providing a value will append that value to the summary from the inherited
+  doclet.
+
+- `@inheritParams` - The `@inheritParams` tag is used in conjunction with the [@param](https://jsdoc.app/tags-param.html) tag. It can be used to inherit params
+  from the parent doclet, and/or modify a param inherited from the parent.
+  
+## Installation
+
+To add the `inheritable` plugin - update `plugins` section in your `jsdoc.json` file:
+
+```
+...
+"tags": {
+    "allowUnknownTags": ["inheritDesc", "inheritSummary", "inheritParams"] //or true
+},
+"plugins": [
+    "node_modules/better-docs/inheritable"
+],
+...
+```
+
+## Using with standard tags
+
+These tags can replace their standard `jsdoc` counterparts, or be used to augment them (i.e. within the same docblock you can replace `@summary` with
+`@inheritSummary`, or you can use them both together). When the `inheritable` tags are used in conjunction with their standard `jsdoc` counterparts, the generated
+documentation will be positional. This means that where you place the `inheritable` tag relative to it's `jsdoc` counterpart will determine where the rendered
+documentation will be placed. For instance, when using both the `@summary` and `@inheritSummary` tags, if the `@summary` tag comes before the `@inheritSummary`,
+then the **inherited** documentation will be placed **after** the `@summary`, and vice versa. See Examples, especially 1 & 2.
+
+## Value Inheritance
+
+These tags follow the same logic of inheritance as a method or property of a class, where the value of the tag will be inherited from the first parent in the
+inheritance tree which defines that value. For instance, using the `@inheritDesc` tag on a method will first look to it's immediate parent(s) for a method of the same name, and inherit it's `@desc`
+**AND** `@inheritDesc` values. If the immediate parent does not have a method with the same name (or if that method does not contain a `@desc` or `@inheritDesc`
+value), then it will look to the parent's parent to find a value, and so on, until either a value is found, or the top of the tree is reached. If the **child**
+class's parent implements the `@inheritDesc` tag then the value for the **child** class will be inherited from it's **grandparent** including any additions the
+**parent** class made to the value it inherited from it's parent (the child's **grandparent**), and so on. See Examples.
+
+## Params
+
+When using the `@inheritParams` tag, in addition to inheriting params from the parent you can use it in conjunction with the `@param` tag to add to or overwrite
+the params defined on the parent. When a param on the **child** class has the same name as a param on the **parent** class, the **childs** param will be used.
+When a param on the **child** class has a different name than a param on the **parent** class, **BOTH** params will be used. See Examples, especially Example 5.
+
+## Examples
+
+### Example 1:
+
+To demonstrate the order of rendered documentation when using `inheritance` tags AND standard `jsdoc` tags, given the following class declarations:
+
+```
+class Parent{
+    /**
+     * @summary This is the parent myMethod summary.
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//FirstChild defines it's own summary, and THEN inherits the summary from Parent
+class FirstChild extends Parent{
+    /**
+     * @summary This is the first child's myMethod summary.
+     * @inheritSummary
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//SecondChild inherits the entire summary from Parent (via FirstChild), and THEN defines it's own summary
+class SecondChild extends FirstChild{
+    /**
+     * @inheritSummary
+     * @summary This is the second child's myMethod summary.
+     */
+    myMethod(){
+        ...
+    }
+}
+```
+
+- **The `Parent` class summary will be:<br>**
+
+  `This is the parent myMethod summary.`<br><br>
+
+- **The `FirstChild` class summary will be:<br>**
+
+  `This is the first child's myMethod summary.`<br>
+  `This is the parent myMethod summary!`<br><br>
+
+- **The `SecondChild` class summary will be:<br>**
+
+  `This is the parent myMethod summary.`<br>
+  `This is the second child's myMethod summary.`<br>
+
+### Example 2:
+
+To demonstrate using `inheritance` tags with a value AND standard `jsdoc` tags, given the following class declarations:
+
+```
+class Parent{
+    /**
+     * @desc This is the parent myMethod description.
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//FirstChild defines it's own description, and THEN inherits the description from Parent and adds to it
+class FirstChild extends Parent{
+    /**
+     * @desc This is the first child's myMethod description.
+     * @inheritDesc Here is some additional description text from FirstChild
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//SecondChild inherits the description from Parent (via FirstChild) and the extended description from
+//FirstChild, and THEN defines it's own desctiption
+class SecondChild extends FirstChild{
+    /**
+     * @inheritDesc
+     * @desc Here is some additional description text from SecondChild
+     */
+    myMethod(){
+        ...
+    }
+}
+```
+
+- **The `Parent` class description will be:<br>**
+
+  `This is the parent myMethod description.`<br><br>
+
+- **The `FirstChild` class description will be:<br>**
+
+  `This is the first child's myMethod description.`<br>
+  `This is the parent myMethod description.`<br>
+  `Here is some additional description text from FirstChild`<br><br>
+
+- **The `SecondChild` class summary will be:<br>**
+
+  `This is the first child's myMethod description.`<br>
+  `This is the parent myMethod description.`<br>
+  `Here is some additional description text from FirstChild`<br>
+  `Here is some additional description text from SecondChild`<br><br>
+
+### Example 3:
+
+To demonstrate using `inheritable` tags WITHOUT a value, given the following class declarations:
+
+```
+class Parent{
+    /**
+     * @desc This is the parent myMethod description.
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//FirstChild will inherit it's description from Parent
+//Unlike in example 4, myMethod WILL have a description
+class FirstChild extends Parent{
+    /** @inheritDesc */
+    myMethod(){
+        ...
+    }
+}
+
+//SecondChild inherits the description from Parent (via FirstChild), and adds to it
+class SecondChild extends FirstChild{
+    /**
+     * @inheritDesc Here is a description using the "inheritDesc" tag on SecondChild
+     */
+    myMethod(){
+        ...
+    }
+}
+```
+
+- **The `Parent` class description will be:<br>**
+
+  `This is the parent myMethod description.`<br><br>
+
+- **The `FirstChild` class description will be:<br>**
+
+  `This is the parent myMethod description.`<br><br>
+
+- **The `SecondChild` class summary will be:<br>**
+
+  `This is the parent myMethod description.`<br>
+  `Here is a description using the "inheritDesc" tag on SecondChild`<br><br>
+  
+### Example 4:
+
+To demonstrate inheritance when a parent method has no description, given the following class declarations:
+
+```
+class Parent{
+    /**
+     * @desc This is the parent myMethod description.
+     */
+    myMethod(){
+        ...
+    }
+}
+
+//FirstChild does not implement a description, so it will be skipped when searching for a value
+class FirstChild extends Parent{
+
+    myMethod(){
+        ...
+    }
+}
+
+//SecondChild inherits the description directly from Parent
+class SecondChild extends FirstChild{
+    /**
+     * @inheritDesc
+     */
+    myMethod(){
+        ...
+    }
+}
+```
+
+- **The `Parent` class description will be:<br>**
+
+  `This is the parent myMethod description.`<br><br>
+
+- **The `FirstChild` class will not have a description**
+
+- **The `SecondChild` class summary will be:<br>**
+
+  `This is the parent myMethod description.`<br>
+  
+### Example 5:
+
+To demonstrate the usage of the `@inheritParams` tag, given the following class declarations:
+
+```
+class Person{
+    name;
+    
+    /**
+     * @param {string}  name  This is the person's name
+     */
+    update(name){
+        this.name=name;
+        ...
+    }
+}
+
+//PersonWithAddress inherits the "name" param from Person, and adds the "address" param after
+class PersonWithAddress extends Person{
+    address;
+    /**
+     * @inheritParams
+     * @param {string}  address  This is the person's address
+     */
+    update(name, address){
+        this.address = address;
+        Person.prototype.update(name);
+        ...
+    }
+}
+
+//Notice "phone" is the FIRST parameter in update(), and @inheritParams is placed AFTER it in the docblock
+//Also notice that we have updated the description on the "name" param
+//PersonWithAddressAndPhone adds the "phone" param, updates the "name" description and THEN inherits the "address" param from Person (via PersonWithAddress)
+class PersonWithAddressAndPhone extends PersonWithAddress{
+    phone;
+    /**
+     * @param {string}  phone  This is the person's phone number
+     * @param {string}  name   This is an updated description for the person's name
+     * @inheritParams
+     */
+    update(phone, name, address){
+        this.phone = phone;
+        PersonWithAddress.prototype.update(name, address);
+        ...
+    }
+}
+```
+
+- **The `Person` class param declaration will effectively be:<br>**
+
+```
+/**
+ * @param {string}  name  This is the person's name
+ */
+```
+
+- **The `PersonWithAddress` class param declaration will effectively be:<br>**
+
+```
+/**
+ * @param {string}  name     This is the person's name
+ * @param {string}  address  This is the person's address
+ */
+```
+
+- **The `PersonWithAddressAndPhone` class param declaration will effectively be:<br>**
+
+```
+/**
+ * @param {string}  phone    This is the person's phone number
+ * @param {string}  name     This is an updated description for the person's name
+ * @param {string}  address  This is the person's address
+ */
+```
+
 
 # Customization
 
