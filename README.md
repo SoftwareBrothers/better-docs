@@ -1,9 +1,9 @@
 <img src="./readme/logo.png" />
 
 Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**,
-**@table**, **@optional**, **@inheritDesc**, **@inheritSummary**, and **@inheritParams** plugins. This template also implements several helpful options to
-better control the behavior of the generated web documentation such as, nested categorization with accordian style folding, automatically opening external
-`{@link ...}` tags in a new browser tab, and inheriting documentation from parent(s) in extended classes.
+**@table**, **@optional**, **@inheritDesc**, **@inheritSummary**, **@inheritProperties**, and **@inheritParams** plugins. This template also implements several
+helpful options to better control the behavior of the generated web documentation such as, nested categorization with accordian style folding, automatically
+opening external `{@link ...}` tags in a new browser tab, and inheriting documentation from parent(s) in extended classes.
 
 This is how it looks:
 
@@ -709,6 +709,10 @@ without the need to repeat it in child classes. This speeds up the documentation
 
 - `@inheritParams` - The `@inheritParams` tag is used in conjunction with the [@param](https://jsdoc.app/tags-param.html) tag. It can be used to inherit params
   from the parent doclet, and/or modify a param inherited from the parent.
+
+- `@inheritProperties` - The `@inheritProperties` tag is used in conjunction with the [@property](https://jsdoc.app/tags-property.html) tag. It can be used to
+  inherit properties from the parent doclet, and/or modify a property inherited from the parent. This tag behaves exactly like the `@inheritParams`, but is used
+  to inherit `@property` tags instead of `@param` tags.
   
 ## Installation
 
@@ -744,9 +748,9 @@ class's parent implements the `@inheritDesc` tag then the value for the **child*
 
 ## Params
 
-When using the `@inheritParams` tag, in addition to inheriting params from the parent you can use it in conjunction with the `@param` tag to add to or overwrite
-the params defined on the parent. When a param on the **child** class has the same name as a param on the **parent** class, the **childs** param will be used.
-When a param on the **child** class has a different name than a param on the **parent** class, **BOTH** params will be used. See Examples, especially Example 5.
+When using the `@inheritParams` or `@inheritProperties` tag, in addition to inheriting params from the parent you can use it in conjunction with the `@param`/`@property` tag
+to add to or overwrite the params defined on the parent. When a param on the **child** class has the same name as a param on the **parent** class, the **childs** param will
+be used. When a param on the **child** class has a different name than a param on the **parent** class, **BOTH** params will be used. See Examples, especially Example 5.
 
 ## Examples
 
