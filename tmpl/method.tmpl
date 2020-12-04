@@ -169,3 +169,7 @@ var self = this;
     <h5>Example<?js= examples.length > 1? 's':'' ?></h5>
     <?js= this.partial('examples.tmpl', data) ?>
 <?js } ?>
+
+<?js if (data.meta && self.outputSourceFiles) {?>
+    <?js= self.partial('view-source.tmpl', data) ?>
+<?js } ?>

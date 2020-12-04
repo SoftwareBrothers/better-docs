@@ -60,16 +60,7 @@
         <?js }) ?>
     <?js } else if (doc.kind === 'class' || (doc.kind === 'namespace' && doc.signature)) { ?>
         <?js if (doc.kind === 'class' && !doc.hideconstructor) { ?>
-            <div class='vertical-section'>
-                <div class="members">
-                    <div class="member">
-                        <div class=name>
-                            <span class="tag">Constructor</span>
-                        </div>
-                        <?js= self.partial('method.tmpl', doc) ?>
-                    </div>
-                </div>
-            </div>
+            
         <?js } else { ?>
             <?js= self.partial('method.tmpl', doc) ?>
         <?js } ?>
@@ -182,6 +173,22 @@
             <?js }); ?></dl>
         </div>
     <?js } ?>
+    
+    <?js if (doc.kind === 'class' && !doc.hideconstructor) { ?>
+        <?js if (doc.meta && self.outputSourceFiles) { ?>
+            <?js= self.partial('view-source.tmpl', doc) ?>
+        <?js } ?>
+        <div class='vertical-section'>
+            <div class="members">
+                <div class="member">
+                    <div class=name>
+                        <span class="tag">Constructor</span>
+                    </div>
+                    <?js= self.partial('method.tmpl', doc) ?>
+                </div>
+            </div>
+        </div>
+    <?js } ?>
 
     <?js
         var members = self.find({kind: 'member', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
@@ -246,7 +253,7 @@
             <h1>Lifecycle Methods</h1>
             <div class="members">
             <?js methods.forEach(function(m) { ?>
-                <div class="member"><?js= self.partial('lifecycle.tmpl', m) ?></div>
+                <div class="member"><?js= self.partial('members.tmpl', m) ?></div>
             <?js }); ?>
             </div>
         </div>

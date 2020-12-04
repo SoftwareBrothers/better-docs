@@ -1,0 +1,10 @@
+<?js if (obj.meta && this.outputSourceFiles) {?>
+    <div class="tag-source">
+        <div>
+            <div class="source-button"><?js= this.linkto(meta.shortpath, 'View Source', 'button', 'line' + meta.lineno) ?></div>
+            <div class="source-links">
+                <?js= this.linkto(meta.shortpath) ?>, <?js= this.linkto(meta.shortpath, 'line ' + meta.lineno, null, 'line' + meta.lineno) ?>
+            </div>
+        </div>
+    </div>
+<?js } ?>
