@@ -79,6 +79,8 @@ exports.handlers = {
         let all = {};
         let byMemberof = {};
         let toProcess = [];
+        let count=0;
+        let postProcess={params: {}};
         e.doclets.forEach((doclet) => {
             
             let name = getInheritableName(doclet);
@@ -86,8 +88,11 @@ exports.handlers = {
             
             all[name] = doclet;
             let memberof='none';
-            if(doclet.memberof){
-                memberof = getInheritableNameByLongname(e.doclets, doclet.memberof);
+            let parent = getParent(doclet.longname, e.doclets);
+            
+            if(parent){
+                memberof = getInheritableNameByLongname(e.doclets, parent.longname);
+                //memberof = getInheritableNameByLongname(e.doclets, doclet.memberof);
             }
             byMemberof[memberof] = byMemberof[memberof] || {};
             byMemberof[memberof][memberName] = doclet;
@@ -118,19 +123,22 @@ exports.handlers = {
             let summary = '';
             let params = [];
             let properties = [];
-            let inheritedMemberofName = getInheritableNameByLongname(e.doclets, inherited.memberof);
+            //let inheritedMemberofName = getInheritableNameByLongname(e.doclets, inherited.memberof);
             let inheritedName = getInheritableName(inherited);
             let inheritedMemberName = getDocletName(inherited);
-            let inheritedParent = all.hasOwnProperty(inheritedMemberofName) ? all[inheritedMemberofName] : null;
-            let parents = inheritedParent ? [inheritedParent] : [];
+            let inheritedParent = getParent(inherited.longname, all);
+            let parents = [];
+            parents = inheritedParent ? [inheritedParent] : [];
             let orderedParents = [];
             
             while(parents.length > 0){
                 let parent = parents.shift();
+                
                 if(parent.augments && parent.augments.length > 0){
                     for(var j=0; j<parent.augments.length; j++){
                         let augmentMemberofName = getInheritableNameByLongname(e.doclets, parent.augments[j]);
                         augment = all.hasOwnProperty(augmentMemberofName) ? all[augmentMemberofName] : null;
+                        
                         if(augment){
                             orderedParents.unshift(augment);
                             parents.unshift(augment);
@@ -149,13 +157,14 @@ exports.handlers = {
                     for(var x=0; x<parent.augments.length; x++){
                         let augmentMemberofName = getInheritableNameByLongname(e.doclets, parent.augments[x]);
                         augment = all.hasOwnProperty(augmentMemberofName) ? all[augmentMemberofName] : null;
-                        
                         if(augment){
                             let augmentName = getInheritableName(augment);
                             //We have the augment class doclet
                             if(byMemberof.hasOwnProperty(augmentName) && byMemberof[augmentName].hasOwnProperty(inheritedMemberName)){
                                 let inheritFrom = byMemberof[augmentName][inheritedMemberName];
+                                
                                 let inheritFromName = getInheritableName(inheritFrom);
+                                
                                 if(processed.indexOf(inheritFromName) < 0){
                                     processed.push(inheritFromName);
                                     if(inheritFrom.description){
@@ -178,17 +187,24 @@ exports.handlers = {
                     }
                 }
             }
+            let updateDoclet = null;
+            if(!isDocletConstructor(inherited)){
+                updateDoclet = inherited;
+            }else{
+                updateDoclet = inheritedParent;
+            }
+            
             //We should have a description from the closest augments, if one exists
             if(inherited.inheritable.types.desc && (description || inherited.inheritable.types.desc.append)){
                 description = stripOuterParagraph(description);
                 inherited.inheritable.types.desc.append = stripOuterParagraph(inherited.inheritable.types.desc.append);
                 inherited.description = stripOuterParagraph(inherited.description);
                 if(inherited.inheritable.types.desc.position == 'append'){
-                    inherited.description = "<p>"+(inherited.description ? inherited.description+"<br />" : '')+
+                    updateDoclet.description = "<p>"+(inherited.description ? inherited.description+"<br />" : '')+
                         description+
                         (inherited.inheritable.types.desc.append ? "<br />"+inherited.inheritable.types.desc.append : '')+"</p>";
                 }else{
-                    inherited.description = "<p>"+description+
+                    updateDoclet.description = "<p>"+description+
                         (inherited.inheritable.types.desc.append ? "<br />"+inherited.inheritable.types.desc.append : '')+
                         (inherited.description ? "<br />"+inherited.description : '')+"</p>";
                 }
@@ -199,25 +215,27 @@ exports.handlers = {
                 inherited.summary = stripOuterParagraph(inherited.summary);
                 inherited.inheritable.types.summary.append = stripOuterParagraph(inherited.inheritable.types.summary.append);
                 if(inherited.inheritable.types.summary.position == 'append'){
-                    inherited.summary = "<p>"+(inherited.summary ? inherited.summary+"<br>" : '')+
+                    updateDoclet.summary = "<p>"+(inherited.summary ? inherited.summary+"<br>" : '')+
                         summary+
                         (inherited.inheritable.types.summary.append ? "<br>"+inherited.inheritable.types.summary.append : '')+"</p>";
                 }else{
-                    inherited.summary = "<p>"+summary+
+                    updateDoclet.summary = "<p>"+summary+
                         (inherited.inheritable.types.summary.append ? "<br>"+inherited.inheritable.types.summary.append : '')+
                         (inherited.summary ? "<br>"+inherited.summary : '')+"</p>";
                 }
             }
-           
+            
+            
             if(inherited.inheritable.types.params && params){
-                inherited.params = mergeProps(params, inherited.params, inherited.inheritable.types.params == 'append');
+                updateDoclet.params = mergeProps(params, updateDoclet.params, inherited.inheritable.types.params == 'append');
             }
         
             if(inherited.inheritable.types.properties && properties){
-                console.log(inherited.inheritable.types.properties);
-                inherited.properties = mergeProps(properties, inherited.properties, inherited.inheritable.types.properties == 'append');
+                updateDoclet.properties = mergeProps(properties, updateDoclet.properties, inherited.inheritable.types.properties == 'append');
             }
         });
+        
+        
     }
 };
 
@@ -261,6 +279,20 @@ function mergeProps(first, second, prepend){
             }
         }
         if(second.length > 0){
+            //let top = !prepend ? merged : second;
+            //let bottom = !prepend ? second : merged;
+            //top.forEach(param => {
+            //    merged.push({
+            //        ...param,
+            //        type: {...param.type}
+            //    });
+            //});
+            //bottom.forEach(param => {
+            //    merged.push({
+            //        ...param,
+            //        type: {...param.type}
+            //    });
+            //})
             if(!prepend){
                 merged = [
                     ...merged,
@@ -302,18 +334,19 @@ function getInheritableName(doclet){
 
 let idMap = {};
 function getInheritableNameByLongname(list, searchName){
-    if(!list || list.length == 0 || !searchName){
+    let listKeys = Object.keys(list);
+    if(!listKeys || listKeys.length == 0 || !searchName){
         return null;
     }
     if(idMap.hasOwnProperty(searchName)){
         return idMap[searchName];
     }
     
-    let index = list.findIndex(search => {
-        return search.longname == searchName;
+    let index = listKeys.findIndex(search => {
+        return list[search].longname == searchName;
     });
     if(index >= 0){
-        idMap[searchName] = getInheritableName(list[index]);
+        idMap[searchName] = getInheritableName(list[listKeys[index]]);
     }else{
         return null;
         idMap[searchName] = null;
@@ -326,7 +359,71 @@ function getDocletName(doclet){
     if(!doclet){
         return null;
     }
+    let name = doclet.name ? doclet.name : null;
+    if(isDocletConstructor(doclet)){
+        name = 'constructor';
+    }
+    
     return (doclet.kind ? doclet.kind+'.' : '')+
         (doclet.scope ? doclet.scope+'.' : '')+
-        (doclet.name ? doclet.name : '');
+        (name ? name : '');
+}
+
+function isDocletConstructor(doclet){
+    if(doclet.kind == 'class' && doclet.meta && doclet.meta.code && doclet.meta.code.type == 'MethodDefinition'){
+        return true;
+    }
+    return false;
+}
+
+function getParent(longname, all){
+    let parent = null;
+    
+    let docletName = getInheritableNameByLongname(all, longname);
+    let doclet = null;
+    let allKeys = Object.keys(all);
+    if(docletName){
+        if(all.hasOwnProperty(docletName) && all[docletName]){
+            doclet = all[docletName];
+        }else{
+            //all is not indexed by the doclet names.
+            let keyIndex = allKeys.findIndex(key => {
+                return getInheritableName(all[key]) == docletName;
+            });
+            if(keyIndex >= 0){
+                doclet = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+            }
+        }
+    }
+    
+    if(doclet){
+        
+        if(isDocletConstructor(doclet)){
+            //This is a constructor, so the parent (memberof) is not going to be the class like other methods
+            //So we need to figure out what the parent class of this constructor is.
+            
+            let keyIndex = allKeys.findIndex(key => {
+                let doc = all[key];
+                return doc.longname != doclet.longname && doc.memberof == doclet.memberof && doc.name == doclet.name && doc.kind == 'class';
+            });
+            if(keyIndex >= 0){
+                parent = all[allKeys[keyIndex]];
+            }
+        }else{
+            let inheritedMemberofName = getInheritableNameByLongname(all, doclet.memberof);
+            parent = all[inheritedMemberofName] ? all[inheritedMemberofName] : null;
+            if(!parent){
+                if(inheritedMemberofName){
+                    let keyIndex = allKeys.findIndex(key => {
+                        return getInheritableName(all[key]) == inheritedMemberofName;
+                    });
+                    if(keyIndex >= 0){
+                        parent = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+                    }
+                }
+            }
+        }
+    }
+    
+    return parent;
 }

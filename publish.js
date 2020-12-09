@@ -85,6 +85,7 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
         'undefined',
         'promise',
         '*',
+        'array',
         'uint8array',
         'arraybufferview',
         'arraybuffer',
