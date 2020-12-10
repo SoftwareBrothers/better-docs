@@ -84,11 +84,42 @@ exports.handlers = {
         e.doclets.forEach((doclet) => {
             
             let name = getInheritableName(doclet);
-            let memberName = getDocletName(doclet);
+            //let memberName = getDocletName(doclet);
             
             all[name] = doclet;
+            //let memberof='none';
+            //let parent = getParent(doclet.longname, e.doclets);
+            //
+            //if(parent){
+            //    memberof = getInheritableNameByLongname(e.doclets, parent.longname);
+            //    //memberof = getInheritableNameByLongname(e.doclets, doclet.memberof);
+            //}
+            //byMemberof[memberof] = byMemberof[memberof] || {};
+            //byMemberof[memberof][memberName] = doclet;
+            //let isInheritable = false;
+            //
+            //if(doclet.inheritable){
+            //    let keys = Object.keys(doclet.inheritable.types);
+            //    for(var i=0;i<keys.length; i++){
+            //        if(doclet.inheritable.types[keys[i]]){
+            //            isInheritable=true;
+            //            break;
+            //        }
+            //    }
+            //}
+            //
+            //if(isInheritable && memberof != 'none'){
+            //    if(doclet.comment.indexOf('@summary') < 0 && doclet.inheritable.types.summary){
+            //        doclet.summary = '';
+            //    }
+            //    toProcess.unshift(doclet);
+            //}
+        });
+        
+        e.doclets.forEach((doclet) => {
+            let memberName = getDocletName(doclet);
             let memberof='none';
-            let parent = getParent(doclet.longname, e.doclets);
+            let parent = getParent(doclet.longname, all);
             
             if(parent){
                 memberof = getInheritableNameByLongname(e.doclets, parent.longname);
@@ -96,6 +127,7 @@ exports.handlers = {
             }
             byMemberof[memberof] = byMemberof[memberof] || {};
             byMemberof[memberof][memberName] = doclet;
+            
             let isInheritable = false;
             
             if(doclet.inheritable){
@@ -124,7 +156,7 @@ exports.handlers = {
             let params = [];
             let properties = [];
             //let inheritedMemberofName = getInheritableNameByLongname(e.doclets, inherited.memberof);
-            let inheritedName = getInheritableName(inherited);
+            //let inheritedName = getInheritableName(inherited);
             let inheritedMemberName = getDocletName(inherited);
             let inheritedParent = getParent(inherited.longname, all);
             let parents = [];
@@ -279,20 +311,6 @@ function mergeProps(first, second, prepend){
             }
         }
         if(second.length > 0){
-            //let top = !prepend ? merged : second;
-            //let bottom = !prepend ? second : merged;
-            //top.forEach(param => {
-            //    merged.push({
-            //        ...param,
-            //        type: {...param.type}
-            //    });
-            //});
-            //bottom.forEach(param => {
-            //    merged.push({
-            //        ...param,
-            //        type: {...param.type}
-            //    });
-            //})
             if(!prepend){
                 merged = [
                     ...merged,
@@ -309,25 +327,35 @@ function mergeProps(first, second, prepend){
     }
 }
 
+let inheritableNameMap={};
 function getInheritableName(doclet){
-    let name = doclet.inheritable && doclet.inheritable.name ? doclet.inheritable.name : null;
-    let update = false;
-    if(!name){
-        if(doclet.meta && doclet.meta.code && doclet.meta.code.id){
-            name = doclet.meta.code.id;
-            update=!!doclet.inheritable;
-        }else{
-            if(doclet.longname){
-                name = doclet.longname;
+    let name;
+    if(inheritableNameMap[doclet.longname]){
+        return inheritableNameMap[doclet.longname];
+    }else{
+        name = doclet.inheritable && doclet.inheritable.name ? doclet.inheritable.name : null;
+        let update = false;
+        if(!name){
+            if(doclet.meta && doclet.meta.code && doclet.meta.code.id){
+                name = doclet.meta.code.id;
                 update=!!doclet.inheritable;
             }else{
-                //doclet doesn't have a longname, so we'll try to use the ID
-                
+                if(doclet.longname){
+                    name = doclet.longname;
+                    update=!!doclet.inheritable;
+                }else{
+                    //doclet doesn't have a longname, so we'll try to use the ID
+                    
+                }
             }
         }
-    }
-    if(name && update){
-        doclet.inheritable.name = name;
+        if(name){
+            if(update){
+                doclet.inheritable.name = name;
+            }else{
+                inheritableNameMap[doclet.longname] = name;
+            }
+        }
     }
     return name;
 }
@@ -342,31 +370,42 @@ function getInheritableNameByLongname(list, searchName){
         return idMap[searchName];
     }
     
-    let index = listKeys.findIndex(search => {
-        return list[search].longname == searchName;
-    });
-    if(index >= 0){
-        idMap[searchName] = getInheritableName(list[listKeys[index]]);
+    if(list.hasOwnProperty(searchName)){
+        idMap[searchName] = getInheritableName(list[searchName]);
     }else{
-        return null;
-        idMap[searchName] = null;
+        let index = listKeys.findIndex(search => {
+            return list[search].longname == searchName;
+        });
+        if(index >= 0){
+            idMap[searchName] = getInheritableName(list[listKeys[index]]);
+        }else{
+            //return null;
+            idMap[searchName] = null;
+        }
     }
     
     return idMap[searchName];
 }
 
+let docletNameMap = {};
 function getDocletName(doclet){
     if(!doclet){
         return null;
     }
-    let name = doclet.name ? doclet.name : null;
-    if(isDocletConstructor(doclet)){
-        name = 'constructor';
+    if(docletNameMap[doclet.longname]){
+        return docletNameMap[doclet.longname];
+    }else{
+        let name = doclet.name ? doclet.name : null;
+        if(isDocletConstructor(doclet)){
+            name = 'constructor';
+        }
+        
+        let theName = (doclet.kind ? doclet.kind+'.' : '')+
+            (doclet.scope ? doclet.scope+'.' : '')+
+            (name ? name : '');
+        docletNameMap[doclet.longname] = theName;
+        return theName;
     }
-    
-    return (doclet.kind ? doclet.kind+'.' : '')+
-        (doclet.scope ? doclet.scope+'.' : '')+
-        (name ? name : '');
 }
 
 function isDocletConstructor(doclet){
@@ -376,54 +415,61 @@ function isDocletConstructor(doclet){
     return false;
 }
 
+let parentMap={};
 function getParent(longname, all){
     let parent = null;
-    
-    let docletName = getInheritableNameByLongname(all, longname);
-    let doclet = null;
-    let allKeys = Object.keys(all);
-    if(docletName){
-        if(all.hasOwnProperty(docletName) && all[docletName]){
-            doclet = all[docletName];
-        }else{
-            //all is not indexed by the doclet names.
-            let keyIndex = allKeys.findIndex(key => {
-                return getInheritableName(all[key]) == docletName;
-            });
-            if(keyIndex >= 0){
-                doclet = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+    if(parentMap.hasOwnProperty(longname)){
+        return parentMap[longname];
+    }else{
+        let docletName = getInheritableNameByLongname(all, longname);
+        let doclet = null;
+        let allKeys;
+        if(docletName){
+            if(all.hasOwnProperty(docletName) && all[docletName]){
+                doclet = all[docletName];
+            }else{
+                allKeys = Object.keys(all);
+                //all is not indexed by the doclet names.
+                let keyIndex = allKeys.findIndex(key => {
+                    return getInheritableName(all[key]) == docletName;
+                });
+                if(keyIndex >= 0){
+                    doclet = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+                }
             }
         }
-    }
-    
-    if(doclet){
         
-        if(isDocletConstructor(doclet)){
-            //This is a constructor, so the parent (memberof) is not going to be the class like other methods
-            //So we need to figure out what the parent class of this constructor is.
+        if(doclet){
             
-            let keyIndex = allKeys.findIndex(key => {
-                let doc = all[key];
-                return doc.longname != doclet.longname && doc.memberof == doclet.memberof && doc.name == doclet.name && doc.kind == 'class';
-            });
-            if(keyIndex >= 0){
-                parent = all[allKeys[keyIndex]];
-            }
-        }else{
-            let inheritedMemberofName = getInheritableNameByLongname(all, doclet.memberof);
-            parent = all[inheritedMemberofName] ? all[inheritedMemberofName] : null;
-            if(!parent){
-                if(inheritedMemberofName){
-                    let keyIndex = allKeys.findIndex(key => {
-                        return getInheritableName(all[key]) == inheritedMemberofName;
-                    });
-                    if(keyIndex >= 0){
-                        parent = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+            if(isDocletConstructor(doclet)){
+                //This is a constructor, so the parent (memberof) is not going to be the class like other methods
+                //So we need to figure out what the parent class of this constructor is.
+                allKeys = allKeys ? allKeys : Object.keys(all);
+                let keyIndex = allKeys.findIndex(key => {
+                    let doc = all[key];
+                    return doc.longname != doclet.longname && doc.memberof == doclet.memberof && doc.name == doclet.name && doc.kind == 'class';
+                });
+                if(keyIndex >= 0){
+                    parent = all[allKeys[keyIndex]];
+                }
+            }else{
+                let inheritedMemberofName = getInheritableNameByLongname(all, doclet.memberof);
+                parent = all[inheritedMemberofName] ? all[inheritedMemberofName] : null;
+                if(!parent){
+                    if(inheritedMemberofName){
+                        let keyIndex = allKeys.findIndex(key => {
+                            return getInheritableName(all[key]) == inheritedMemberofName;
+                        });
+                        if(keyIndex >= 0){
+                            parent = all[allKeys[keyIndex]] ? all[allKeys[keyIndex]] : null;
+                        }
                     }
                 }
             }
         }
     }
-    
+    if(parent){
+        parentMap[longname] = parent;
+    }
     return parent;
 }

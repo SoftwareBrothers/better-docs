@@ -94,13 +94,34 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
       
       if(skip.indexOf(longname.toLowerCase()) < 0 && rtn.indexOf('<a') < 0){
         let found=false;
-        skip.forEach(type => {
-          if('Array.<'+type+'>' == longname){
-            found=true;
+        let types = [];
+        if(longname.indexOf('.<') >= 0){
+          let matches = (new RegExp(/^(.*).<\(?(.*)[\)?]>/)).exec(longname);
+          if(matches && matches.length >= 1){
+            if(matches.length >= 2){
+              types = matches[2].split('|');
+              Object.keys(types).forEach(key => types[key] = types[key].trim());
+            }
+            if(matches[1].trim()){
+              types.unshift(matches[1].trim());
+            }
           }
-        });
-        if(!found){
-          console.log('Invalid link to '+longname, linkText);
+        }
+        if(types.length <= 0){
+          skip.forEach(type => {
+            if('Array.<'+type+'>' == longname){
+              found=true;
+            }
+          });
+          if(!found){
+            console.log('Invalid link to '+longname, linkText);
+          }
+        }else{
+          types.forEach(type => {
+            if(skip.indexOf(type.toLowerCase()) < 0){
+              console.log('Invalid link to '+type+' for '+longname, linkText);
+            }
+          });
         }
         
       }
