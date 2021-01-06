@@ -1,9 +1,64 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component**, **@lifecycle**, **@renders**,
-**@table**, **@optional**, **@inheritDesc**, **@inheritSummary**, **@inheritProperties**, and **@inheritParams** plugins. This template also implements several
-helpful options to better control the behavior of the generated web documentation such as, nested categorization with accordian style folding, automatically
-opening external `{@link ...}` tags in a new browser tab, and inheriting documentation from parent(s) in extended classes.
+A Documentation toolbox for your **javascript** / **typescript**, **react**, or **react-native** projects based on JSDoc3 with tags such as
+**@category**, **@component**, **@lifecycle**, **@renders**, **@table**, **@optional**, **@inheritDesc**, **@inheritSummary**, **@inheritProperties**,
+and **@inheritParams** plugins. This template also implements several helpful options to better control the behavior of the generated web documentation
+such as, nested categorization with accordian style folding, automatically opening external `@link` tags in a new browser tab, and inheriting
+documentation from parent(s) in extended classes.
+
+# OpenSource SoftwareBrothers community
+
+- [Join the community](https://join.slack.com/t/adminbro/shared_invite/zt-czfb79t1-0U7pn_KCqd5Ts~lbJK0_RA) to get help and be inspired.
+- subscribe to our [newsletter](http://opensource.softwarebrothers.co)
+
+# Contents
+- [Example](#example)
+- [Theme Installation](#theme-installation)
+- [Theme Usage](#theme-usage)
+- [Template Options](#template-options)
+  - [Options List](#template-options-option-list)
+  - [Using Template Options](#using-template-options)
+- [TypeScript Support](#typescript-support)
+  - [Installation](#typescript-support-installation)
+  - [How It Works](#typescript-support-how-it-works)
+  - [Examples](#typescript-support-examples)
+- Plugins
+  - [@category Plugin](#category-plugin)
+    - [Inatallation](#category-plugin-installation)
+    - [Usage](#category-plugin-usage)
+  - [@component Plugin](#component-plugin)
+    - [Installation](#component-installation)
+    - [Usage](#component-usage)
+    - [Preview](#component-preview)
+    - [Mixing Components In Preview](#component-mixing-components-in-preview)
+    - [Wrapper Component](#component-wrapper-component)
+      - [Installation](#component-wrapper-component-installation)
+      - [Usage](#component-wrapper-component-usage)
+    - [Styling React Examples](#component-styling-react-examples)
+    - [Adding commands to bundle entry file](#component-adding-commands-to-bundle-entry-file)
+  - [@lifecycle Plugin](#lifecycle-plugin)
+    - [Installation](#lifecycle-installation)
+    - [Usage](#lifecycle-usage)
+  - [@table Plugin](#table-plugin)
+    - [Installation](#table-installation)
+    - [Usage](#table-usage)
+  - ['inheritable' Plugin](#inheritable-plugin)
+    - [Installation](#inheritable-installation)
+    - [Supported Tags](#inheritable-supported-tags)
+    - [Usage](#inheritable-usage)
+      - [Using With Standard Tags](#inheritable-using-with-standard-tags)
+      - [Value Inheritance](#inheritable-value-inheritance)
+      - [Params](#inheritable-params)
+    - [Examples](#inheritable-examples)
+  - ['@typedef import' Plugin](#typedef-import-plugin)
+    - [Installation](#typedef-import-installation)
+- [Setting Up For Development](#setting-up-for-development)
+- [License](#license)
+
+<a name="example"></a>
+# Example
+
+Example documentation can be found here: [](https://softwarebrothers.github.io/example-design-system/index.html)
 
 This is how it looks:
 
@@ -21,21 +76,14 @@ This is how it looks:
   </tr>
 </table>
 
-# Example
-
-Example documentation can be found here: https://softwarebrothers.github.io/example-design-system/index.html
-
-# OpenSource SoftwareBrothers community
-
-- [Join the community](https://join.slack.com/t/adminbro/shared_invite/zt-czfb79t1-0U7pn_KCqd5Ts~lbJK0_RA) to get help and be inspired.
-- subscribe to our [newsletter](http://opensource.softwarebrothers.co)
-
-# Installation
+<a name="theme-installation"></a>
+# Theme Installation
 
 ```sh
 npm install --save-dev better-docs
 ```
 
+<a name="theme-usage"></a>
 # Theme Usage
 
 ## With command line
@@ -64,12 +112,44 @@ in your `jsdoc.json` file, set the template:
 }
 ```
 
-# Options
+<a name="template-options"></a>
+# Template Options
 
-better-docs has several template options which are helpful in controlling the way documentation behaves.
+First of all, let me state that better-docs extends the `default` template. That is why default template parameters can be used in addition to the template options
+provided by better-docs.
 
-- `useNestedCategories` - Used in conjunction with the @category plugin. Determines if the navigation should nest into `@category` -> `@subcategory` -> type. defaults to false
-- `isReactNative` - Used in conjunction with the @category plugin. When set to true the live preview is diabled since it won't work, which speeds up building the docs and removes errors. Defaults to false
+To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc configuration file`.
+
+<a name="template-options-option-list"></a>
+## Option List
+
+[BETA]: You must explicitly set the `search` option of the `default` template to `true` to enable search
+
+better-docs has several template options which are helpful in controlling the way documentation generation behaves:
+- `name` - Text to be used as the "site title" in the header of the generated docs
+- `logo` - The path to a logo to include in the top navigation header of the generated docs
+- `title` - Text to be used as the `<title>` in the `<head>` of the generated docs
+- `css` - Path to a CSS file to be included in the generated docs. The path is relative to the `jsdoc.json` configuration file
+- `trackingCode` - A string containing tracking code to include in the <head> of each page. It should include `<script>` tags if they are needed.
+- `hideGenerator` - Boolean indicating if the 'Generated By' text should be excluded from the footer
+- `navLinks` - An array of objects defining links to be included in the navigation dropdown
+  - `navLinks[...].label` - The link text
+  - `navLinks[...].href` - The link URL
+- `head` - A string of HTML to be included in the `<head>` of each page
+- `navButtons` - An array of objects defining buttons that should be added to the top nav of the generated docs
+  - `navButtons[...].label` - The link text
+  - `navButtons[...].href` - The link URL
+  - `navButtons[...].target` - The value of the `target` attribute (i.e. Given `navButtons[...].target: "_new"` the anchor will be `<a target="_new" />`)
+  - `navButtons[...].className` - A css class to include on the anchor
+- `landing` - Boolean value. If true the landing page will be `docs.html`, otherwise it will be `index.html`
+- `component` - An object to customize how the `@component` tag works. See [@component](#component-plugin-beta) documentation below
+  - `component.wrapper` - Add a wrapper component (such as a context provider) See [Wrapper component](#wrapper-component-only-react) documentation below
+  - `component.entry` - Add to the `.entry.js` file created by `@component`. This property is an array of strings. See
+    [Adding commands to bundle entry file](#adding-commands-to-bundle-entry-file)
+- `useNestedCategories` - Used in conjunction with the @category plugin. Determines if the navigation should nest into `@category` -> `@subcategory` -> type.
+  defaults to false
+- `isReactNative` - Used in conjunction with the @category plugin. When set to true the live preview is diabled since it won't work, which speeds up building
+  the docs and removes errors. Defaults to false
 - `maxPropertyDepth` - Used to limit the depth that properties display when objects are defined. Defaults to 2. For example:
 ```
 //maxPropertyDepth is set to 2
@@ -102,34 +182,105 @@ better-docs has several template options which are helpful in controlling the wa
 - `includeTodoPage` - Boolean to determine if a "To Do" list page should be generated along with the documentation. This list will include all `@todo` tags defined
 anywhere in the system and are categorized by the file in which they appear.
 
-## Usage
+<a name="using-template-options"></a>
+## Using Template Options
 
-All options can be set in the `jsdoc.json` file:
+All options can be set in the `jsdoc.json` file. Below is a sample of the `jsdoc.json` configuration with settings for both `default` and `better-docs` templates:
 
 ```json
-...
-"templates": {
-  ...
-  "better-docs": {
-    "useNestedCategories": true,
-    "isReactNative": true,
-    "maxPropertyDepth": 10,
-    "useNavFolding": true,
-    "usePropertyFolding": true,
-    "foldingDefaultClosed": true,
-    "linkTagToNewTab":true,
-    "subsectionsInSideNav": ["augments","requires","classes","interfaces","mixins","namespaces"],
-    "includeTodoPage": true
+  {
+    "tags": {
+        "allowUnknownTags": ["category"]
+    },
+    "source": {
+        "include": ["./src"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": [
+        "plugins/markdown",
+        "jsdoc-mermaid",
+        "node_modules/better-docs/category"
+    ],
+    "opts": {
+        "encoding": "utf8",
+        "destination": "docs/",
+        "readme": "readme.md",
+        "recurse": true,
+        "verbose": true,
+        "tutorials": "./docs-src/tutorials",
+        "template": "better-docs"
+    },
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false,
+      "search": true,
+      "default": {
+        "staticFiles": {
+          "include": [
+            "./docs-src/statics"
+          ]
+        }
+      },
+      "better-docs": {
+        "name": "AdminBro Documentation",
+        "logo": "images/logo.png",
+        "title": "", //HTML title
+        "css": "style.css",
+        "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
+        "hideGenerator": false,
+        "navLinks": [
+          {
+            "label": "Github",
+            "href": "https://github.com/SoftwareBrothers/admin-bro"
+          },{
+            "label": "Example Application",
+            "href": "https://admin-bro-example-app.herokuapp.com/admin"
+          }
+        ],
+        "navButtons": [
+          {
+            "label": "Page 1",
+            "href": "/page1.html",
+            "target": "",
+            "className": "header-button"
+          },{
+            "label": "External Page",
+            "href": "https://external.link",
+            "target": "_new",
+            "className": "header-button external-button"
+          }
+        ],
+        "landing": true,
+        "component": {
+          "wrapper": "./path/to/your/wrapper-component.js",
+          "entry": [
+            "import 'babel-polyfill';",
+            "import 'bulma/css/bulma.css';"
+          ]
+        },
+        "useNestedCategories": true,
+        "isReactNative": true,
+        "maxPropertyDepth": 10,
+        "useNavFolding": true,
+        "usePropertyFolding": true,
+        "foldingDefaultClosed": true,
+        "linkTagToNewTab":true,
+        "subsectionsInSideNav": ["augments","requires","classes","interfaces","mixins","namespaces"],
+        "includeTodoPage": true
+      }
+    }
   }
-}
 ...
 ```
 
+<a name="typescript-support"></a>
 # TypeScript support
 
 better-docs has a plugin which allows you to generate documentation from your TypeScript codebase.
 
-## Usage
+<a name="typescript-support-installation"></a>
+## Installation
 
 To use it update your `jsdoc.json` file
 
@@ -149,6 +300,7 @@ To use it update your `jsdoc.json` file
 
 And now you can run your `jsdoc` command and parse TypeScript files.
 
+<a name="typescript-support-how-it-works"></a>
 ## How it works?
 
 It performs 4 operations:
@@ -164,6 +316,7 @@ Furthermore it:
 
 so they can be printed by JSDoc automatically.
 
+<a name="typescript-support-examples"></a>
 ## Examples
 
 ```
@@ -278,12 +431,13 @@ class ClassName {
   constructor(color: string) {}
 }
 ```
-
+<a name="category-plugin"></a>
 # @category plugin
 
 better-docs also allows you to nest your documentation into categories and subcategories in the sidebar menu.
 
-## Usage
+<a name="category-plugin-installation"></a>
+## Installation
 
 To add a plugin - update `plugins` section in your `jsdoc.json` file:
 
@@ -297,8 +451,10 @@ To add a plugin - update `plugins` section in your `jsdoc.json` file:
 ],
 ...
 ```
+<a name="category-plugin-usage"></a>
+## Usage
 
-and then you can use `@category` and/or `@subcategory` tag in your code:
+Once installed, you can use `@category` and/or `@subcategory` tag in your code:
 
 ```
 /**
@@ -311,10 +467,13 @@ class YourClass {
 }
 ```
 
+<a name="component-plugin"></a>
 # @component plugin [BETA]
 
-Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) components automatically. The only thing you have to do is to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
+Better-docs also allows you to document your [React](https://reactjs.org/) and [Vue](https://vuejs.org/) components automatically. The only thing you have to do is
+to add a `@component` tag. It will take all props from your components and along with an `@example` tag - will generate a __live preview__.
 
+<a name="component-installation"></a>
 ## Installation instructions
 
 Similar as before to add a plugin - you have to update the `plugins` section in your `jsdoc.json` file:
@@ -330,8 +489,8 @@ Similar as before to add a plugin - you have to update the `plugins` section in 
 ...
 ```
 
-When the `isReactNative` template option is not set to `true`, the __component__ plugin will use [parcel](https://parceljs.org) as a bundler so you have to
-install it globally. To do this run:
+When the `isReactNative` template option is not set to `true` (which disables live preview), the __component__ plugin will use [parcel](https://parceljs.org) as a
+bundler so you have to install it globally. To do this run:
 
 ```
 # if you use npm
@@ -340,7 +499,7 @@ npm install -g parcel-bundler
 # or yarn
 yarn global add parcel-bundler
 ```
-
+<a name="component-usage"></a>
 ## Usage
 
 To document components simply add `@component` in your JSDoc documentation:
@@ -395,11 +554,13 @@ export default {
 
 In this case, props will be taken from `props` property.
 
+<a name="component-preview"></a>
 ## Preview
 
-`@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to add an `@example` tag and return component from it:
+`@component` plugin also modifies the behaviour of `@example` tag in a way that it can generate an actual __component preview__. What you have to do is to add
+an `@example` tag and return component from it:
 
-**React example:**
+### React example:
 
 ```jsx
 /**
@@ -417,7 +578,7 @@ const Documented = (props) => {
 }
 ```
 
-**Vue example 1:**
+### Vue example 1:
 
 ```vue
 <script>
@@ -433,7 +594,7 @@ export default {
 </script>
 ```
 
-**Vue example 2:**
+### Vue example 2:
 
 ```vue
 <script>
@@ -457,6 +618,8 @@ export default {
 </script>
 ```
 
+### Multiple Examples and Captions
+
 You can put as many `@example` tags as you like in one component and "caption" each of them like this:
 
 ```javascript
@@ -466,10 +629,11 @@ You can put as many `@example` tags as you like in one component and "caption" e
  * // your example here
  */
 ```
-
+<a name="component-mixing-components-in-preview"></a>
 ## Mixing components in preview
 
-Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the second component you want to use the first one as a wrapper like this:
+Also you can use multiple components which are documented with `@component` tag together. So lets say you have 2 components and in the second component you want to
+use the first one as a wrapper like this:
 
 ```javascript
 // component-1.js
@@ -494,12 +658,16 @@ const Component1 = (props) => {...}
  */
 const Component2 = (props) => {...}
 ```
-
+<a name="component-wrapper-component"></a>
 ## Wrapper component [only React]
 
-Most probably your components will have to be run within a particular context, like within redux store provider or with custom CSS libraries.
-You can simulate this by passing a `component.wrapper` in your `jsdoc.json`:
-_(To read more about passing options - scroll down to __Customization__ section)_
+Most probably your components will have to be run within a particular context, like within redux store provider or with custom CSS libraries. Better Docs achieves this by
+allowing you to add a wrapper component to your components.
+
+<a name="component-wrapper-component-installation"></a>
+### Installation
+You can simulate running in a context or redux store provider by passing a `component.wrapper` in your `jsdoc.json`:
+_(To read more about passing options - See the [Template Options](#template-options) section)_
 
 ```json
 // jsdoc.json
@@ -516,6 +684,9 @@ _(To read more about passing options - scroll down to __Customization__ section)
     }
 }
 ```
+
+<a name="component-wrapper-component-usage"></a>
+### Usage
 
 Wrapper component can look like this:
 
@@ -545,7 +716,7 @@ const Component = (props) => {
 
 export default Component
 ```
-
+<a name="component-styling-react-examples"></a>
 ## Styling React examples
 
 Better-docs inserts all examples within an `iframe`. This results in the following styling options:
@@ -585,10 +756,11 @@ const Component = (props) => {
 
 export default Component
 ```
-
+<a name="component-adding-commands-to-bundle-entry-file"></a>
 ## Adding commands to bundle entry file
 
-`@component` plugin creates an entry file: `.entry.js` in your _docs_ output folder. Sometimes you might want to add something to it. You can do this by passing: `component.entry` option, which is an array of strings.
+`@component` plugin creates an entry file: `.entry.js` in your _docs_ output folder. Sometimes you might want to add something to it. You can do this by passing:
+`component.entry` option, which is an array of strings.
 
 So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your bundle. You can do it like this:
 
@@ -610,7 +782,7 @@ So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your 
     }
 }
 ```
-
+<a name="lifecycle-plugin"></a>
 # @lifecycle plugin
 
 better-docs creates the `@lifecycle` tag, which will label tagged methods and sort them into their own categories in the right navigation.
@@ -619,6 +791,7 @@ This plugin also implements the `@renders` tag so you can tag methods which caus
 
 **Note** This plugin requires the use of the `@component` plugin
 
+<a name="lifecycle-installation"></a>
 ## Installation
 
 To add the `@lifecycle` plugin - update `plugins` section in your `jsdoc.json` file:
@@ -634,7 +807,9 @@ To add the `@lifecycle` plugin - update `plugins` section in your `jsdoc.json` f
 ...
 ```
 
-and then you can use `@lifecycle` and/or `@renders` tag in your code:
+<a name="lifecycle-usage"></a>
+## Usage
+Once installed you can use `@lifecycle` and/or `@renders` tag in your code:
 
 ```
 class YourClass {
@@ -651,6 +826,7 @@ class YourClass {
 }
 ```
 
+<a name="table-plugin"></a>
 # @table plugin
 
 better-docs creates the `@table` tag, which is a logical separator of members for defining tables in a database. Using this tag will separate those members
@@ -658,6 +834,7 @@ tagged with `@table` into it's own section in the documentation, making the docs
 `@typedef` just as you do any other typedef, including the `@table` table tag to indicate that this typedef should be documented in the "Tables" section.
 This table definition will be rendered the same as any other `@typedef`, except it will be grouped into a "Table" section with any other tables.
 
+<a name="table-installation"></a>
 ## Installation
 
 To add the `@table` plugin - update `plugins` section in your `jsdoc.json` file:
@@ -673,7 +850,10 @@ To add the `@table` plugin - update `plugins` section in your `jsdoc.json` file:
 ...
 ```
 
-and then you can use the `@table` tag in your code:
+<a name="table-usage"></a>
+## Usage
+
+Once installed you can use the `@table` tag in your code:
 
 ```
   /**
@@ -696,26 +876,13 @@ and then you can use the `@table` tag in your code:
   * 
   */
 ```
-
+<a name="inheritable-plugin"></a>
 # inheritable Plugin
 
 better-docs creates several tags that allow you to inhert documentation in a child class from it's parent making it quick and easy to reuse documentation
 without the need to repeat it in child classes. This speeds up the documentation process, and keeps param definitions consistent.
 
-- `@inheritDesc <additional description>` - The `@inheritDesc` tag can either be used in conjunction with [@desc](https://jsdoc.app/tags-description.html),
-  or replace it entirely. Additionally, providing a value will append that value to the description from the inherited doclet.
-
-- `@inheritSummary <additional summary>` - The `@inheritSummary` tag can either be used in conjunction with [@summary](https://jsdoc.app/tags-summary.html),
-  or replace it entirely to inherit the summary from the parent doclet. Additionally, providing a value will append that value to the summary from the inherited
-  doclet.
-
-- `@inheritParams` - The `@inheritParams` tag is used in conjunction with the [@param](https://jsdoc.app/tags-param.html) tag. It can be used to inherit params
-  from the parent doclet, and/or modify a param inherited from the parent.
-
-- `@inheritProperties` - The `@inheritProperties` tag is used in conjunction with the [@property](https://jsdoc.app/tags-property.html) tag. It can be used to
-  inherit properties from the parent doclet, and/or modify a property inherited from the parent. This tag behaves exactly like the `@inheritParams`, but is used
-  to inherit `@property` tags instead of `@param` tags.
-  
+<a name="inheritable-installation"></a>
 ## Installation
 
 To add the `inheritable` plugin - update `plugins` section in your `jsdoc.json` file:
@@ -731,7 +898,27 @@ To add the `inheritable` plugin - update `plugins` section in your `jsdoc.json` 
 ...
 ```
 
-## Using with standard tags
+<a name="inheritable-supported-tags"></a>
+## Supported Tags
+- `@inheritDesc <additional description>` - The `@inheritDesc` tag can either be used in conjunction with [@desc](https://jsdoc.app/tags-description.html),
+  or replace it entirely. Additionally, providing a value will append that value to the description from the inherited doclet.
+
+- `@inheritSummary <additional summary>` - The `@inheritSummary` tag can either be used in conjunction with [@summary](https://jsdoc.app/tags-summary.html),
+  or replace it entirely to inherit the summary from the parent doclet. Additionally, providing a value will append that value to the summary from the inherited
+  doclet.
+
+- `@inheritParams` - The `@inheritParams` tag is used in conjunction with the [@param](https://jsdoc.app/tags-param.html) tag. It can be used to inherit params
+  from the parent doclet, and/or modify a param inherited from the parent.
+
+- `@inheritProperties` - The `@inheritProperties` tag is used in conjunction with the [@property](https://jsdoc.app/tags-property.html) tag. It can be used to
+  inherit properties from the parent doclet, and/or modify a property inherited from the parent. This tag behaves exactly like the `@inheritParams`, but is used
+  to inherit `@property` tags instead of `@param` tags.
+
+<a name="inheritable-usage"></a> 
+## Usage
+
+<a name="inheritable-using-with-standard-tags"></a>
+### Using with standard tags
 
 These tags can replace their standard `jsdoc` counterparts, or be used to augment them (i.e. within the same docblock you can replace `@summary` with
 `@inheritSummary`, or you can use them both together). When the `inheritable` tags are used in conjunction with their standard `jsdoc` counterparts, the generated
@@ -739,21 +926,24 @@ documentation will be positional. This means that where you place the `inheritab
 documentation will be placed. For instance, when using both the `@summary` and `@inheritSummary` tags, if the `@summary` tag comes before the `@inheritSummary`,
 then the **inherited** documentation will be placed **after** the `@summary`, and vice versa. See Examples, especially 1 & 2.
 
-## Value Inheritance
+<a name="inheritable-value-inheritance"></a>
+### Value Inheritance
 
 These tags follow the same logic of inheritance as a method or property of a class, where the value of the tag will be inherited from the first parent in the
-inheritance tree which defines that value. For instance, using the `@inheritDesc` tag on a method will first look to it's immediate parent(s) for a method of the same name, and inherit it's `@desc`
-**AND** `@inheritDesc` values. If the immediate parent does not have a method with the same name (or if that method does not contain a `@desc` or `@inheritDesc`
-value), then it will look to the parent's parent to find a value, and so on, until either a value is found, or the top of the tree is reached. If the **child**
-class's parent implements the `@inheritDesc` tag then the value for the **child** class will be inherited from it's **grandparent** including any additions the
-**parent** class made to the value it inherited from it's parent (the child's **grandparent**), and so on. See Examples.
+inheritance tree which defines that value. For instance, using the `@inheritDesc` tag on a method will first look to it's immediate parent(s) for a method of
+the same name, and inherit it's `@desc` **AND** `@inheritDesc` values. If the immediate parent does not have a method with the same name (or if that method does
+not contain a `@desc` or `@inheritDesc` value), then it will look to the parent's parent to find a value, and so on, until either a value is found, or the top
+of the tree is reached. If the **child** class's parent implements the `@inheritDesc` tag then the value for the **child** class will be inherited from it's
+**grandparent** including any additions the **parent** class made to the value it inherited from it's parent (the child's **grandparent**), and so on. See Examples.
 
-## Params
+<a name="inheritable-params"></a>
+### Params
 
 When using the `@inheritParams` or `@inheritProperties` tag, in addition to inheriting params from the parent you can use it in conjunction with the `@param`/`@property` tag
 to add to or overwrite the params defined on the parent. When a param on the **child** class has the same name as a param on the **parent** class, the **childs** param will
 be used. When a param on the **child** class has a different name than a param on the **parent** class, **BOTH** params will be used. See Examples, especially Example 5.
 
+<a name="inheritable-examples"></a>
 ## Examples
 
 ### Example 1:
@@ -1028,85 +1218,21 @@ class PersonWithAddressAndPhone extends PersonWithAddress{
  */
 ```
 
+<a name="typedef-import-plugin"></a>
+# typedef(import(...)) Plugin
 
-# Customization
-
-First of all, let me state that better-docs extends the `default` template. That is why default template parameters are also handled.
-
-[BETA]: You must explicitly set the `search` option of the `default` template to `true` to enable search
-
-To customize the better-docs pass `options` to `templates['better-docs']`. section in your `jsdoc configuration file`.
-
-Example configuration file with settings for both `default` and `better-docs` templates:
-
-```json
-{
-    "tags": {
-        "allowUnknownTags": ["category"]
-    },
-    "source": {
-        "include": ["./src"],
-        "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
-    },
-    "plugins": [
-        "plugins/markdown",
-        "jsdoc-mermaid",
-        "node_modules/better-docs/category"
-    ],
-    "opts": {
-        "encoding": "utf8",
-        "destination": "docs/",
-        "readme": "readme.md",
-        "recurse": true,
-        "verbose": true,
-        "tutorials": "./docs-src/tutorials",
-        "template": "better-docs"
-    },
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false,
-        "search": true,
-        "default": {
-            "staticFiles": {
-              "include": [
-                  "./docs-src/statics"
-              ]
-            }
-        },
-        "better-docs": {
-            "name": "AdminBro Documentation",
-            "logo": "images/logo.png",
-            "title": "", // HTML title
-            "css": "style.css",
-            "trackingCode": "tracking-code-which-will-go-to-the-HEAD",
-	    "hideGenerator": false,
-            "navLinks": [
-                {
-                    "label": "Github",
-                    "href": "https://github.com/SoftwareBrothers/admin-bro"
-                },
-                {
-                    "label": "Example Application",
-                    "href": "https://admin-bro-example-app.herokuapp.com/admin"
-                }
-            ]
-        }
-    }
-}
-```
-
-## Extras
-
-### typedef(import(...))
-
-better-docs also has one extra plugin for handling typescript'like types imports like (it has to be one-liner):
+better-docs also has one extra plugin for handling typescript-like imports (it has to be one-liner) such as:
 
 ```
 /** @typedef {import('./some-other-file').ExportedType} ExportedType */
 ```
 
-It simply removes that from the code so JSDoc wont throw an error. In order to use it add this plugin to your plugins section:
+It simply removes that from the code so JSDoc won't throw an error. 
+
+<a name="typedef-import-installation"></a>
+## Installation
+
+In order to use it add this plugin to your plugins section:
 
 ```
   "plugins": [
@@ -1114,6 +1240,7 @@ It simply removes that from the code so JSDoc wont throw an error. In order to u
     ],
 ```
 
+<a name="setting-up-for-development"></a>
 # Setting up for the development
 
 If you want to change the theme locally follow the steps:
@@ -1147,8 +1274,10 @@ yarn
 
 It supports following EVN variables:
 
-* `DOCS_COMMAND` - a command in your root repo which you use to generate documentation: i.e. `DOCS_COMMAND='jsdoc -c jsdoc.json'` or `npm run docs` if you have `docs` command defined in `package.json` file
-* `DOCS_OUTPUT` - where your documentation is generated. It should point to the same folder your jsdoc `--destination` conf. But make sure that it is relative to the path where you cloned `better-docs`.
+* `DOCS_COMMAND` - a command in your root repo which you use to generate documentation: i.e. `DOCS_COMMAND='jsdoc -c jsdoc.json'` or `npm run docs` if you have
+  `docs` command defined in `package.json` file
+* `DOCS_OUTPUT` - where your documentation is generated. It should point to the same folder your jsdoc `--destination` conf. But make sure that it is relative to
+  the path where you cloned `better-docs`.
 * `DOCS` - list of folders from your original repo what you want to watch for changes. Separated by comma.
 
 ```
@@ -1165,6 +1294,7 @@ If you want to see how to setup jsdoc in your project - take a look at these bri
 - JSDoc - https://www.youtube.com/watch?v=Yl6WARA3IhQ
 - better-docs and Mermaid: https://www.youtube.com/watch?v=UBMYogTzsBk
 
+<a name="license"></a>
 # License
 
 better-docs is Copyright © 2019 SoftwareBrothers.co. It is free software and may be redistributed under the terms specified in the [LICENSE](LICENSE) file - MIT.
