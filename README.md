@@ -99,7 +99,8 @@ better-docs has several template options which are helpful in controlling the wa
   - `interfaces` - Interfaces
   - `mixins` - Mixins
   - `namespaces` - Namespaces
-
+- `includeTodoPage` - Boolean to determine if a "To Do" list page should be generated along with the documentation. This list will include all `@todo` tags defined
+anywhere in the system and are categorized by the file in which they appear.
 
 ## Usage
 
@@ -118,6 +119,7 @@ All options can be set in the `jsdoc.json` file:
     "foldingDefaultClosed": true,
     "linkTagToNewTab":true,
     "subsectionsInSideNav": ["augments","requires","classes","interfaces","mixins","namespaces"],
+    "includeTodoPage": true
   }
 }
 ...

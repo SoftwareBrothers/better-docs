@@ -631,7 +631,10 @@ function buildGroupNav (members, title) {
 function buildNav(members, navTypes = null, betterDocs) {
   const href = betterDocs.landing ? 'docs.html' : 'index.html'
   var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
-
+  if (env.conf.templates.betterDocs.includeTodoPage) {
+    let todoHref = 'Todo.html';
+    nav += `<h2><a href="${todoHref}">TODO</a></h2>`;
+  }
   var categorised = {}
   var rootScope = {}
 
@@ -1136,6 +1139,27 @@ exports.publish = function(taffyData, opts, tutorials) {
         longname: (opts.mainpagetitle) ? opts.mainpagetitle : 'Main Page'
       }]
     ).concat(files), indexUrl)
+  
+  if (env.conf.templates.betterDocs.includeTodoPage) {
+    //Generate the todo page
+    let docs = {};
+    //Gather all the members that have a TODO
+    data().each(function(member) {
+      if(member && Object.keys(member).indexOf('todo') >= 0){
+        if(!docs.hasOwnProperty(member.meta.shortpath)){
+          docs[member.meta.shortpath] = {
+            shortpath: member.meta.shortpath,
+            path: member.meta.path,
+            filepath: path.join(member.meta.path, member.meta.filename),
+            members: []
+          }
+        }
+        docs[member.meta.shortpath].members.push(member);
+      }
+    });
+
+    generate('TODO', '', [{kind: 'todo', docs:docs}], helper.getUniqueFilename('Todo'));
+  }
 
   // set up the lists that we'll use to generate pages
   classes = taffy(members.classes)

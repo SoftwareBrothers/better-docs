@@ -11,7 +11,9 @@
         isGlobalPage = (doc.kind === 'globalobj');
     }
 ?>
-<?js if (doc.kind === 'mainpage' || (doc.kind === 'package')) { ?>
+<?js if (doc.kind === 'todo') { ?>
+    <?js= self.partial('todo.tmpl', doc) ?>
+<?js }else if (doc.kind === 'mainpage' || (doc.kind === 'package')) { ?>
     <?js= self.partial('mainpage.tmpl', doc) ?>
 <?js } else if (doc.kind === 'source') { ?>
     <?js= self.partial('source.tmpl', doc) ?>

@@ -1,0 +1,43 @@
+<?js
+var data = obj;
+var self = this;
+?>
+
+<article class="vertical-section">
+    <h1 style="font-size:35px">Files</h1>
+    <div class="members">
+        <?js Object.keys(data.docs).forEach(key => { ?>
+            <section class="member">
+                
+                <h4 class="name" id="<?js= data.docs[key].shortpath ?>">
+                    <a class="href-link" href="#<?js= data.docs[key].shortpath ?>">#</a>
+                    <span class="code-name"><?js= data.docs[key].shortpath ?></span>
+                </h4>
+                <ul class="description">
+                <?js data.docs[key].members.forEach(member => { ?>
+                    <?js member.todo.forEach(todo => {
+                        let lines = member.comment.split('\n');
+                        let todoline = lines.findIndex(line => { return line.indexOf(todo) >= 0 });
+                        let lineno = member.meta.lineno - lines.length + (todoline >= 0 ? todoline : 0);
+                        lineno = lineno < 0 ? 0 : lineno;
+                    ?>
+                        <li style="margin: 35px 0;">
+                            <div>
+                                <p style="margin:0;"><?js= todo ?></p>
+                            </div>
+                            <dl class="details">
+                                <dt style="display:inline-block;vertical-align:middle;font-size:16px;margin-left:1px;padding-left:10px;">Source:</dt>
+                                <dd class="tag-source" style="margin:0px 0px 0px 10px;display:inline-block;vertical-align:middle;">
+                                    <div class="source-links" style="padding:0">
+                                        <?js= this.linkto(member.meta.shortpath, member.meta.shortpath+(lineno ? ', line ' + lineno : ''), null, (lineno ? 'line' + lineno : null)) ?>
+                                    </div>
+                                </dd>
+                        </li>
+                    <?js }) ?>
+                <?js }) ?>
+                </ul>
+                
+            </section>
+        <?js }) ?>
+    </div>
+</article>
