@@ -90,6 +90,8 @@ if (env.conf.templates["better-docs"].linkTagToNewTab) {
         'arraybufferview',
         'arraybuffer',
         'date',
+        'enum',
+        'error',
       ];
       
       if(skip.indexOf(longname.toLowerCase()) < 0 && rtn.indexOf('<a') < 0){

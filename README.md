@@ -8,7 +8,7 @@ documentation from parent(s) in extended classes.
 
 # OpenSource SoftwareBrothers community
 
-- [Join the community](https://join.slack.com/t/adminbro/shared_invite/zt-czfb79t1-0U7pn_KCqd5Ts~lbJK0_RA) to get help and be inspired.
+- [Join the community](https://adminbro.slack.com/) to get help and be inspired.
 - subscribe to our [newsletter](http://opensource.softwarebrothers.co)
 
 # Contents
