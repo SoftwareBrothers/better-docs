@@ -23,7 +23,7 @@ var self = this;
           <tr class="deep-level-0">
             <td class="name"><code><?js= propType.name ?></code></td>
             <td>
-              <?js= propType.type ?>
+              <?js= self.linkto(propType.type, self.htmlsafe(propType.type)) ?>
             </td>
             <td><?js= propType.required ? 'Yes' : 'No' ?></td>
             <td><?js= propType.description ?></td>

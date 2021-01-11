@@ -2,6 +2,7 @@ const fs = require('fs')
 const execSync = require('child_process').execSync
 const path = require('path')[process.platform === 'win32' ? 'win32' : 'posix']
 
+var env = require('jsdoc/env');
 const VUE_WRAPPER = process.env.IS_DEV ? 'src/vue-wrapper.js' : 'lib/vue-wrapper.js'
 const REACT_WRAPPER = process.env.IS_DEV ? 'src/react-wrapper.jsx' : 'lib/react-wrapper.js'
 
@@ -9,7 +10,7 @@ const pathCrossEnv = (path) =>
   process.platform !== 'win32' ? path : path.replace(/\\/g, '/')
 
 module.exports = function bundle (Components, out, config) {
-  if (!Components.length) {
+  if (!Components.length || env.conf.templates.betterDocs.isReactNative) {
     return
   }
   const vueComponents = Components.filter(c => c.component.type === 'vue')

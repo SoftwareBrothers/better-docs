@@ -1,13 +1,45 @@
 <?js
+    if(env.conf.templates && env.conf.templates.betterDocs) {
+        betterDocs = env.conf.templates.betterDocs
+    } else {
+        betterDocs = {}
+    }
     var data = obj;
     var props = data.props;
     var prop = data.prop;
     var level = data.level;
+    var parentProp = parentProp ? parentProp : null;
     var self = this;
+    var hasSubprops = prop.subprops ? (prop.subprops.findIndex(subprop => subprop) >= 0) : false;
+    let foldClasses = '';
+    if(betterDocs.usePropertyFolding){
+      if(betterDocs.foldingDefaultClosed && level > 0){
+        foldClasses += ' hide';
+      }else{
+        foldClasses += ' show';
+      }
+      if(level > 0){
+        foldClasses += ' is-closed';
+      }else{
+        foldClasses += ' is-closed';
+      }
+    }
 ?>
-<tr class="deep-level-<?js= level ?>">
-    <?js if (props.hasName) {?>
-        <td class="name"><code><?js= prop.name ?></code></td>
+
+<tr class="deep-level-<?js= level ?><?js= foldClasses ?>" data-level="<?js= level ?>" <?js= (parentProp ? 'data-parentprop="'+parentProp.name+'" ' : '') ?>data-prop="<?js= prop.name?>">
+    <?js if (props.hasName) { ?>
+        <td class="name">
+          <code>
+            <?js if(hasSubprops && betterDocs.usePropertyFolding){ ?>
+              <a href="javascript:void(0);" class="property-opener">
+                <i class="fas fa-caret-<?js= betterDocs.foldingDefaultClosed ? 'right' : 'down' ?>"></i>
+            <?js } ?>
+            <?js= prop.name ?>
+            <?js if(hasSubprops && betterDocs.usePropertyFolding){ ?>
+              </a>
+            <?js } ?>
+          </code>
+        </td>
     <?js } ?>
 
     <td class="type">
@@ -47,6 +79,7 @@
               props: props,
               prop: subprop,
               level: level + 1,
+              parentProp: prop,
           }
   ?>
       <?js= self.partial('property.tmpl', propData) ?>

@@ -21,7 +21,7 @@ var search = env.conf.templates && env.conf.templates.search
 <body class="<?js= self.smallHeader ? 'layout small-header' : 'layout'?>">
     <div id="stickyNavbarOverlay"></div>
     <?js= this.partial('topnav.tmpl', { betterDocs }) ?>
-    <div id="main">
+    <div id="main" class="<?js= ((betterDocs.useNavFolding ? ' use-nav-folding' : '')+(betterDocs.foldingDefaultClosed && betterDocs.useNavFolding ? ' folding-default-closed' : (betterDocs.useNavFolding ? ' folding-default-opened' : ''))).trim() ?>">
         <div
             class="sidebar <?js= isTutorial ? 'tutorials' : '' ?>"
             id="sidebarNav"

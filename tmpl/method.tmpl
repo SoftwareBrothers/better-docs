@@ -55,7 +55,7 @@ var self = this;
 
 <?js if (data.component) { ?>
     <?js if (data.component.props && data.component.props.length) { ?>
-        <h5>PropTypes:</h5>
+        <h5>Props:</h5>
         <?js= self.partial('proptypes.tmpl', data.component) ?>
     <?js } ?>
 <?js } ?>
@@ -168,4 +168,8 @@ var self = this;
 <?js if (data.examples && examples.length) { ?>
     <h5>Example<?js= examples.length > 1? 's':'' ?></h5>
     <?js= this.partial('examples.tmpl', data) ?>
+<?js } ?>
+
+<?js if (data.meta && self.outputSourceFiles) {?>
+    <?js= self.partial('view-source.tmpl', data) ?>
 <?js } ?>
