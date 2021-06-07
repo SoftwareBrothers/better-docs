@@ -1,5 +1,4 @@
 'use strict'
-
 var doop = require('jsdoc/util/doop')
 var env = require('jsdoc/env')
 var fs = require('jsdoc/fs')
@@ -240,6 +239,7 @@ function generate(title, subtitle, docs, filename, resolveLinks) {
   }
 
   outpath = path.join(outdir, filename)
+
   html = view.render('container.tmpl', docData)
 
   if (resolveLinks) {
@@ -261,6 +261,7 @@ function generateSourceFiles(sourceFiles, encoding) {
     try {
       source = {
         kind: 'source',
+        file: sourceFiles[file].shortened,
         code: helper.htmlsafe( fs.readFileSync(sourceFiles[file].resolved, encoding) )
       }
     }
@@ -318,6 +319,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
   const subCategories = items.reduce((memo, item) => {
     const subCategory = item.subCategory || ''
     memo[subCategory] = memo[subCategory] || []
+    console.log(memo[subCategory])
     return {
       ...memo,
       [subCategory]: [...memo[subCategory], item]
@@ -327,7 +329,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
   const subCategoryNames = Object.keys(subCategories)
     
   var nav = ''
-
+  // console.log(items, itemHeading, itemsSeen, linktoFn)
   subCategoryNames.forEach((subCategoryName) => {
     const subCategoryItems = subCategories[subCategoryName]
     if (subCategoryItems.length) {
@@ -335,9 +337,11 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     
       subCategoryItems.forEach(function(item) {
         var displayName
+
+        var filename = item.filename
     
         if ( !hasOwnProp.call(item, 'longname') ) {
-          itemsNav += '<li>' + linktoFn('', item.name) + '</li>'
+          itemsNav += '<li  class="navBar-content">' + linktoFn('', item.name) + '<div class="filenameDiv"> <p>'+filename+'</p> </div>' +  '</li>'
         }
         else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
           if (env.conf.templates.default.useLongnameInNav) {
@@ -345,7 +349,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
           } else {
             displayName = item.name
           }
-          itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''))
+          itemsNav += '<li class="navBar-content">'+ linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '<div  class="filenameDiv"> <p>'+filename+'</p> </div>'
 
           if (item.children && item.children.length) {
             itemsNav += '<ul>'
@@ -355,7 +359,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
               } else {
                 displayName = child.name
               }
-              itemsNav += '<li>' + linktoFn(child.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>'
+              itemsNav += '<li class="navBar-content">' + linktoFn(child.longname, displayName.replace(/\b(module|event):/g, '')) + 
+              '<div class="filenameDiv"> <p>'+filename+'</p> </div>'
+              '</li>'
             })
             itemsNav += '</ul>'
           }
@@ -371,8 +377,15 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         if (subCategoryName) {
           heading = heading + ' / ' + subCategoryName
         }
-        nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
-      }
+
+      // Dropdown extra
+      //  var buttonheading = "'" + heading +"'"
+      //   nav += '<h3>' + heading + '</h3> <button onclick="showContentFunction(' + buttonheading + ')" class="dropbtn">Dropdown</button> <ul class="dropdown-content" id="'+heading+'">' + itemsNav + '</ul>'
+      //   }
+
+      
+        nav += '<h3>' + heading + '</h3>' + itemsNav + '</ul>'
+        }
     }
   })
 
@@ -392,10 +405,15 @@ function buildGroupNav (members, title) {
   var seenTutorials = {}
   var nav = ''
   var seen = {}
-  nav += '<div class="category">'
+  nav += '<div class=("category_"+title+"")>'
   if (title) {
-    nav += '<h2>' + title + '</h2>'
+    var titleRef = "'" + title  + "'"
+    var titleRefMenuIcon = "'" + title +"_arrow" + "'"
+    nav += '<div><div class="title_header"><h2 class="core-header">' + title +'</h2> </div>' + '<div onclick="showContentFunction(' + titleRef + ')" class="title_arrow"><i id='+titleRefMenuIcon+' class="arrow down"></i></div>' + '</div>'
+
+//<p onclick="showContentFunction(' + titleRef + ')" class="dropbtn">view</p>
   }
+  nav += '<div class="dropdown-content" id='+title +"_content"+' >'
   nav += buildMemberNav(members.tutorials || [], 'Tutorials', seenTutorials, linktoTutorial)
   nav += buildMemberNav(members.modules || [], 'Modules', {}, linkto)
   nav += buildMemberNav(members.externals || [], 'Externals', seen, linktoExternal)
@@ -405,25 +423,29 @@ function buildGroupNav (members, title) {
   nav += buildMemberNav(members.events || [], 'Events', seen, linkto)
   nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto)
   nav += buildMemberNav(members.components || [], 'Components', seen, linkto)
-    
-  if (members.globals && members.globals.length) {
-    globalNav = ''
 
-    members.globals.forEach(function(g) {
-      if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
-        globalNav += '<li>' + linkto(g.longname, g.name) + '</li>'
+  
+
+    if (members.globals && members.globals.length) {
+      globalNav = ''
+
+      members.globals.forEach(function(g) {
+        var filename = g.filename
+        if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+          globalNav += '<li class="navBar-content">' + linkto(g.longname, g.name)  + '<div class="filenameDiv"> <p>'+filename+'</p> </div>'+ '</li>'
+        }
+        seen[g.longname] = true
+      })
+
+      if (!globalNav) {
+        // turn the heading into a link so you can actually get to the global page
+        nav += '<h3>' + linkto('global', 'Global') + '</h3>'
       }
-      seen[g.longname] = true
-    })
-
-    if (!globalNav) {
-      // turn the heading into a link so you can actually get to the global page
-      nav += '<h3>' + linkto('global', 'Global') + '</h3>'
+      else {
+        nav += '<h3>Global</h3>' + globalNav 
+      }
     }
-    else {
-      nav += '<h3>Global</h3><ul>' + globalNav + '</ul>'
-    }
-  }
+  nav += '</div>'
   nav += '</div>'
   return nav
 }
@@ -445,7 +467,8 @@ function buildGroupNav (members, title) {
  */
 function buildNav(members, navTypes = null, betterDocs) {
   const href = betterDocs.landing ? 'docs.html' : 'index.html'
-  var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
+  var nav = navTypes ? '' : ''
+  // var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
 
   var categorised = {}
   var rootScope = {}
@@ -467,13 +490,23 @@ function buildNav(members, navTypes = null, betterDocs) {
       }
     })
   })
-    
-  nav += buildGroupNav(rootScope)
+
+  nav += buildGroupNav(rootScope, 'Core')
   Object.keys(categorised).sort().forEach(function (category) {
     nav += buildGroupNav(categorised[category], category)
   })
 
   return nav
+}
+
+function addFilename (f, filename) {
+  f.filename = filename
+  
+  // var types = f.type ? buildItemTypeStrings(f) : []
+
+  // f.signature = (f.signature || '') + '<span class="type-signature">' +
+  //       (types.length ? ' :' + types.join('|') : '') + '</span>'
+
 }
 
 /**
@@ -654,6 +687,12 @@ exports.publish = function(taffyData, opts, tutorials) {
       addSignatureReturns(doclet)
       addAttribs(doclet)
     }
+    if(doclet.meta) {
+      var filename = getPathFromDoclet(doclet)
+      filename = sourceFiles[filename].shortened
+      addFilename(doclet, filename)
+    }
+   
   })
 
   // do this after the urls have all been generated
@@ -673,7 +712,6 @@ exports.publish = function(taffyData, opts, tutorials) {
   })
 
   view.smallHeader = !conf.betterDocs.navButtons
-
   members = helper.getMembers(data)
   if (opts.tutorials) {
     // sort tutorials
@@ -707,8 +745,8 @@ exports.publish = function(taffyData, opts, tutorials) {
   view.tutoriallink = tutoriallink;
   view.htmlsafe = htmlsafe
   view.outputSourceFiles = outputSourceFiles
-
   // once for all
+  // console.log(members)
   view.nav = buildNav(members, null, conf.betterDocs)
   
   view.tutorialsNav = buildNav(members, ['tutorials'], conf.betterDocs)
