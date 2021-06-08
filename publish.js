@@ -11,6 +11,7 @@ var util = require('util')
 const { getParser } = require('jsdoc/util/markdown')
 
 var bundler = require('./bundler')
+const { exit } = require('process')
 const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe
@@ -319,7 +320,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
   const subCategories = items.reduce((memo, item) => {
     const subCategory = item.subCategory || ''
     memo[subCategory] = memo[subCategory] || []
-    console.log(memo[subCategory])
+    // console.log(memo[subCategory])
     return {
       ...memo,
       [subCategory]: [...memo[subCategory], item]
@@ -349,6 +350,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
           } else {
             displayName = item.name
           }
+
           itemsNav += '<li class="navBar-content">'+ linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '<div  class="filenameDiv"> <p>'+filename+'</p> </div>'
 
           if (item.children && item.children.length) {
@@ -406,13 +408,20 @@ function buildGroupNav (members, title) {
   var nav = ''
   var seen = {}
   nav += '<div class=("category_"+title+"")>'
+
+ 
+
+
   if (title) {
     var titleRef = "'" + title  + "'"
     var titleRefMenuIcon = "'" + title +"_arrow" + "'"
-    nav += '<div><div class="title_header"><h2 class="core-header">' + title +'</h2> </div>' + '<div onclick="showContentFunction(' + titleRef + ')" class="title_arrow"><i id='+titleRefMenuIcon+' class="arrow down"></i></div>' + '</div>'
+    nav += '<div><div class="title_header"><h3 class="core-header">' + title +'</h3> </div>' + '<div onclick="showContentFunction(' + titleRef + ')" class="title_arrow"><i id='+titleRefMenuIcon+' class="arrow down"></i></div>' + '</div>'
 
 //<p onclick="showContentFunction(' + titleRef + ')" class="dropbtn">view</p>
   }
+  
+  // nav += '<p>'+members.shortFilename+'</p>'
+
   nav += '<div class="dropdown-content" id='+title +"_content"+' >'
   nav += buildMemberNav(members.tutorials || [], 'Tutorials', seenTutorials, linktoTutorial)
   nav += buildMemberNav(members.modules || [], 'Modules', {}, linkto)
@@ -439,10 +448,10 @@ function buildGroupNav (members, title) {
 
       if (!globalNav) {
         // turn the heading into a link so you can actually get to the global page
-        nav += '<h3>' + linkto('global', 'Global') + '</h3>'
+        nav += '<h3 class="core-header">' + linkto('global', 'Global') + '</h3>'
       }
       else {
-        nav += '<h3>Global</h3>' + globalNav 
+        nav += '<h3 class="core-header">Global</h3>' + globalNav 
       }
     }
   nav += '</div>'
@@ -470,30 +479,130 @@ function buildNav(members, navTypes = null, betterDocs) {
   var nav = navTypes ? '' : ''
   // var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
 
-  var categorised = {}
+  var fileCategories = {}
+  var categories = {}
   var rootScope = {}
+
+  // var experiment = { }
 
   var types = navTypes || ['modules', 'externals', 'namespaces', 'classes',
     'components', 'interfaces', 'events', 'mixins', 'globals']
   types.forEach(function(type) {
     if (!members[type]) { return }
     members[type].forEach(function(element) {
+
       if (element.access && element.access === 'private') {
         return
       }
-      if (element.category) {
-        if (!categorised[element.category]){ categorised[element.category] = [] }
-        if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
-        categorised[element.category][type].push(element)
+
+      // if (element.category) {
+      //   if (!categorised[element.category]){ categorised[element.category] = [] }
+      //   if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
+      //   categorised[element.category][type].push(element)
+      // } else {
+      //   rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
+      // }
+
+      if(element.shortFilename) {
+        if (!fileCategories[element.shortFilename]){ fileCategories[element.shortFilename] = [] }
+        if (!fileCategories[element.shortFilename][type]){ fileCategories[element.shortFilename][type] = [] }
+        fileCategories[element.shortFilename][type].push(element)
       } else {
         rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
       }
+
+      if(element.category) {
+        if (!categories[element.category]){ categories[element.category] = [] }
+        if (!categories[element.category][type]){ categories[element.category][type] = [] }
+        categories[element.category][type].push(element)
+      } 
+
+       // if (element.category) {
+      //   if (!categorised[element.category]){ categorised[element.category] = [] }
+      //   if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
+      //   categorised[element.category][type].push(element)
+      // } else {
+      //   rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
+      // }
+
+      // {
+      //   "demo.js" : {
+      //     "class" : []
+      //   }
+      // }
+      // {
+      //   "root" : {
+      //     "demo.js" : {
+      //       "class" : []
+      //     }
+      //     "core" : {
+      //       "demo2.js" : {
+      //         "class" : []
+      //       }
+      //     }
+      //   }
+      // }
+      
+      // // Build file path
+      // if(element.filename) {
+      //   var spiltedStr = element.filename.split('/');
+      //   if(Array.isArray(spiltedStr)) {
+      //     // Is in files.
+      //     if(spiltedStr.length > 1) {
+      //       for(let i = 0; i < spiltedStr.length; i++) {
+
+      //         if (!experiment[spiltedStr[i]]){ experiment[spiltedStr[i]] = [] }
+
+      //       }
+      //       spiltedStr.forEach(function(path) {
+
+      //         if (!experiment[element.path]){ experiment[element.path] = [] }
+
+
+      //         if (!experiment[element.fileName][type]){ experiment[element.fileName][type] = [] }
+      //         experiment[element.fileName][type].push(element)
+
+      //       })
+      //     }
+
+      //   }
+     
+      // } 
+
     })
   })
 
-  nav += buildGroupNav(rootScope, 'Core')
-  Object.keys(categorised).sort().forEach(function (category) {
-    nav += buildGroupNav(categorised[category], category)
+  nav += '<div><h2  id="FilesTabTitle" class="tabheader file" onclick="displayFiles()">Files</h2>'
+
+  if(Object.keys(categories).length > 0) {
+    nav += '<h2 id="CategoriesTabTitle" class="tabheader category" onclick="displayCategories()">Categories</h2>'
+  }
+
+  nav += '</div>'
+
+  nav += '<div id="file_structure">'
+
+  nav += buildGroupNav(rootScope, 'Unlisted')
+
+  // Object.keys(categorised).sort().forEach(function (category) {
+  //   nav += buildGroupNav(categorised[category], category)
+  // })
+
+  Object.keys(fileCategories).sort().forEach(function (category) {
+    
+    nav += buildGroupNav(fileCategories[category], category)
+
+  })
+
+  nav += '</div>'
+
+  Object.keys(categories).sort().forEach(function (category) {
+    nav += '<div id="category_structure">'
+
+    nav += buildGroupNav(categories[category], category)
+
+    nav += '</div>'
+
   })
 
   return nav
@@ -501,6 +610,16 @@ function buildNav(members, navTypes = null, betterDocs) {
 
 function addFilename (f, filename) {
   f.filename = filename
+  
+  // var types = f.type ? buildItemTypeStrings(f) : []
+
+  // f.signature = (f.signature || '') + '<span class="type-signature">' +
+  //       (types.length ? ' :' + types.join('|') : '') + '</span>'
+
+}
+
+function addShortFilename (f, filename) {
+  f.shortFilename = filename
   
   // var types = f.type ? buildItemTypeStrings(f) : []
 
@@ -590,6 +709,7 @@ exports.publish = function(taffyData, opts, tutorials) {
         }
       })
     }
+
     if (doclet.see) {
       doclet.see.forEach(function(seeItem, i) {
         doclet.see[i] = hashToLink(doclet, seeItem)
@@ -689,8 +809,11 @@ exports.publish = function(taffyData, opts, tutorials) {
     }
     if(doclet.meta) {
       var filename = getPathFromDoclet(doclet)
+     
       filename = sourceFiles[filename].shortened
+      var shortFilename = doclet.meta.filename
       addFilename(doclet, filename)
+      addShortFilename(doclet, shortFilename)
     }
    
   })
@@ -712,7 +835,9 @@ exports.publish = function(taffyData, opts, tutorials) {
   })
 
   view.smallHeader = !conf.betterDocs.navButtons
+
   members = helper.getMembers(data)
+
   if (opts.tutorials) {
     // sort tutorials
     try {
@@ -726,7 +851,6 @@ exports.publish = function(taffyData, opts, tutorials) {
       }
       members.tutorials = tutorials.children
     }
-        
   } else {
     members.tutorials = tutorials.children
   }
