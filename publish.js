@@ -572,6 +572,10 @@ function buildNav(members, navTypes = null, betterDocs) {
     })
   })
 
+  Object.keys(categories).length
+
+  // nav += '<div><p> Total files '+ Object.keys(categories).length+' documented</p></div>'
+
   nav += '<div><h2  id="FilesTabTitle" class="tabheader file" onclick="displayFiles()">Files</h2>'
 
   if(Object.keys(categories).length > 0) {
@@ -582,7 +586,6 @@ function buildNav(members, navTypes = null, betterDocs) {
 
   nav += '<div id="file_structure">'
 
-  nav += buildGroupNav(rootScope, 'Unlisted')
 
   // Object.keys(categorised).sort().forEach(function (category) {
   //   nav += buildGroupNav(categorised[category], category)
@@ -593,6 +596,8 @@ function buildNav(members, navTypes = null, betterDocs) {
     nav += buildGroupNav(fileCategories[category], category)
 
   })
+
+  nav += buildGroupNav(rootScope, 'Unlisted')
 
   nav += '</div>'
 
@@ -605,6 +610,7 @@ function buildNav(members, navTypes = null, betterDocs) {
 
   })
 
+  
   return nav
 }
 
