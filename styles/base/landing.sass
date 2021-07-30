@@ -38,6 +38,7 @@ body.landing
   #main
     display: block
     height: auto
+    background-color: $white
     // TODO: find out if how to hide nav-bar and remove following line
     padding-top: 0 !important
 
@@ -64,7 +65,7 @@ body.landing
         height: 36px
 
   .main-hero
-    background: $white url('../images/header-background.png') no-repeat top / 100%
+    background: url('../images/header-background.png') no-repeat top / 100%
     color: $white
     text-align: center
     padding: 190px 12.5% 0
@@ -101,6 +102,55 @@ body.landing
       margin-top: 36px
     strong
       color: $white
+    
+  .quick-installation
+    display: flex
+    flex-direction: column
+    align-items: center
+    margin: 120px 10% 160px
+    padding: 64px 16px
+    border-radius: 16px
+    background-color: rgba(77, 112, 235, 0.1)
+    h1
+      font-family: $bold-font-family
+      font-size: 44px
+      line-height: 64px
+      letter-spacing: 0.2px
+      color: #021048
+      margin-bottom: 16px
+    h3
+      font-family: $regular-font-family
+      font-size: 20px
+      line-height: 32px
+      letter-spacing: 0.09px
+      color: #656771
+      margin-bottom: 40px
+    h4
+      font-family: $code-font-family
+      font-size: 20px
+      line-height: 32px
+      letter-spacing: 0.09px
+      color: $white
+    .command
+      display: flex
+      background-color: #021048
+      padding: 12px
+      border-radius: 4px
+      margin-bottom: 56px
+      width: 100%
+      max-width: 600px
+      h4
+        flex-grow: 1
+        text-align: center
+    a
+      background-color: #4d70eb;
+      color: $white
+      min-height: 56px
+      padding: 0 40px
+      img
+        width: 20px
+        height: 20px
+        margin-right: 8px
   
   .white-oval
     background: $white
