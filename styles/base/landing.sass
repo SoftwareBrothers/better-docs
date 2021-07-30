@@ -42,6 +42,23 @@ body.landing
     // TODO: find out if how to hide nav-bar and remove following line
     padding-top: 0 !important
 
+  h1
+    font-family: $bold-font-family
+    font-size: 44px
+    line-height: 64px
+    color: #021048
+    text-align: center
+
+  .blue-button
+    background-color: #4d70eb
+    color: $white
+    min-height: 56px
+    padding: 0 40px
+    img
+      width: 20px
+      height: 20px
+      margin-right: 8px
+
   .header
     position: absolute
     display: flex
@@ -93,6 +110,8 @@ body.landing
           border-right: #f1faff 1px solid
           padding: 2px 2px 2px 0px
     h1
+      font-family: $regular-font-family
+      color: $white
       font-size: 52px
       line-height: 65px
       font-weight: lighter
@@ -101,13 +120,14 @@ body.landing
       margin-right: auto
       margin-top: 36px
     strong
+      font-family: $bold-font-family
       color: $white
     
   .quick-installation
     display: flex
     flex-direction: column
     align-items: center
-    margin: 120px 10% 160px
+    margin-top: 120px
     padding: 64px 16px
     border-radius: 16px
     background-color: rgba(77, 112, 235, 0.1)
@@ -115,21 +135,18 @@ body.landing
       font-family: $bold-font-family
       font-size: 44px
       line-height: 64px
-      letter-spacing: 0.2px
       color: #021048
       margin-bottom: 16px
     h3
       font-family: $regular-font-family
       font-size: 20px
       line-height: 32px
-      letter-spacing: 0.09px
       color: #656771
       margin-bottom: 40px
     h4
       font-family: $code-font-family
       font-size: 20px
       line-height: 32px
-      letter-spacing: 0.09px
       color: $white
     .command
       display: flex
@@ -142,15 +159,39 @@ body.landing
       h4
         flex-grow: 1
         text-align: center
-    a
-      background-color: #4d70eb;
-      color: $white
-      min-height: 56px
-      padding: 0 40px
+
+  .key-features
+    margin-top: 160px
+    display: flex
+    flex-direction: column
+    align-items: center
+    h1
+      max-width: 680px
+    .columns
+      margin: 80px 0
+      display: flex
+      justify-content: space-between
+    .feature
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      margin: 0 40px
+      text-align: center
       img
-        width: 20px
-        height: 20px
-        margin-right: 8px
+        width: 80px
+        height: 80px
+      h3
+        font-family: $bold-font-family
+        font-size: 26px
+        line-height: 36px
+        color: #021048
+        margin: 32px 0 24px
+        max-width: 230px
+      h5
+        font-family: $regular-font-family
+        color: #656771
+
   
   .white-oval
     background: $white
@@ -161,20 +202,20 @@ body.landing
     border-bottom-right-radius: 50%
 
 
-  h2
-    font-weight: bold
-    font-size: 36px
-    line-height: 48px
-    color: $black
-    margin-bottom: 15px
-    &+p
-      color: $grey80
-      font-size: 16px
+  // h2
+  //   font-weight: bold
+  //   font-size: 36px
+  //   line-height: 48px
+  //   color: $black
+  //   margin-bottom: 15px
+  //   &+p
+  //     color: $grey80
+  //     font-size: 16px
   
-  h4
-    font-weight: bold
-    font-size: 24px
-    line-height: 32px
+  // h4
+  //   font-weight: bold
+  //   font-size: 24px
+  //   line-height: 32px
 
   .header-message
     margin-bottom: 80px
