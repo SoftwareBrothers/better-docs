@@ -335,6 +335,72 @@ body.landing
           img
             width: 93px
             height: 93px
+
+  .features
+    background: url('../images/features-background.png') no-repeat center / 100%
+    padding: 120px 112px 172px
+    h1
+      color: $white
+      margin-bottom: 16px
+    h3
+      color: $white
+      font-size: 20px
+      line-height: 32px
+      font-family: $regular-font-family
+      max-width: 1000px
+      text-align: center
+      margin: auto
+    .features-content
+      display: flex
+      flex-direction: row
+      margin-top: 120px
+    .features-list
+      padding: 40px 24px
+      margin-right: 56px
+      margin-bottom: auto
+      border-radius: 8px
+      border: solid 1px rgba(255, 255, 255, 0.15)
+      display: flex
+      flex-direction: column
+      input[type="radio"]
+        display: none
+      .feature-name
+        font-size: 24px
+        font-family: $regular-font-family
+        line-height: 32px
+        color: rgba(255, 255, 255, 0.8)
+        min-width: 230px
+        cursor: pointer
+        padding: 16px 12px
+      .selected
+        font-family: $bold-font-family
+        background-color: $accentButton
+        border-radius: 4px
+        color: $baseText
+    .feature
+      display: flex
+      flex-direction: row
+      div
+        flex: 1
+        display: flex
+        flex-direction: column
+      .description-container
+        align-items: flex-start
+        margin-top: 40px
+      .image-container
+        align-items: center
+        justify-content: center
+      img
+        max-height: 530px
+      h1
+        font-size: 38px
+        line-height: 48px
+        font-family: $bold-font-family
+      h2
+        font-family: $regular-font-family
+        font-size: 24px
+        line-height: 34px
+        color: #f1faff
   
   .white-oval
     background: $white
