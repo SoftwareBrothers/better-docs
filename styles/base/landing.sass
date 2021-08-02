@@ -1,3 +1,7 @@
+$baseText: #021048
+$subtitleText: #656771
+$accentButton: #6dfbce
+
 body.landing
   & > .top-nav
     // TODO: find out if how to hide nav-bar and remove following line
@@ -46,7 +50,7 @@ body.landing
     font-family: $bold-font-family
     font-size: 44px
     line-height: 64px
-    color: #021048
+    color: $baseText
     text-align: center
 
   .blue-button
@@ -68,7 +72,7 @@ body.landing
     right: 0
     padding: 32px 48px
     .demo
-      background: #6dfbce
+      background: $accentButton
       color: #003274
     .slack
       display: flex
@@ -92,14 +96,13 @@ body.landing
       .button
         min-height: 48px
       .slack
-        background: #6dfbce
+        background: $accentButton
         color: #003274
         margin-left: 24px
     h3
       font-size: 14px
       line-height: 20px
       letter-spacing: 1px
-      text-transform: uppercase
       color: #f1faff
       .emphasized
         background: rgba(0, 0, 0, 0.35)
@@ -135,13 +138,13 @@ body.landing
       font-family: $bold-font-family
       font-size: 44px
       line-height: 64px
-      color: #021048
+      color: $baseText
       margin-bottom: 16px
     h3
       font-family: $regular-font-family
       font-size: 20px
       line-height: 32px
-      color: #656771
+      color: $subtitleText
       margin-bottom: 40px
     h4
       font-family: $code-font-family
@@ -150,7 +153,7 @@ body.landing
       color: $white
     .command
       display: flex
-      background-color: #021048
+      background-color: $baseText
       padding: 12px
       border-radius: 4px
       margin-bottom: 56px
@@ -185,13 +188,153 @@ body.landing
         font-family: $bold-font-family
         font-size: 26px
         line-height: 36px
-        color: #021048
+        color: $baseText
         margin: 32px 0 24px
         max-width: 230px
       h5
         font-family: $regular-font-family
-        color: #656771
+        font-size: 16px
+        line-height: 26px
+        color: $subtitleText
 
+  .how-it-works
+    background-color: #f8f9fe
+    padding: 120px 0
+    margin-top: 120px
+    .diagram
+      display: grid
+      grid-template-columns: 55% 25% 20%
+      grid-template-rows: repeat(2, auto)
+      h5
+        color: $baseText
+        font-size: 16px
+        line-height: 22px
+      .first-layer
+        display: flex
+        flex-direction: row
+        .left-column
+          flex: 3
+        .right-column
+          flex: 2
+      .description
+        display: flex
+        flex-direction: column
+        margin-top: 80px
+        margin-bottom: 48px
+        h3
+          color: $baseText
+          font-size: 24px
+          line-height: 32px
+          margin-bottom: 16px
+        h4
+          font-family: $regular-font-family
+          font-size: 16px
+          line-height: 26px
+          color: $subtitleText
+          max-width: 330px
+      .shadow
+        background-color: $white
+        border-radius: 8px
+        box-shadow: 0 4px 16px 0 rgba(2, 16, 72, 0.1)
+      .diagram-item
+        margin-top: 24px
+        min-height: 88px
+        &:first-of-type
+          margin-top: 0
+        img
+          height: 32px
+        h6
+          font-family: $regular-font-family
+          font-size: 12px
+          line-height: 28px
+          color: $subtitleText
+      .databases
+        display: flex
+        flex-direction: row
+        .databases-column
+          flex: 1
+          padding: 32px
+          &:last-of-type
+            border-right: 1px dashed $subtitleText
+            padding-left: 0
+      .diagram-column
+        padding: 32px
+      .admin
+        margin: auto 0
+        .arrows
+          display: flex
+          flex-direction: row
+          justify-content: space-between
+          .path
+            flex: 1
+            border-radius: 16px
+            border: dashed 1.5px $subtitleText
+            min-height: 64px
+            position: relative
+          .triangle
+            position: absolute
+            width: 0
+            height: 0
+            border-radius: 4px
+          .top-left
+            border-bottom: none
+            border-left: none
+            border-top-left-radius: 0
+            border-bottom-right-radius: 0
+            margin-right: 25px
+            div
+              bottom: 0
+              right: -10px
+              border-left: 10px solid transparent
+              border-right: 10px solid transparent
+              border-top: 10px solid $subtitleText
+          .top-right
+            border-bottom: none
+            border-right: none
+            border-top-right-radius: 0
+            border-bottom-left-radius: 0
+            margin-left: 25px
+            div
+              top: -10px
+              right: 0
+              border-top: 10px solid transparent
+              border-bottom: 10px solid transparent
+              border-left: 10px solid $subtitleText
+          .bottom-right
+            border-top: none
+            border-right: none
+            border-top-left-radius: 0
+            border-bottom-right-radius: 0
+            margin-left: 25px
+            div
+              bottom: -10px
+              right: 0
+              border-top: 10px solid transparent
+              border-bottom: 10px solid transparent
+              border-left: 10px solid $subtitleText
+          .bottom-left
+            border-top: none
+            border-left: none
+            border-top-right-radius: 0
+            border-bottom-left-radius: 0
+            margin-right: 25px
+            div
+              top: 0
+              right: -10px
+              border-left: 10px solid transparent
+              border-right: 10px solid transparent
+              border-bottom: 10px solid $subtitleText
+        .tile
+          display: flex
+          flex-direction: column
+          justify-content: center
+          align-items: center
+          padding: 40px
+          margin: auto
+          max-width: 180px
+          img
+            width: 93px
+            height: 93px
   
   .white-oval
     background: $white
