@@ -1,6 +1,7 @@
 $baseText: #021048
 $subtitleText: #656771
 $accentButton: #6dfbce
+$grayBackground: #f8f9fe
 
 body.landing
   & > .top-nav
@@ -198,7 +199,7 @@ body.landing
         color: $subtitleText
 
   .how-it-works
-    background-color: #f8f9fe
+    background-color: $grayBackground
     padding: 120px 0
     margin-top: 120px
     .diagram
@@ -403,7 +404,7 @@ body.landing
         color: #f1faff
     
   .documentation
-    background-color: #f8f9fe
+    background-color: $grayBackground
     padding-top: 120px
     h3
       font-family: $bold-font-family 
@@ -434,6 +435,38 @@ body.landing
           img
             width: 22px
             margin-right: 16px
+  
+  .real-business
+    display: flex
+    flex-direction: column
+    h1
+      color: $white
+      margin-bottom: 48px
+    .bg-gray
+      flex: 1
+      background-color: $grayBackground
+      position: absolute
+      height: 400px
+      top: 0
+      left: 0
+      right: 0
+    .bg-white
+      flex: 1
+      background-color: $white
+      position: relative
+    .card
+      margin: 160px 0
+      display: flex
+      flex-direction: column
+      align-items: center
+      background: url('../images/real-business-background.png') no-repeat center / 100%
+      padding: 140px 0
+      border-radius: 16px
+      a
+        font-size: 16px
+        line-height: 22px
+        min-height: 56px
+        color: $baseText
 
   
   .white-oval
