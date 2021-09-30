@@ -588,6 +588,83 @@ body.landing
       align-self: flex-start
       img
         margin-left: 8px
+
+  .community
+    background-color: $grayBackground
+    .container
+      display: flex
+      flex-direction: row
+    .description
+      flex-basis: 50%
+      padding-right: 40px
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    .messages
+      flex-basis: 50%
+      position: relative
+      min-height: 460px
+      margin-top: 25px
+      div
+        background-color: #01187a
+        color: $white
+        padding: 24px
+        border-radius: 16px
+        border-bottom-right-radius: 0
+        font-family: $regular-font-family
+        font-size: 16px
+        line-height: 26px
+        position: absolute
+      .support
+        color: $accentButton
+      .user-message
+        background-color: rgba(77, 112, 235, 0.15)
+        border-bottom-left-radius: 0
+        border-bottom-right-radius: 16px
+        opacity: 0.9
+        color: transparent;
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.6)
+      .user
+        text-shadow: 0 0 2px $baseText
+      .code
+        color: #4d70eb
+      #message-1
+        top: 0
+        left: 10px
+        max-width: 320px
+      #message-2
+        top: 20px
+        left: 250px
+        max-width: 380px
+        z-index: 2
+      #message-3
+        top: 140px
+        left: 60px
+        max-width: 420px
+        z-index: 2
+      #message-4
+        top: 170px
+        left: 410px
+        max-width: 300px
+      #message-5
+        top: 285px
+        left: 250px
+        max-width: 380px
+        z-index: 2
+      #message-6
+        top: 310px
+        left: 0
+        max-width: 300px
+    h1
+      text-align: start
+      margin-bottom: 16px
+    h3
+      font-family: $regular-font-family
+      font-size: 20px
+      line-height: 32px
+      color: $subtitleText
+      margin-bottom: 48px
   
   .white-oval
     background: $white
