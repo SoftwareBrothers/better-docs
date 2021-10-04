@@ -1,5 +1,5 @@
 name: CI/CD
-on: push
+on: pull_request
 jobs:
   setup:
     name: setup
@@ -50,7 +50,7 @@ jobs:
       - name: test
         run: yarn test
 
-  notify: 
+  notify:
     name: Notify
     runs-on: ubuntu-latest
     if: always()
@@ -95,5 +95,3 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn release
-
-      
