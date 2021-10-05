@@ -31,7 +31,7 @@ body.landing
       width: 20px
       height: 20px
       margin-right: 8px
-
+    
   .header
     position: absolute
     display: flex
@@ -63,6 +63,27 @@ body.landing
         flex-direction: row
         align-items: flex-end
         justify-content: center
+        .dropdown 
+          position: relative
+          display: inline-block
+        .dropdown-content 
+          display: none
+          position: absolute
+          background-color: $white
+          width: 250px
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
+          z-index: 1
+        .dropdown-content a 
+          color: #4a4a4a
+          padding: 6px 16px
+          font-size: 14px
+          line-height: 20px
+          display: block
+        .dropdown-content a:hover
+          background-color: #f1f1f1
+          color: $black
+        .dropdown:hover .dropdown-content
+          display: block
     .badge
       border: 1px solid rgba(255, 255, 255, 0.35)
       border-radius: 4px
