@@ -5,46 +5,14 @@ $grayBackground: #f8f9fe
 
 body.landing
   & > .top-nav
-    // TODO: find out if how to hide nav-bar and remove following line
+    // disable better-docs header
     display: none
-    box-shadow: none
-    transition: margin-top 0.3s
-    &.hidden
-      transition: margin-top 0.3s
-      margin-top: (-$main-nav-height - 10px)
-      @include until($desktop)
-        margin-top: (-$main-nav-height-mobile - 10px)
-    &.sticky
-      box-shadow: 0 0 20px 0 rgba(0,0,255,0.5)
-    & .inner
-      margin: 0 auto
-      max-width: 1226px
-    color: $white
-    background: $primary100
-    & a.button
-      color: $white
-      border-color: $white
-      background: transparent
-      &:hover
-        background: $white
-        border-color: $white
-        color: $grey100
-    & .menu .navigation a.link
-      color: $white
-      &:hover
-        border-color: $white
-
-    .image img
-      content:url("../images/logo.svg")
-    
-    #hamburger
-      display: none
 
   #main
     display: block
     height: auto
     background-color: $white
-    // TODO: find out if how to hide nav-bar and remove following line
+    // disable better-docs header
     padding-top: 0 !important
 
   h1
@@ -72,6 +40,60 @@ body.landing
     left: 0
     right: 0
     padding: 32px 48px
+    .header-nav
+      flex: 1
+      display: flex
+      flex-direction: row
+      justify-content: center
+      align-self: flex-start
+      a
+        font-size: 16px
+        line-height: 22px
+        color: $white
+        display: flex
+        flex-direction: row
+        align-items: center
+      .fa-chevron-down
+        font-size: 12px
+        margin-left: 8px
+        margin-right: 44px
+      .links
+        flex: 1
+        display: flex
+        flex-direction: row
+        align-items: flex-end
+        justify-content: center
+    .badge
+      border: 1px solid rgba(255, 255, 255, 0.35)
+      border-radius: 4px
+      display: flex
+      flex-direction: row
+      align-items: center
+      align-self: flex-start
+      .badge-label
+        background-color: rgba(255, 255, 255, 0.05)
+        border-right: 1px solid rgba(255, 255, 255, 0.35)
+        display: flex
+        flex-direction: row
+        align-items: center;
+        padding: 6px 11px
+      .fa-github
+        font-size: 20px
+        color: $white
+        margin-right: 8px
+      h3
+        color: $white
+        font-size: 16px
+        font-family: $bold-font-family
+        padding: 6px 11px
+      h4
+        color: $white
+        font-size: 16px
+        font-family: $regular-font-family
+    .header-community
+      flex: 1
+      display: flex
+      flex-direction: row
     .demo
       background: $accentButton
       color: #003274
@@ -82,9 +104,12 @@ body.landing
       color: $white
       margin-left: auto
       margin-right: 64px
-      img
-        width: 232px
-        height: 36px
+    .avatars
+      width: 232px
+      height: 36px
+    .logo
+      height: 29px
+      width: auto
 
   .main-hero
     background: url('../images/header-background.png') no-repeat top / 100%
