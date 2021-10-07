@@ -254,30 +254,38 @@ body.landing
     align-items: center
     margin-top: 120px
     padding: 64px 103px
-    border-radius: 16px
     background-color: rgba(77, 112, 235, 0.1)
+    @include desktop
+      border-radius: 16px
+    @include until($mobileBreakpoint)
+      margin-top: 64px
+      padding: 64px 16px
     h1
       font-family: $bold-font-family
       font-size: 44px
       line-height: 64px
       color: $baseText
       margin-bottom: 16px
+      @include until($mobileBreakpoint)
+        font-size: 32px
+        line-height: 42px
+        margin-bottom: 24px
     h3
       font-family: $regular-font-family
       font-size: 20px
       line-height: 32px
       color: $subtitleText
       margin-bottom: 40px
+      @include until($mobileBreakpoint)
+        font-size: 16px
+        line-height: 26px
     h4
       font-family: $code-font-family
       font-size: 18px
       line-height: 32px
       color: $white
-      background-color: $baseText
-      padding: 12px 24px
-      border-radius: 4px
-      margin-right: 16px
-      flex: 1
+      @include mobile
+        width: 80vw
     h5
       font-size: 16px
       line-height: 28px
@@ -285,14 +293,31 @@ body.landing
       color: $subtitleText
       margin-bottom: 56px
       align-self: flex-start
+      @include until($mobileBreakpoint)
+        margin-bottom: 48px
     .example-label
       font-family: $light-font-family
     .command
       display: flex
       width: 100%
       margin-bottom: 16px
+      position: relative
+      align-items: center
+    .command-text
+      background-color: $baseText
+      padding: 12px 24px
+      border-radius: 4px
+      margin-right: 16px
+      flex: 1
+      @include mobile
+        margin-right: 0
     .copy-button
       padding: 8px 24px
+      @include mobile
+        padding: 16px
+        position: absolute
+        top: 16px
+        right: 16px
     .copy-icon
       width: 24px
       height: 24px
