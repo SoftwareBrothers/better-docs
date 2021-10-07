@@ -328,12 +328,17 @@ body.landing
     display: flex
     flex-direction: column
     align-items: center
+    @include mobile
+      margin-top: 64px
     h1
       max-width: 680px
+      @include mobile
+        font-size: 32px
+        line-height: 42px
     .columns
       margin: 80px 0
-      display: flex
-      justify-content: space-between
+      @include mobile
+        margin: 64px 0 -8px
     .feature
       display: flex
       flex-direction: column
@@ -341,6 +346,9 @@ body.landing
       align-items: center
       margin: 0 40px
       text-align: center
+      @include mobile
+        margin: 0 0 54px
+        padding: 0 12px
       img
         width: 80px
         height: 80px
@@ -351,11 +359,18 @@ body.landing
         color: $baseText
         margin: 32px 0 24px
         max-width: 230px
+        @include mobile
+          font-size: 22px
+          line-height: 32px
+          max-width: 260px
       h5
         font-family: $regular-font-family
         font-size: 16px
         line-height: 26px
         color: $subtitleText
+        @include mobile
+          font-size: 14px
+          line-height: 24px
 
   .in-numbers
     display: flex
@@ -365,9 +380,19 @@ body.landing
     padding: 64px 205px
     border-radius: 16px
     background: url('../images/in-numbers-background.png') no-repeat center / 100%
+    @include until($mobileBreakpoint)
+      margin: 64px 16px 0
+      background: url('../images/in-numbers-background.png') no-repeat left / cover
+    @include touch
+      padding: 64px 16px
     h1
       color: $white
       margin-bottom: 48px
+      @include touch
+        font-size: 32px
+        line-height: 42px
+        max-width: 168px
+        margin-bottom: 40px
     h4
       font-family: $bold-font-family
       font-size: 32px
@@ -378,6 +403,10 @@ body.landing
       font-size: 16px
       line-height: 26px
       color: $white
+      @include touch
+        font-size: 14px
+        line-height: 20px
+        margin-bottom: 8px
     .in-numbers-content
       width: 100%
       max-width: 800px
@@ -388,6 +417,10 @@ body.landing
       flex-direction: row
     .stargazers
       flex: 1
+      @include touch
+        display: flex
+        flex-direction: column
+        align-items: center
     .github-logo
       height: 31px
     .stargazers-count
@@ -402,13 +435,19 @@ body.landing
       flex: 1
       display: flex
       flex-direction: row
+      @include touch
+        justify-content: center 
     .weekly-count
       display: flex
       flex-direction: column
       justify-content: flex-end
+      @include touch
+        align-items: center
     .underline
       flex: 1
       border-bottom: 2px solid $accentButton 
+      @include touch
+        display: none
     .chart
       display: flex
       flex-direction: row
@@ -416,9 +455,28 @@ body.landing
       top: 18px
       left: 0
       width: 100%
+      @include touch
+        position: inherit
+        justify-content: center
       img
         margin-bottom: -1px
         margin-left: -1px
+    .columns
+      width: 100%
+    .button-container
+      display: flex
+      @include until($mobileBreakpoint)
+        padding-right: 12px !important
+        padding-left: 12px !important
+      a
+        @include until($mobileBreakpoint)
+          flex: 1
+    .left-button
+      justify-content: flex-end
+      padding-right: 0
+    .right-button
+      justify-content: flex-start
+      padding-left: 0
     .button
       height: 56px
       padding: 18px 40px
