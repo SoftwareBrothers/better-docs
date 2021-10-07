@@ -202,13 +202,41 @@ body.landing
     display: flex
     flex-direction: column
     .clients
-      display: flex
-      flex-direction: row
-      justify-content: space-between
-      margin-bottom: 64px
+      margin-bottom: 32px
+      padding: 0 32px
+      @include until($mobileBreakpoint)
+        margin-bottom: 12px
+      .column
+        display: flex
+        align-items: center
+        justify-content: space-around
+        margin: 32px 0
     img
-      height: 30px
       width: auto
+    .onserro
+      height: 30px
+      @include until($mobileBreakpoint)
+        height: 17px
+    .carfellows
+      height: 24px
+      @include until($mobileBreakpoint)
+        height: 13px
+    .bussr
+      height: 44px
+      @include until($mobileBreakpoint)
+        height: 24px
+    .skyhome
+      height: 32px
+      @include until($mobileBreakpoint)
+        height: 18px
+    .scalerr
+      height: 35px
+      @include until($mobileBreakpoint)
+        height: 20px
+    .bolttech
+      height: 29px
+      @include until($mobileBreakpoint)
+        height: 16px
     a
       display: flex
       flex-direction: row
