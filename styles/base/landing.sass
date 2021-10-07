@@ -128,24 +128,38 @@ body.landing
       margin-left: 22px
     
   .main-hero
-    background: url('../images/header-background.png') no-repeat top / 100%
+    background: url(../images/header-background.png) no-repeat top/200vh
     color: $white
     text-align: center
     padding: 190px 12.5% 0
+    @include until($mobileBreakpoint)
+      padding: 128px 47px 0
     .action-buttons
       margin-top: 56px
-      vertical-align: middle
+      @include until($mobileBreakpoint)
+        margin-top: 48px
+      .left-button
+        display: flex
+        justify-content: flex-end
+        @include until($mobileBreakpoint)
+          justify-content: center
+      .right-button
+        display: flex
+        justify-content: flex-start
+        @include until($mobileBreakpoint)
+          justify-content: center
       .button
         min-height: 48px
       .slack
         background: $accentButton
         color: #003274
-        margin-left: 24px
     h3
       font-size: 14px
       line-height: 20px
       letter-spacing: 1px
       color: #f1faff
+      @include until($mobileBreakpoint)
+        font-size: 12px
       .emphasized
         background: rgba(0, 0, 0, 0.35)
         border-radius: 2px
@@ -164,9 +178,25 @@ body.landing
       margin-left: auto
       margin-right: auto
       margin-top: 36px
+      @include until($mobileBreakpoint)
+        margin-top: 24px
+        font-size: 38px
+        line-height: 48px
     strong
       font-family: $bold-font-family
       color: $white
+    .image-container
+      display: flex
+      margin-left: 0
+      @include until($mobileBreakpoint)
+        margin-left: -105px
+    .image-inner-container
+      flex-shrink: 1
+      @include until($mobileBreakpoint)
+        flex-shrink: 0
+    img
+      @include until($mobileBreakpoint)
+        width: 200vw
 
   .case-studies
     display: flex
