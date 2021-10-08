@@ -922,6 +922,8 @@ body.landing
       top: 0
       left: 0
       right: 0
+      @include touch
+        display: none
     .bg-white
       flex: 1
       background-color: $white
@@ -931,9 +933,13 @@ body.landing
       display: flex
       flex-direction: column
       align-items: center
-      background: url('../images/real-business-background.png') no-repeat center / 100%
+      background: #4177ee url('../images/real-business-background.png') no-repeat left / cover
       padding: 140px 0
       border-radius: 16px
+      @include touch
+        border-radius: 0
+        margin: 0
+        padding: 64px 25px
       a
         font-size: 16px
         line-height: 22px
@@ -941,10 +947,16 @@ body.landing
         color: $baseText
 
   .open-source
-    background: url('../images/open-source-background.png') no-repeat center / 100%
+    background: url('../images/open-source-background.png') no-repeat center / cover
     padding: 116px 0
+    @include touch
+      padding: 51px 16px
     h1
       text-align: left
+      @include touch
+        font-size: 26px
+        line-height: 36px
+        text-align: center
     h3
       margin: 16px 0 48px
       font-family: $regular-font-family
@@ -952,6 +964,11 @@ body.landing
       line-height: 32px
       color: $baseText
       max-width: 550px
+      @include touch
+        font-size: 16px
+        line-height: 26px
+        text-align: center
+        margin: 12px 0 32px
     .subscribe
       display: flex
       flex-direction: row
@@ -978,6 +995,8 @@ body.landing
 
   .testimonials
     margin-top: 160px
+    @include touch
+      margin-top: 64px
     .fab
       font-size: 48px
     .fa-youtube
@@ -995,12 +1014,22 @@ body.landing
       color: $subtitleText
       text-align: center
       margin: 16px 0 80px
+      @include touch
+        font-size: 16px
+        line-height: 26px
+        max-width: 260px
+        margin: 24px auto 16px
     .testimonials-carousel
       display: flex
       flex-direction: row
+      @include touch
+        overflow-x: auto
+        padding: 0 8px
     img
       margin: 40px
       cursor: pointer
+      @include touch
+        display: none
     .testimonial
       flex: 1
       border-radius: 8px
@@ -1010,27 +1039,44 @@ body.landing
       padding: 56px 32px
       margin: 16px
       min-height: 370px
+      @include touch
+        padding: 32px 16px
+        min-height: 0
+        min-width: 275px
+        margin: 16px 8px
     h5
       font-size: 20px
       line-height: 32px
       color: $baseText
       margin: 24px 0 32px
+      @include touch
+        font-size: 16px
+        line-height: 26px
     span
       font-size: 14px
       color: $subtitleText
       text-transform: capitalize
       letter-spacing: 1px
       margin-top: auto
-
+      @include touch
+        font-size: 12px
+        line-height: 18px
 
   .products
     margin: 160px auto
+    @include touch
+      margin: 64px auto
     h1
       margin-bottom: 82px
+      @include touch
+        margin-bottom: 48px
+        padding: 0 16px
     div
       display: flex
       flex-direction: row
       justify-content: center
+      @include touch
+        flex-direction: column
     .card
       flex-direction: column
       max-width: 488px
@@ -1038,17 +1084,34 @@ body.landing
       border-radius: 8px
       box-shadow: 0 4px 16px 0 rgba(2, 16, 72, 0.1)
       color: $baseText
+      @include touch
+        max-width: inherit
+    .cover
+      @include touch
+        height: 230px
+        width: auto 
+        object-fit: cover
+        border-top-left-radius: 8px
+        border-top-right-radius: 8px
     h3
       margin: 32px 40px 16px
       font-family: $bold-font-family
       font-size: 24px
       line-height: 32px
+      @include touch
+        font-size: 20px
+        line-height: 26px
+        margin: 24px 24px 16px
     h5
       flex: 1
       margin: 0 45px 0 40px
       font-family: $regular-font-family
       font-size: 16px
       line-height: 26px
+      @include touch
+        font-size: 14px
+        line-height: 24px
+        margin: 0 24px 42px
     a
       display: flex
       flex-direction: row
@@ -1058,6 +1121,8 @@ body.landing
       font-size: 16px
       line-height: 22px
       align-self: flex-start
+      @include touch
+        margin: 0 24px 24px
       img
         margin-left: 8px
 
@@ -1066,6 +1131,8 @@ body.landing
     .container
       display: flex
       flex-direction: row
+      @include touch
+        flex-direction: column
     .description
       flex-basis: 50%
       padding-right: 40px
@@ -1073,11 +1140,22 @@ body.landing
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-    .messages
+      @include touch
+        padding-right: 0
+        align-items: center
+    .messages-container
       flex-basis: 50%
-      position: relative
       min-height: 460px
       margin-top: 25px
+      @include touch
+        margin-top: 40px
+        display: flex
+        justify-content: center
+        min-height: 280px
+    .messages
+      position: relative
+      @include touch
+        width: 400px
       div
         background-color: #01187a
         color: $white
@@ -1088,6 +1166,14 @@ body.landing
         font-size: 16px
         line-height: 26px
         position: absolute
+        @include until($mobileBreakpoint)
+          font-size: 12px
+          line-height: 16px
+        @include touch
+          font-size: 8px
+          line-height: 13px
+          padding: 12px
+          border-radius: 8px
       .support
         color: $accentButton
       .user-message
@@ -1097,8 +1183,15 @@ body.landing
         opacity: 0.9
         color: transparent;
         text-shadow: 0 0 2px rgba(0, 0, 0, 0.6)
+        @include touch
+          border-bottom-right-radius: 8px
+          color: $subtitleText
+          text-shadow: none
       .user
         text-shadow: 0 0 2px $baseText
+        @include touch
+          color: $baseText
+          text-shadow: none
       .code
         color: #4d70eb
         font-family: $code-font-family
@@ -1106,57 +1199,107 @@ body.landing
         top: 0
         left: 10px
         max-width: 320px
+        @include touch
+          max-width: 160px
+          left: 20px
       #message-2
         top: 20px
         left: 250px
         max-width: 380px
         z-index: 2
+        @include touch
+          top: 16px
+          left: 120px
+          max-width: 185px
       #message-3
         top: 140px
         left: 60px
-        max-width: 420px
+        max-width: 440px
         z-index: 2
+        @include touch
+          top: 75px
+          left: 40px
+          max-width: 220px
       #message-4
         top: 170px
         left: 410px
         max-width: 300px
+        @include touch
+          top: 90px
+          left: 235px
+          max-width: 160px
       #message-5
         top: 285px
         left: 250px
         max-width: 380px
         z-index: 2
+        @include touch
+          top: 150px
+          left: 170px
+          max-width: 200px
       #message-6
         top: 310px
         left: 0
         max-width: 300px
+        @include touch
+          top: 165px
+          left: 16px
+          max-width: 165px
     h1
       text-align: start
       margin-bottom: 16px
+      @include touch
+        padding: 0 16px
+        text-align: center
+        margin-bottom: 24px
+        margin-top: 64px
     h3
       font-family: $regular-font-family
       font-size: 20px
       line-height: 32px
       color: $subtitleText
       margin-bottom: 48px
+      @include touch
+        padding: 0 16px
+        text-align: center
+        font-size: 16px
+        line-height: 26px
+        margin-bottom: 56px
 
   .landing-footer
-    background: url('../images/footer-background.png') no-repeat top / 100%
+    background: url('../images/footer-background.png') no-repeat top / cover
     .container
       padding: 64px 0 30px 0
       display: flex
       flex-direction: column
+      @include touch
+        padding: 56px 16px 40px
     .footer-content
       display: flex
       flex-direction: row
+      @include touch
+        flex-direction: column
     .footer-column
       display: flex
       flex-direction: column
       flex: 1
     .wide
       flex: 4
+    .footer-links
+      flex: 3
+      display: flex
+      flex-direction: row
+      @include touch
+        display: grid
+        grid-template-columns: 50% 50%
+        margin-top: 56px
+        grid-row-gap: 56px
     img
       width: 154px
       margin-bottom: 38px
+      @include touch
+        widows: 140px
+        margin-bottom: 24px
     h3
       color: $white
       font-family: $bold-font-family
@@ -1170,328 +1313,21 @@ body.landing
       line-height: 18px
       text-align: end
       margin-top: 118px
+      @include touch
+        font-size: 12px
+        text-align: center
+        margin-top: 56px
     h5
       color: $white
       font-family: $regular-font-family
       font-size: 12px
       line-height: 18px
       max-width: 240px
+      @include touch
+        max-width: inherit
     a
       color: $white
       font-family: $regular-font-family
       font-size: 14px
       line-height: 20px
       margin-bottom: 8px
-
-  // .white-oval
-  //   background: $white
-  //   padding: 110px 500px 100px
-  //   margin: 0 -500px
-  //   text-align: center
-  //   border-bottom-left-radius: 50%
-  //   border-bottom-right-radius: 50%
-
-
-  // h2
-  //   font-weight: bold
-  //   font-size: 36px
-  //   line-height: 48px
-  //   color: $black
-  //   margin-bottom: 15px
-  //   &+p
-  //     color: $grey80
-  //     font-size: 16px
-  
-  // h4
-  //   font-weight: bold
-  //   font-size: 24px
-  //   line-height: 32px
-
-  // .header-message
-  //   margin-bottom: 80px
-
-  // .todo-actions
-  //   text-align: left
-  //   padding: 100px 0 100px 100px
-  //   @include until($widescreen)
-  //     padding-top: 20px
-  //   h4
-  //     margin-bottom: 60px
-  //     position: relative
-  //     &:before
-  //       content: ''
-  //       position: absolute
-  //       left: -50px
-  //       top: 0
-  //       height: 30px
-  //       width: 30px
-  //       background: url('../images/check.svg') no-repeat 50% 50%
-  // .action-buttons span
-  //   line-height: 36px
-  //   margin: 0 10px
-  //   color: $primary100
-
-
-  // .credentials
-  //   text-align: center
-  //   padding: 100px 0
-  //   background: url('../images/map.svg') no-repeat 50% 50%
-
-  //   .fa-youtube
-  //     color: #FF0000
-  //   .fa-reddit
-  //     color: #FF4500
-  //   .fa-github
-  //     color: $black
-    
-  //   .columns
-  //     margin-bottom: 20px
-
-  //   .column
-  //     display: flex
-  //     flex-direction: column
-
-  //   .box
-  //     flex-direction: column
-  //     padding: 30px
-  //     height: 100%
-  //     box-shadow: 0px 0px 40px rgba(115, 134, 160, 0.25)
-  //     display: flex
-  //     justify-content: center
-  //     &:hover
-  //       box-shadow:  0px 0px 40px rgba(115, 134, 160, 0.5)
-  //     h5
-  //       align-self: center
-  //       font-size: 22px
-  //       line-height: 26px
-  //       margin-bottom: 30px
-  //     span
-  //       font-size: 11px
-
-  // .stat-box
-  //   padding: 40px 65px
-  //   box-shadow: 0px 0px 40px rgba(115, 134, 160, 0.25)
-
-  //   .column:first-child
-  //     @include mobile
-  //       padding-bottom: 40px
-
-  //   .fa-github
-  //     color: $black
-
-  //   h2
-  //     margin: 0 0 60px
-
-  //   h4
-  //     font-size: 32px
-  //     font-weight: bolder
-  //     margin-top: 15px
-  //     color: $black
-  //     strong
-  //       color: $black
-
-  //   .level
-  //     border-bottom: #4C73F7 3px solid
-  //     margin-bottom: -3px
-  //     img
-  //       position: relative
-  //       bottom: -3px
-    
-  //   .action-buttons
-  //     margin: 50px 0 0
-
-  // .feature-docs
-  //   margin-top: -200px
-  //   padding-top: 300px
-
-  //   @include from($widescreen)
-  //     .container .columns.is-multiline
-  //       margin: 0 8.333%
-  //   .columns.is-multiline
-  //     .column
-  //       display: flex
-      
-
-  //   .box
-  //     color: $black
-  //     &:hover
-  //       box-shadow:  4px 8px 12px rgba(115, 134, 160, 0.25)
-  //     img
-  //       margin: -10px 0
-  //     h4
-  //       line-height: 36px
-  //       font-size: 26px
-  //     p
-  //       font-size: 20px
-  //       line-height: 26px
-  //       margin: 35px 0
-  //   .action-buttons
-  //     margin: 100px 0 50px
-
-
-  // .feature-side-blocks
-  //   .bg-crud
-  //     background: url('../images/bg-crud.png') no-repeat 100% 50%
-  //     @include until($widescreen)
-  //       background-position-x: 150%
-  //     @include until($desktop)
-  //       background: none
-  //       text-align: center
-  //   .bg-filter
-  //     background: url('../images/bg-filter.png') no-repeat 0% 50%
-  //     @include until($widescreen)
-  //       background-position-x: -200px
-  //     @include until($desktop)
-  //       background: none
-  //       text-align: center
-  //   .column
-  //     justify-content: center
-  //     display: flex
-  //     flex-direction: column
-  //     @include from($desktop)
-  //       height: 700px
-  //   .container
-  //     margin-top: 50px
-  //     margin-bottom: 50px
-    
-  //   .action-buttons
-  //     margin: 30px 0
-
-  // .support-block
-  //   padding: 80px 0 350px
-  //   background: #fff
-  //   margin-bottom: -200px
-  //   .column
-  //     display: flex
-  //     flex-direction: column
-  //     .box
-  //       flex-grow: 1
-  //   .img
-  //     text-align: center
-  //     border-bottom: 1px solid #D8D8D8
-  //     margin: 0 -20px 20px
-  //   h4
-  //     font-weight: bolder
-  //     font-size: 26px
-  //     line-height: 48px
-  //   .text
-  //     padding: 0 10px 20px
-  //   .form
-  //     background: #4268F6
-  //     padding: 40px
-  //     border-radius: 10px
-
-  // .button.is-success
-  //   width: 170px
-  //   height: 50px
-
-  // .form
-  //   color: #fff
-  //   .success-msg
-  //     display: none
-  //     img
-  //       width: 150px
-  //       margin: 100px 0
-
-  //   &.completed
-  //     .success-msg
-  //       display: block
-  //     .form-fields
-  //       display: none
-  //   h2
-  //     color: #fff
-  //     margin-bottom: 30px
-  //   .label
-  //     font-size: 20px
-  //   .field
-  //     margin-bottom: 40px
-  //     color: #fff
-  //     label
-  //       color: #fff
-  //       font-weight: bold
-  //     input
-  //       border-radius: 4px
-  //       height: 54px
-  //   .checkbox
-  //     display: block
-  //     padding: 8px 0
-  //     font-size: 16px
-  //     &:hover
-  //       color: #fff
-  //     input
-  //       margin-right: 5px
-  //   .interested
-  //     .label
-  //       color: #fff
-  //     padding: 0 0 20px
-  //   textarea
-  //     height: 80px
-  //   .notice
-  //     font-size: 14px
-  //     font-weight: lighter
-  //     padding: 10px 30px
-
-
-  // .curved-footer
-  //   background: #4268F6
-  //   padding: 110px 500px
-  //   margin: 0 -500px
-  //   border-top-left-radius: 50%
-  //   border-top-right-radius: 50%
-
-  //   color: #fff
-
-  //   .the-part
-  //     position: relative
-  //     h2
-  //       font-size: 90px
-  //       line-height: 120px
-  //       opacity: 0.08
-  //       color: #fff
-  //       @include until($desktop)
-  //         font-size: 70px
-
-  //     h4
-  //       font-size: 56px
-  //       line-height: 65px
-  //       position: absolute
-  //       left: 0
-  //       top: 0
-  //       right: 0
-  //       padding: 80px 0
-
-  // .button.is-link
-  //   background: transparent
-  //   span
-  //     border-bottom: 1px solid #fff
-  //   &:hover span
-  //     border-bottom: none
-
-  // .top
-  //   border-bottom: 1px solid rgba(255,255,255, 0.2)
-  //   padding-bottom: 120px
-  //   text-align: center
-  
-  // .bottom
-  //   font-size: 14px
-  //   padding: 65px 0 0
-  //   @include until($tablet)
-  //     padding: 20px
-  //   strong
-  //     color: #fff
-  //   p
-  //     padding: 6px 0
-  //   a
-  //     color: #fff
-
-  //   .sb
-  //     padding-top: 40px
-  //   .logo
-  //     padding-bottom: 30px
-    
-  //   .button.is-success
-  //     margin-top: 40px
-  //     height: 54px
-
-  //   .form
-  //     margin-top: 30px
