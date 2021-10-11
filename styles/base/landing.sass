@@ -133,6 +133,68 @@ body.landing
       display: flex
     .hamburger
       margin-left: 22px
+
+  .mobile-menu
+    display: none
+    flex-direction: column
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    background-color: #0b151e
+    z-index: 1
+    padding: 19px 16px
+    .close-button
+      width: 40px
+      height: 40px
+    .logo
+      height: 26px
+    .close-button-container
+      display: flex
+    .mobile-menu-content
+      padding: 75px 16px 0
+    h2
+      font-size: 24px
+      line-height: 32px
+      color: $white
+    .docs-label
+      display: flex
+      flex-direction: row
+      margin-bottom: 32px
+      align-items: center
+    .fas
+      font-size: 16px
+      margin-left: 16px
+      color: $white
+      transition-duration: 0.2s
+    .docs-collapsible-content
+      display: flex
+      flex-direction: column
+      max-height: 0
+      overflow: hidden
+      transition: max-height 0.2s ease-out;
+    .link
+      font-family: $regular-font-family 
+      font-size: 20px
+      line-height: 26px
+      color: #9cacc3
+      margin-bottom: 20px
+      margin-left: 24px
+      &:last-child
+        margin-bottom: 40px
+    .slack
+      display: flex
+      flex-direction: column
+      align-items: center
+      margin: 64px 0 48px
+      padding-top: 56px
+      border-top: 1px solid #37465a
+    .avatars
+      width: 307px
+      margin-bottom: 16px
+    .button
+      width: 100%
     
   .main-hero
     background: url(../images/header-background.png) no-repeat top/200vh
