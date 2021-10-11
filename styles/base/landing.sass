@@ -936,7 +936,9 @@ body.landing
     .row
       display: flex
       flex-direction: row
-      justify-content: space-between
+      // TODO: switch justify-content when API and Your app sections are brought back
+      // justify-content: space-between
+      justify-content: space-evenly
       @include touch
         flex-direction: column
       .section-container
@@ -1144,6 +1146,9 @@ body.landing
       border-radius: 8px
       box-shadow: 0 4px 16px 0 rgba(2, 16, 72, 0.1)
       color: $baseText
+      // TODO remove desktop style when 'Read the full story' links are brought back
+      @include desktop
+        padding-bottom: 48px
       @include touch
         max-width: inherit
     .cover
