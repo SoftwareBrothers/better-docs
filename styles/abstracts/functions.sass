@@ -1,2 +1,4 @@
-@function rem($size-in-px, $context: $base-font-size) 
-  @return ($size-in-px / $context) * 1rem
+@use "sass:math"
+
+@function rem($size-in-px, $context: $base-font-size)
+  @return math.div($size-in-px, $context) * 1rem
