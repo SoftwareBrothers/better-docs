@@ -8,7 +8,7 @@ export enum PropertyPlace {
 /**
  * JSON representation of a Property.
  */
-type PropertyJSON = {
+interface PropertyJSON {
   /**
    * If given property should be treated as a title
    */

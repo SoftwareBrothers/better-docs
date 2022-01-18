@@ -1,9 +1,5 @@
-const fs = require('fs')
-const path = require('path')
 const { expect } = require('chai')
 const typeConverter = require('./type-converter')
-
-const src = fs.readFileSync(path.join(__dirname, '../fixtures/typescript/entity.ts'), 'utf-8')
 
 const interface1 = require('../fixtures/typescript/interface1')
 const interface2 = require('../fixtures/typescript/interface2')
@@ -98,8 +94,5 @@ describe('.typeConverter', function () {
     })
   })
   
-
-  // it.only('parses test', function() {
-  //   console.log(typeConverter(src, '../fixtures/interface.ts'))
-  // })
+  // TODO: Provide tests for typescript
 })
