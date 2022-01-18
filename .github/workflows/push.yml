@@ -14,7 +14,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -36,7 +36,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -50,7 +50,7 @@ jobs:
       - name: test
         run: yarn test
 
-  notify: 
+  notify:
     name: Notify
     runs-on: ubuntu-latest
     if: always()
@@ -79,7 +79,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -96,4 +96,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn release
 
-      
