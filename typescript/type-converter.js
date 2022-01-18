@@ -147,12 +147,12 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
     if (jsDocNode) {
       let comment = src.substring(jsDocNode.pos, jsDocNode.end)
       const name = getName(statement, src)
-      
+
       if (ts.isTypeAliasDeclaration(statement)) {
         if (ts.isFunctionTypeNode(statement.type)) {
           comment = appendComment(comment, `@typedef {function} ${name}`)
           return convertParams(comment, statement, src)
-        }        
+        }
         if (ts.isTypeLiteralNode(statement.type)) {
           comment = appendComment(comment, `@typedef {object} ${name}`)
           return convertMembers(comment, statement.type, src)
