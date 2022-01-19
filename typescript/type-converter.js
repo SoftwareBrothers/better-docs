@@ -60,7 +60,7 @@ const getName = (node, src) => {
  * 
  */
 const convertParams = (jsDoc = '', node, src) => {
-  const parameters = node.type && node.type.parameters || node.parameters
+  const parameters = node.type?.parameters || node.parameters
   if(!parameters) { return }
   parameters.forEach(parameter => {
     let name = getName(parameter, src)
