@@ -59,8 +59,10 @@ const getName = (node, src) => {
  * @returns {string} modified jsDoc comment with appended @param tags
  * 
  */
-const convertParams = (jsDoc = '', node, src, parentName = null) => {
-  node.type.parameters.forEach(parameter => {
+const convertParams = (jsDoc = '', node, src) => {
+  const parameters = node.type && node.type.parameters || node.parameters
+  if(!parameters) { return }
+  parameters.forEach(parameter => {
     let name = getName(parameter, src)
     let comment = parameter.jsDoc && parameter.jsDoc[0] && parameter.jsDoc[0].comment || ''
     if (parameter.questionToken) {
@@ -88,12 +90,12 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     typesToCheck.push(...type.types)
   }
   typesToCheck.forEach(type => {
-    // Handling array defined like this: {alement1: 'something'}[]
+    // Handling array defined like this: {element1: 'something'}[]
     if(ts.isArrayTypeNode(type) && type.elementType) {
       jsDoc = convertMembers(jsDoc, type.elementType, src, parentName ? parentName + '[]' : '[]')
     }
 
-    // Handling Array<{element1: 'somethin'}>
+    // Handling Array<{element1: 'something'}>
     if (type.typeName && type.typeName.escapedText === 'Array') {
       if(type.typeArguments && type.typeArguments.length) {
         type.typeArguments.forEach(subType => {
@@ -178,9 +180,9 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           if (!member.type && ts.isFunctionLike(member)) {
             let type = getTypeName(member, src)
             memberComment = appendComment(memberComment, `@type {${type}}`)
-            memberComment = appendComment(memberComment, `@method`)
+            memberComment = appendComment(memberComment, '@method')
           } else {
-            memberComment = convertMembers(memberComment, member.type, src, parentName = null)
+            memberComment = convertMembers(memberComment, member.type, src)
             let type = getTypeName(member.type, src)
             memberComment = appendComment(memberComment, `@type {${type}}`)
           }
@@ -193,18 +195,24 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
         const className = getName(statement, src)
         statement.members.forEach(member => {
           if (!member.jsDoc) { return }
-          if (!ts.isPropertyDeclaration(member)) { return }
           let memberComment = src.substring(member.jsDoc[0].pos, member.jsDoc[0].end)
           const modifiers = (member.modifiers || []).map(m => m.getText({text: src}))
-          modifiers.forEach(m => {
-            if (['private', 'public', 'protected'].includes(m)) {
-              memberComment = appendComment(memberComment, `@${m}`)
+          modifiers.forEach(modifier => {
+            const allowedModifiers = ['abstract', 'private', 'public', 'protected']
+            if (allowedModifiers.includes(modifier)) {
+              memberComment = appendComment(memberComment, `@${modifier}`)
             }
           })
-          if (member.type) {
-            memberComment = appendComment(memberComment, `@type {${getTypeName(member.type, src)}}`)
+          if (member.type && ts.isPropertyDeclaration(member)) {
+            const type = getTypeName(member.type, src)
+            memberComment = appendComment(memberComment, `@type {${type}}`)
           }
-          getTypeName(member, src)
+          if (member.type && ts.isFunctionLike(member)) {
+            memberComment = appendComment(memberComment, '@method')
+            memberComment = convertParams(memberComment,  member, src)
+            memberComment = convertMembers(memberComment, member.type, src)
+            memberComment = appendComment(memberComment, `@return {${getTypeName(member.type, src)}}`)
+          }
           if (modifiers.find((m => m === 'static'))) {
             memberComment += '\n' + `${className}.${getName(member, src)}`
           } else {
