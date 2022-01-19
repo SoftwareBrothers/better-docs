@@ -52,13 +52,13 @@
   },
   "dependencies": {
     "brace": "^0.11.1",
-    "react-ace": "^6.5.0",
-    "react-docgen": "^5.3.0",
-    "react-frame-component": "^4.1.1",
-    "typescript": "^3.7.5",
-    "underscore": "^1.9.1",
-    "vue-docgen-api": "^3.22.0",
-    "vue2-ace-editor": "^0.0.13"
+    "react-ace": "^9.5.0",
+    "react-docgen": "^5.4.0",
+    "react-frame-component": "^5.2.1",
+    "typescript": "^4.5.4",
+    "underscore": "^1.13.2",
+    "vue-docgen-api": "^4.44.2",
+    "vue2-ace-editor": "^0.0.15"
   },
   "husky": {
     "hooks": {
@@ -66,6 +66,6 @@
     }
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   }
 }
