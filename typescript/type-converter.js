@@ -49,6 +49,27 @@ const getName = (node, src) => {
   return name
 }
 
+/** 
+ * Check type of node 
+ * @param {node} node
+ * @return {void} Console log predicted types
+ */
+function checkType(node) {
+  console.group(node.name?.escapedText)
+  Object.keys(ts)
+    .filter((key) => typeof ts[key] === 'function' && key.startsWith('is'))
+    .filter((key) => {
+      try {
+        return ts[key](node) === true
+      } catch (error) {
+        // console.log(error)
+      }
+    })
+    .forEach((key) => console.log(key))
+  console.groupEnd()
+}
+  
+
 /**
  * converts function parameters to @params
  *
@@ -149,7 +170,15 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
     if (jsDocNode) {
       let comment = src.substring(jsDocNode.pos, jsDocNode.end)
       const name = getName(statement, src)
+      checkType(statement)
 
+      if (ts.isFunctionLikeDeclaration(statement)) {
+          const returnType = getTypeName(statement.type, src)
+          comment = appendComment(comment, `@method ${name}`)
+          comment = convertParams(comment, statement, src)
+          comment = appendComment(comment, `@return {${returnType}}`)
+          return comment;
+      }
       if (ts.isTypeAliasDeclaration(statement)) {
         if (ts.isFunctionTypeNode(statement.type)) {
           comment = appendComment(comment, `@typedef {function} ${name}`)
