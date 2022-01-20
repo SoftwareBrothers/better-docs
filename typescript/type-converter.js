@@ -163,6 +163,11 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           comment = appendComment(comment, `@typedef {object} ${name}`)
           return convertMembers(comment, statement.type, src)
         }
+        if (ts.isUnionTypeNode(statement.type) || ts.isSimpleInlineableExpression(statement.type)) {
+          let typeName = getTypeName(statement.type, src)
+          comment = appendComment(comment, `@typedef {${typeName}} ${name}`)
+          return convertMembers(comment, statement.type, src)
+        }      
       }
       if (ts.isInterfaceDeclaration(statement)) {
         comment = appendComment(comment, `@interface ${name}`)
