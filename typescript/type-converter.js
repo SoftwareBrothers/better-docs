@@ -43,10 +43,29 @@ const getTypeName = (type, src) => {
 const getName = (node, src) => {
   let name = node.name && node.name.escapedText
   || node.parameters && src.substring(node.parameters.pos, node.parameters.end)
-  
+
   // changing type [key: string] to {...} - otherwise it wont be parsed by @jsdoc
   if (name === 'key: string') { return '{...}' }
   return name
+}
+
+/**
+ * Transform JSDoc @link NodeObject into string after moving from typescript 3 to 4
+ *
+ * @param comment
+ * @returns {string}
+ */
+function convertComment (comment) {
+  if (typeof comment === 'string') return comment;
+
+  const elements = Array.isArray(comment) ? comment : [comment];
+
+  return elements.reduce((acc, next) => {
+    if (next.name && [ts.SyntaxKind.Identifier, ts.SyntaxKind.PrivateIdentifier].includes(next.name.kind)) {
+      return acc + `{@link ${next.name.escapedText}}`;
+    }
+    return acc + next.text
+  }, '')
 }
 
 /**
@@ -57,7 +76,7 @@ const getName = (node, src) => {
  * @param {string} src      source for an entire parsed file (we are fetching substrings from it)
  * @param {string} parentName     name of a parent element - NOT IMPLEMENTED YET
  * @returns {string} modified jsDoc comment with appended @param tags
- * 
+ *
  */
 const convertParams = (jsDoc = '', node, src) => {
   const parameters = node.type?.parameters || node.parameters
@@ -110,7 +129,7 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     // Handling {property1: "value"}
     (type.members || []).filter(m => ts.isTypeElement(m)).forEach(member => {
       let name = getName(member, src)
-      let comment = member.jsDoc && member.jsDoc[0] && member.jsDoc[0].comment || ''
+      let comment = convertComment(member.jsDoc && member.jsDoc[0] && member.jsDoc[0].comment || '')
       const members = member.type.members || []
       let typeName = members.length ? 'object' : getTypeName(member.type, src)
       if (parentName) {
@@ -127,7 +146,7 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
 
 /**
  * Main function which converts types
- * 
+ *
  * @param {string} src           typescript code to convert to jsdoc comments
  * @param {string} [filename]    filename which is required by typescript parser
  * @return {string}              @jsdoc comments generated from given typescript code
@@ -140,7 +159,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
     false,
     ts.ScriptKind.TS
   )
-  
+
   // iterate through all the statements in global scope
   // we are looking for `interface xxxx` and `type zzz`
   return ast.statements.map(statement => {
@@ -167,7 +186,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           let typeName = getTypeName(statement.type, src)
           comment = appendComment(comment, `@typedef {${typeName}} ${name}`)
           return convertMembers(comment, statement.type, src)
-        }      
+        }
       }
       if (ts.isInterfaceDeclaration(statement)) {
         comment = appendComment(comment, `@interface ${name}`)
