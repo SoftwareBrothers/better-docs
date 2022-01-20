@@ -606,7 +606,7 @@ Example configuration file with settings for both `default` and `better-docs` te
                 },
                 {
                     "label": "Example Application",
-                    "href": "https://admin-bro-example-app.herokuapp.com/admin"
+                    "href": "https://admin-bro-example-app-staging.herokuapp.com/admin"
                 }
             ]
         }
