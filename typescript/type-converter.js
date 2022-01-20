@@ -214,14 +214,10 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
             memberComment = appendComment(memberComment, `@type {${type}}`)
           }
           if (member.type && ts.isFunctionLike(member)) {
-            try {
-              memberComment = appendComment(memberComment, '@method')
-              memberComment = convertParams(memberComment, member, src)
-              memberComment = convertMembers(memberComment, member.type, src)
-              memberComment = appendComment(memberComment, `@return {${getTypeName(member.type, src)}}`)
-            } catch (error) {
-              console.log(error);
-            }
+            memberComment = appendComment(memberComment, '@method')
+            memberComment = convertParams(memberComment, member, src)
+            memberComment = convertMembers(memberComment, member.type, src)
+            memberComment = appendComment(memberComment, `@return {${getTypeName(member.type, src)}}`)
           }
           if (modifiers.find((m => m === 'static'))) {
             memberComment += '\n' + `${className}.${getName(member, src)}`
