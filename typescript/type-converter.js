@@ -12,6 +12,7 @@ const appendComment = (commentBlock, toAppend) => {
  * @returns {string}    node type
  */
 const getTypeName = (type, src) => {
+  if(!type) { return ''}
   if (type.typeName && type.typeName.escapedText) {
     const typeName = type.typeName.escapedText
     if(type.typeArguments && type.typeArguments.length) {
@@ -214,7 +215,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           }
           if (member.type && ts.isFunctionLike(member)) {
             memberComment = appendComment(memberComment, '@method')
-            memberComment = convertParams(memberComment,  member, src)
+            memberComment = convertParams(memberComment, member, src)
             memberComment = convertMembers(memberComment, member.type, src)
             memberComment = appendComment(memberComment, `@return {${getTypeName(member.type, src)}}`)
           }
