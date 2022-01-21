@@ -22,8 +22,7 @@
     },
     "templates": {
         "better-docs": {
-            "name": "AdminBro Documentation",
-            "logo": "images/logo.png"
+            "name": "Sample Documentation"
         }
     }
 }
