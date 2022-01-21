@@ -12,6 +12,7 @@ const appendComment = (commentBlock, toAppend) => {
  * @returns {string}    node type
  */
 const getTypeName = (type, src) => {
+  if(!type) { return ''}
   if (type.typeName && type.typeName.escapedText) {
     const typeName = type.typeName.escapedText
     if(type.typeArguments && type.typeArguments.length) {
