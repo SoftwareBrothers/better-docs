@@ -50,6 +50,31 @@ const getName = (node, src) => {
   return name
 }
 
+/** 
+ * Check type of node (dev only)
+ * @param {node} node
+ * @return {void} Console log predicted types
+ */
+function checkType(node) {
+  console.group(node.name?.escapedText);
+  const predictedTypes = Object.keys(ts).reduce((acc, key) => {
+    if (typeof ts[key] !== "function" && !key.startsWith("is")) {
+      return acc;
+    }
+    try {
+      if (ts[key](node) === true) {
+        acc.push(key);
+      }
+    } catch (error) {
+      return acc;
+    }
+    return acc;
+  }, []);
+  console.log(predictedTypes);
+  console.groupEnd();
+}
+  
+
 /**
  * Fill missing method declaration
  * 
@@ -65,10 +90,10 @@ const fillMethodComment = (comment, member, src) => {
   if (!comment.includes('@param')) {
     comment = convertParams(comment, member, src)
   }
-  if (ts.isArrayTypeNode(member.type)) {
+  if (member.type && ts.isArrayTypeNode(member.type)) {
     comment = convertMembers(comment, member.type, src)
   }
-  if (!comment.includes('@return')) {
+  if (member.type && !comment.includes('@return')) {
     const returnType = getTypeName(member.type, src)
     comment = appendComment(comment, `@return {${returnType}}`)
   }
@@ -175,7 +200,9 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
     if (jsDocNode) {
       let comment = src.substring(jsDocNode.pos, jsDocNode.end)
       const name = getName(statement, src)
-
+      if (ts.isFunctionDeclaration(statement)) {
+          return fillMethodComment(comment, statement, src);
+      }
       if (ts.isTypeAliasDeclaration(statement)) {
         if (ts.isFunctionTypeNode(statement.type)) {
           comment = appendComment(comment, `@typedef {function} ${name}`)
@@ -238,7 +265,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
             const type = getTypeName(member.type, src)
             memberComment = appendComment(memberComment, `@type {${type}}`)
           }
-          if (member.type && ts.isFunctionLike(member)) {
+          if (ts.isFunctionLike(member)) {
             memberComment = fillMethodComment(memberComment, member, src)
           }
           if (modifiers.find((m => m === 'static'))) {
