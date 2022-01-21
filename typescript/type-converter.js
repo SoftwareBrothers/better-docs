@@ -50,23 +50,27 @@ const getName = (node, src) => {
 }
 
 /** 
- * Check type of node 
+ * Check type of node (dev only)
  * @param {node} node
  * @return {void} Console log predicted types
  */
 function checkType(node) {
-  console.group(node.name?.escapedText)
-  Object.keys(ts)
-    .filter((key) => typeof ts[key] === 'function' && key.startsWith('is'))
-    .filter((key) => {
-      try {
-        return ts[key](node) === true
-      } catch (error) {
-        // console.log(error)
+  console.group(node.name?.escapedText);
+  const predictedTypes = Object.keys(ts).reduce((acc, key) => {
+    if (typeof ts[key] !== "function" && !key.startsWith("is")) {
+      return acc;
+    }
+    try {
+      if (ts[key](node) === true) {
+        acc.push(key);
       }
-    })
-    .forEach((key) => console.log(key))
-  console.groupEnd()
+    } catch (error) {
+      return acc;
+    }
+    return acc;
+  }, []);
+  console.log(predictedTypes);
+  console.groupEnd();
 }
   
 
@@ -85,10 +89,10 @@ const fillMethodComment = (comment, member, src) => {
   if (!comment.includes('@param')) {
     comment = convertParams(comment, member, src)
   }
-  if (ts.isArrayTypeNode(member.type)) {
+  if (member.type && ts.isArrayTypeNode(member.type)) {
     comment = convertMembers(comment, member.type, src)
   }
-  if (!comment.includes('@return')) {
+  if (member.type && !comment.includes('@return')) {
     const returnType = getTypeName(member.type, src)
     comment = appendComment(comment, `@return {${returnType}}`)
   }
@@ -195,14 +199,8 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
     if (jsDocNode) {
       let comment = src.substring(jsDocNode.pos, jsDocNode.end)
       const name = getName(statement, src)
-      checkType(statement)
-
-      if (ts.isFunctionLikeDeclaration(statement)) {
-          const returnType = getTypeName(statement.type, src)
-          comment = appendComment(comment, `@method ${name}`)
-          comment = convertParams(comment, statement, src)
-          comment = appendComment(comment, `@return {${returnType}}`)
-          return comment;
+      if (ts.isFunctionDeclaration(statement)) {
+          return fillMethodComment(comment, statement, src);
       }
       if (ts.isTypeAliasDeclaration(statement)) {
         if (ts.isFunctionTypeNode(statement.type)) {
@@ -266,7 +264,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
             const type = getTypeName(member.type, src)
             memberComment = appendComment(memberComment, `@type {${type}}`)
           }
-          if (member.type && ts.isFunctionLike(member)) {
+          if (ts.isFunctionLike(member)) {
             memberComment = fillMethodComment(memberComment, member, src)
           }
           if (modifiers.find((m => m === 'static'))) {
