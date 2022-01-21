@@ -67,7 +67,7 @@ jobs:
   notify:
     name: Notify
     runs-on: ubuntu-latest
-    if: always()
+    if: failure()
     needs:
       - test
       - setup
