@@ -268,12 +268,17 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           if (ts.isFunctionLike(member)) {
             memberComment = fillMethodComment(memberComment, member, src)
           }
-          if (modifiers.find((m => m === 'static'))) {
-            memberComment += '\n' + `${className}.${getName(member, src)}`
+          if (ts.isConstructorDeclaration(member)) {
+            memberComment = appendComment(memberComment, `@constructor`)
+            memberComment += `\n${className}.prototype.${className}`
           } else {
-            memberComment += '\n' + `${className}.prototype.${getName(member, src)}`
+            if (modifiers.find((m) => m === "static")) {
+              memberComment += `\n${className}.${getName(member, src)}`
+            } else {
+              memberComment += `\n${className}.prototype.${getName(member, src)}`
+            }
           }
-          comment += '\n' + memberComment
+          comment += "\n" + memberComment
         })
         return comment
       }
