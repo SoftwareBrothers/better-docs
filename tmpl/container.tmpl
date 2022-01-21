@@ -194,9 +194,13 @@
     <?js
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (methods && methods.length && methods.forEach) {
-            methods = methods.filter(function(m) {
-                return m.access !== 'private';
-            });
+            // Remove duplicated definition, keep overwritten by the converter
+            methods = methods.reduce((acc, method) => {
+                if(method.access === 'private') return acc
+                var index = acc.findIndex(m => m.id === method.id)
+                index < 0 ? acc.push(method) : acc[index] = method
+                return acc
+            }, [])
     ?>
         <div class='vertical-section'>
             <h1>Methods</h1>

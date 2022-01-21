@@ -51,6 +51,31 @@ const getName = (node, src) => {
 }
 
 /**
+ * Fill missing method declaration
+ * 
+ * @param {string} comment
+ * @param member
+ * @param {string} src
+ * @return {string}
+ */
+const fillMethodComment = (comment, member, src) => {
+  if (!comment.includes('@method')) {
+    comment = appendComment(comment, '@method')
+  }
+  if (!comment.includes('@param')) {
+    comment = convertParams(comment, member, src)
+  }
+  if (ts.isArrayTypeNode(member.type)) {
+    comment = convertMembers(comment, member.type, src)
+  }
+  if (!comment.includes('@return')) {
+    const returnType = getTypeName(member.type, src)
+    comment = appendComment(comment, `@return {${returnType}}`)
+  }
+  return comment
+}
+
+/**
  * converts function parameters to @params
  *
  * @param {string} [jsDoc]  existing jsdoc text where all @param comments should be appended
@@ -204,7 +229,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
           let memberComment = src.substring(member.jsDoc[0].pos, member.jsDoc[0].end)
           const modifiers = (member.modifiers || []).map(m => m.getText({text: src}))
           modifiers.forEach(modifier => {
-            const allowedModifiers = ['abstract', 'private', 'public', 'protected']
+            const allowedModifiers = ['async', 'abstract', 'private', 'public', 'protected']
             if (allowedModifiers.includes(modifier)) {
               memberComment = appendComment(memberComment, `@${modifier}`)
             }
@@ -214,10 +239,7 @@ module.exports = function typeConverter(src, filename = 'test.ts') {
             memberComment = appendComment(memberComment, `@type {${type}}`)
           }
           if (member.type && ts.isFunctionLike(member)) {
-            memberComment = appendComment(memberComment, '@method')
-            memberComment = convertParams(memberComment, member, src)
-            memberComment = convertMembers(memberComment, member.type, src)
-            memberComment = appendComment(memberComment, `@return {${getTypeName(member.type, src)}}`)
+            memberComment = fillMethodComment(memberComment, member, src)
           }
           if (modifiers.find((m => m === 'static'))) {
             memberComment += '\n' + `${className}.${getName(member, src)}`
