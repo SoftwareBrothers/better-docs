@@ -205,8 +205,7 @@
         <div class='vertical-section'>
             <h1>Methods</h1>
             <div class="members">
-            <?js methods.forEach(function(m, i) { ?>
-                <span><?js= m.summary ?></span>
+            <?js methods.forEach(function(m) { ?>
                 <div class="member"><?js= self.partial('method.tmpl', m) ?></div>
             <?js }); ?>
             </div>
