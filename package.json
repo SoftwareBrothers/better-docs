@@ -13,6 +13,20 @@
   },
   "author": "Wojciech Krysiak",
   "license": "MIT",
+  "dependencies": {
+    "brace": "^0.11.1",
+    "react-ace": "^9.5.0",
+    "react-docgen": "^5.4.0",
+    "react-frame-component": "^5.2.1",
+    "typescript": "^4.5.4",
+    "underscore": "^1.13.2",
+    "vue-docgen-api": "^3.26.0",
+    "vue2-ace-editor": "^0.0.15"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
@@ -44,21 +58,6 @@
     "mocha": "^9.1.4",
     "sass": "^1.48.0",
     "semantic-release": "^18.0.1"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "typescript": "^4.5.4"
-  },
-  "dependencies": {
-    "brace": "^0.11.1",
-    "react-ace": "^9.5.0",
-    "react-docgen": "^5.4.0",
-    "react-frame-component": "^5.2.1",
-    "typescript": "^4.5.4",
-    "underscore": "^1.13.2",
-    "vue-docgen-api": "^3.26.0",
-    "vue2-ace-editor": "^0.0.15"
   },
   "husky": {
     "hooks": {

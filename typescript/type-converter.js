@@ -101,6 +101,31 @@ const fillMethodComment = (comment, member, src) => {
 }
 
 /**
+ * Fill missing method declaration
+ * 
+ * @param {string} comment
+ * @param member
+ * @param {string} src
+ * @return {string}
+ */
+const fillMethodComment = (comment, member, src) => {
+  if (!comment.includes('@method')) {
+    comment = appendComment(comment, '@method')
+  }
+  if (!comment.includes('@param')) {
+    comment = convertParams(comment, member, src)
+  }
+  if (ts.isArrayTypeNode(member.type)) {
+    comment = convertMembers(comment, member.type, src)
+  }
+  if (!comment.includes('@return')) {
+    const returnType = getTypeName(member.type, src)
+    comment = appendComment(comment, `@return {${returnType}}`)
+  }
+  return comment
+}
+
+/**
  * converts function parameters to @params
  *
  * @param {string} [jsDoc]  existing jsdoc text where all @param comments should be appended
