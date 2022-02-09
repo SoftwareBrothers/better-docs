@@ -442,7 +442,7 @@ _(To read more about passing options - scroll down to __Customization__ section)
     "opts": {...},
     "templates": {
         "better-docs": {
-            "name": "AdminBro Documentation",
+            "name": "Sample Documentation",
             "component": {
               "wrapper": "./path/to/your/wrapper-component.js",
             },
@@ -533,7 +533,7 @@ So let's say you want to add `babel-polyfill` and 'bulma.css' framework to your 
     "opts": {...},
     "templates": {
         "better-docs": {
-            "name": "AdminBro Documentation",
+            "name": "Sample Documentation",
             "component": {
                 "entry": [
                     "import 'babel-polyfill';",
@@ -592,7 +592,7 @@ Example configuration file with settings for both `default` and `better-docs` te
             }
         },
         "better-docs": {
-            "name": "AdminBro Documentation",
+            "name": "Sample Documentation",
             "logo": "images/logo.png",
             "title": "", // HTML title
             "css": "style.css",

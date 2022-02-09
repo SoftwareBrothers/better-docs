@@ -42,7 +42,7 @@ const getTypeName = (type, src) => {
  * Fetches name from a node.
  */
 const getName = (node, src) => {
-  let name = node.name && node.name.escapedText
+  let name = node.name?.escapedText
   || node.parameters && src.substring(node.parameters.pos, node.parameters.end)
   
   // changing type [key: string] to {...} - otherwise it wont be parsed by @jsdoc
