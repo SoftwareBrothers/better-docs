@@ -3,13 +3,17 @@
         "allowUnknownTags": "all"
     },
     "source": {
-        "include": ["fixtures/typescript"],
+        "include": [
+            "fixtures/typescript",
+            "fixtures/examples"
+        ],
         "includePattern": "\\.(jsx|js|ts|tsx)$"
     },
     "plugins": [
         "plugins/markdown",
         "category",
         "component",
+        "load",
         "typescript"
     ],
     "opts": {
@@ -22,7 +26,10 @@
     },
     "templates": {
         "better-docs": {
-            "name": "Sample Documentation"
+            "name": "AdminJS Documentation",
+            "ogTags": {
+                "title": "some title"
+            }
         }
     }
 }
