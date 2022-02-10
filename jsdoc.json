@@ -26,10 +26,7 @@
     },
     "templates": {
         "better-docs": {
-            "name": "AdminJS Documentation",
-            "ogTags": {
-                "title": "some title"
-            }
+            "name": "Sample Documentation"
         }
     }
 }
