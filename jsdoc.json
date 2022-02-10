@@ -3,13 +3,17 @@
         "allowUnknownTags": "all"
     },
     "source": {
-        "include": ["fixtures/typescript"],
+        "include": [
+            "fixtures/typescript",
+            "fixtures/examples"
+        ],
         "includePattern": "\\.(jsx|js|ts|tsx)$"
     },
     "plugins": [
         "plugins/markdown",
         "category",
         "component",
+        "load",
         "typescript"
     ],
     "opts": {
