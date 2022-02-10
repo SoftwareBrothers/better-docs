@@ -115,7 +115,7 @@ const convertParams = (jsDoc = '', node, src) => {
   if(!parameters) { return }
   parameters.forEach(parameter => {
     let name = getName(parameter, src)
-    let comment = parameter.jsDoc && parameter.jsDoc[0] && parameter.jsDoc[0].comment || ''
+    let comment = getCommentAsString(parameter, src)
     if (parameter.questionToken) {
       name = ['[', name, ']'].join('')
     }
@@ -161,7 +161,7 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     // Handling {property1: "value"}
     (type.members || []).filter(m => ts.isTypeElement(m)).forEach(member => {
       let name = getName(member, src)
-      let comment = member.jsDoc && member.jsDoc[0] && member.jsDoc[0].comment || ''
+      let comment = getCommentAsString(member, src)
       const members = member.type.members || []
       let typeName = members.length ? 'object' : getTypeName(member.type, src)
       if (parentName) {
@@ -174,6 +174,25 @@ let convertMembers = (jsDoc = '', type, src, parentName = null) => {
     })
   })
   return jsDoc
+}
+
+/** 
+ * Extract comment from member jsDoc as string
+ * @param member
+ * @param {string} src
+ * @returns {string} 
+ */
+function getCommentAsString(member, src) {
+  if (member.jsDoc && member.jsDoc[0] && member.jsDoc[0].comment) {
+    const comment = member.jsDoc[0].comment;
+    if (Array.isArray(comment)) {
+      return comment
+        .map((c) => c.text.length ? c.text : src.substring(c.pos, c.end))
+        .join('');
+    }
+    return member.jsDoc[0].comment;
+  }
+  return '';
 }
 
 /**
