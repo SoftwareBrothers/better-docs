@@ -12,7 +12,7 @@ exports.defineTags = (dictionary) => {
 
       if (doclet.classdesc) {
         doclet.classdesc = [doclet.classdesc, text].join('\n')
-      } else if (doclet.description) {
+      } else if (doclet.description || doclet.kind === 'module') {
         doclet.description = [doclet.description, text].join('\n')
       }
     },
