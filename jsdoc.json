@@ -1,6 +1,6 @@
 {
     "tags": {
-        "allowUnknownTags": "all"
+        "allowUnknownTags": true
     },
     "source": {
         "include": [
@@ -16,6 +16,9 @@
         "load",
         "typescript"
     ],
+    "markdown": {
+      "tags": ["load"]
+    },
     "opts": {
         "encoding": "utf8",
         "destination": "docs/",

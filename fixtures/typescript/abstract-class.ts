@@ -24,3 +24,5 @@ abstract class AbstractClass {
 
   #test: string
 }
+
+export default AbstractClass
