@@ -42,7 +42,7 @@ const getTypeName = (type, src) => {
  * Fetches name from a node.
  */
 const getName = (node, src) => {
-  let name = node.name?.escapedText
+  let name = (node.name && node.name.escapedText)
   || node.parameters && src.substring(node.parameters.pos, node.parameters.end)
   
   // changing type [key: string] to {...} - otherwise it wont be parsed by @jsdoc
@@ -56,7 +56,7 @@ const getName = (node, src) => {
  * @return {void} Console log predicted types
  */
 function checkType(node) {
-  console.group(node.name?.escapedText);
+  console.group(node.name && node.name.escapedText);
   const predictedTypes = Object.keys(ts).reduce((acc, key) => {
     if (typeof ts[key] !== "function" && !key.startsWith("is")) {
       return acc;
@@ -111,7 +111,7 @@ const fillMethodComment = (comment, member, src) => {
  * 
  */
 const convertParams = (jsDoc = '', node, src) => {
-  const parameters = node.type?.parameters || node.parameters
+  const parameters = (node.type && node.type.parameters) || node.parameters
   if(!parameters) { return }
   parameters.forEach(parameter => {
     let name = getName(parameter, src)
