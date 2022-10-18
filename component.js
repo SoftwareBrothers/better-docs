@@ -55,7 +55,7 @@ var parseReact = function (filePath, doclet) {
   var src = fs.readFileSync(filePath, 'UTF-8')
   var docGen
   try {
-    docGen = reactDocs.parse(src)
+        docGen = reactDocs.parse(src, null, null, { filename: '' })
   } catch (error) {
     if (error.message === 'No suitable component definition found.') {
       return {
