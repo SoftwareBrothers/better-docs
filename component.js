@@ -56,7 +56,7 @@ var parseReact = function (filePath, doclet) {
   var src = fs.readFileSync(filePath, 'UTF-8')
   var docGen
   try {
-    docGen = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions);
+    docGen = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions)[0];
   } catch (error) {
     if (error.message === 'No suitable component definition found.') {
       return {
@@ -68,7 +68,7 @@ var parseReact = function (filePath, doclet) {
       throw error
     }
   }
-  
+
   return {
     props: Object.entries(docGen.props || {}).map(([key, prop]) => ({
       name: key,
@@ -79,7 +79,7 @@ var parseReact = function (filePath, doclet) {
         ? (prop.defaultValue.computed ? 'function()' : prop.defaultValue.value)
         : undefined
     })),
-    displayName: doclet.name,
+    displayName: docGen.displayName,
     filePath: filePath,
   }
 }
