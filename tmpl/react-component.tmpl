@@ -6,8 +6,8 @@ var uniqId = ['component', number].join('')
 <div id='<?js= uniqId ?>'></div>
 
 <script>
-  ReactDOM.render(ReactWrapper({
+	ReactDOM.createRoot(document.getElementById('<?js= uniqId ?>')).render(ReactWrapper({
     example: <?js= JSON.stringify(example.code || null) ?>,
     uniqId: <?js= JSON.stringify(uniqId) ?>,
-  }), document.getElementById('<?js= uniqId ?>'));
+  }));
 </script>
