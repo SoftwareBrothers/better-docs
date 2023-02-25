@@ -67,14 +67,16 @@ class Wrapper extends React.Component {
   computeHeight() {
     const { height } = this.state
     const padding = 5 // buffer for any unstyled margins
+
     if (
       this.iframeRef.current
-      && this.iframeRef.current.node.contentDocument
-      && this.iframeRef.current.node.contentDocument.body.offsetHeight !== 0
-      && this.iframeRef.current.node.contentDocument.body.offsetHeight !== (height - padding)
+      && this.iframeRef.current.contentDocument
+	  && this.iframeRef.current.contentDocument.body
+      && this.iframeRef.current.contentDocument.body.offsetHeight !== 0
+      && this.iframeRef.current.contentDocument.body.offsetHeight !== (height - padding)
     ) {
       this.setState({
-        height: this.iframeRef.current.node.contentDocument.body.offsetHeight + padding,
+        height: this.iframeRef.current.contentDocument.body.offsetHeight + padding,
       })
     }
   }
