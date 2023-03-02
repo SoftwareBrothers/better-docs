@@ -369,7 +369,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
       if (itemsNav !== '') {
         var heading = itemHeading
         if (subCategoryName) {
-          heading = heading + ' / ' + subCategoryName
+			heading = heading === 'Globals' ? subCategoryName : heading + ' / ' + subCategoryName
         }
         nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
       }
@@ -405,6 +405,7 @@ function buildGroupNav (members, title) {
   nav += buildMemberNav(members.events || [], 'Events', seen, linkto)
   nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto)
   nav += buildMemberNav(members.components || [], 'Components', seen, linkto)
+  nav += buildMemberNav(members.globals || [], 'Globals', seen, linkto)
     
   if (members.globals && members.globals.length) {
     globalNav = ''
