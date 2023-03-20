@@ -24,6 +24,7 @@ exports.handlers = {
         doclet.component.type = 'react'
       }
       doclet.kind = 'class'
+      doclet.type = 'component'
     } else {
       if (path.extname(filePath) === '.vue') {
         const docGen = vueDocs.parse(filePath)
@@ -36,9 +37,9 @@ exports.handlers = {
       }
 
       if (path.extname(filePath) === '.jsx') {
-        if (doclet.kind !== 'function' && doclet.kind !== 'event') {
-          doclet.undocumented = true
-        }
+        // if (doclet.kind !== 'function' && doclet.kind !== 'event') {
+        //   doclet.undocumented = true
+        // }
       }
     }
   }
@@ -55,7 +56,7 @@ var parseReact = function (filePath, doclet) {
   var src = fs.readFileSync(filePath, 'UTF-8')
   var docGen
   try {
-    docGen = reactDocs.parse(src)
+    docGen = reactDocs.parse(src, reactDocs.resolver.findAllComponentDefinitions)[0];
   } catch (error) {
     if (error.message === 'No suitable component definition found.') {
       return {
@@ -67,7 +68,7 @@ var parseReact = function (filePath, doclet) {
       throw error
     }
   }
-  
+
   return {
     props: Object.entries(docGen.props || {}).map(([key, prop]) => ({
       name: key,

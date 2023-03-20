@@ -1,6 +1,6 @@
 <img src="./readme/logo.png" />
 
-Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc3 with **@category**, **@component** and **@optional** plugins.
+Documentation toolbox for your **javascript** / **typescript** projects based on JSDoc4 with **@category**, **@component** and **@optional** plugins.
 
 This is how it looks:
 
@@ -270,10 +270,10 @@ Since __component__ plugin uses [parcel](https://parceljs.org) as a bundler you 
 
 ```
 # if you use npm
-npm install -g parcel-bundler
+npm install -g parcel
 
 # or yarn
-yarn global add parcel-bundler
+yarn global add parcel
 ```
 
 ## Usage
