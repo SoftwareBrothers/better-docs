@@ -24,7 +24,7 @@ exports.handlers = {
         doclet.component.type = 'react'
       }
       doclet.kind = 'class'
-	  doclet.type = 'component'
+      doclet.type = 'component'
     } else {
       if (path.extname(filePath) === '.vue') {
         const docGen = vueDocs.parse(filePath)

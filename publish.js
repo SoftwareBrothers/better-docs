@@ -369,7 +369,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
       if (itemsNav !== '') {
         var heading = itemHeading
         if (subCategoryName) {
-			heading = heading === 'Globals' ? subCategoryName : heading + ' / ' + subCategoryName
+          heading = heading === 'Globals' ? subCategoryName : heading + ' / ' + subCategoryName
         }
         nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
       }
