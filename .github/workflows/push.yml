@@ -12,10 +12,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-      - uses: actions/cache@v1
+          node-version: '18.x'
+      - uses: actions/cache@v2
         id: yarn-cache
         with:
           path: node_modules
@@ -34,10 +34,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-      - uses: actions/cache@v1
+          node-version: '18.x'
+      - uses: actions/cache@v2
         id: yarn-cache
         with:
           path: node_modules
@@ -50,25 +50,6 @@ jobs:
       - name: test
         run: yarn test
 
-  notify:
-    name: Notify
-    runs-on: ubuntu-latest
-    if: failure()
-    needs:
-      - test
-      - setup
-      - publish
-    steps:
-      - uses: technote-space/workflow-conclusion-action@v1
-      - uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ env.WORKFLOW_CONCLUSION }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
-
   publish:
     name: Publish
     needs: test
@@ -77,10 +58,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-      - uses: actions/cache@v1
+          node-version: '18.x'
+      - uses: actions/cache@v2
         id: yarn-cache
         with:
           path: node_modules
