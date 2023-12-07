@@ -78,9 +78,9 @@ module.exports = function bundle (Components, out, config) {
 
   console.log('Generating entry file for "components" plugin')
   fs.writeFileSync(entry, entryFile)
-  console.log('Bundling components')
+  console.log('Bundling components...')
   const outDist = path.join(out, 'build')
-  const cmd = `${process.platform === 'win32' ? 'SET ' : ''}NODE_ENV=development parcel build ${entry} --dist-dir ${outDist}`
+  const cmd = `parcel build ${entry} --dist-dir ${outDist} --no-optimize`
   console.log(`running: ${cmd}`)
   try {
     execSync(cmd)

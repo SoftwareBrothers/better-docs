@@ -6,7 +6,7 @@ var fs = require('jsdoc/fs')
 var helper = require('jsdoc/util/templateHelper')
 var logger = require('jsdoc/util/logger')
 var path = require('jsdoc/path')
-var taffy = require('@jsdoc/salty').taffy
+const { taffy } = require('@jsdoc/salty');
 var template = require('jsdoc/template')
 var util = require('util')
 const { getParser } = require('jsdoc/util/markdown')
@@ -369,7 +369,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
       if (itemsNav !== '') {
         var heading = itemHeading
         if (subCategoryName) {
-          heading = heading + ' / ' + subCategoryName
+          heading = heading === 'Globals' ? subCategoryName : heading + ' / ' + subCategoryName
         }
         nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
       }
@@ -405,6 +405,7 @@ function buildGroupNav (members, title) {
   nav += buildMemberNav(members.events || [], 'Events', seen, linkto)
   nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto)
   nav += buildMemberNav(members.components || [], 'Components', seen, linkto)
+  nav += buildMemberNav(members.globals || [], 'Globals', seen, linkto)
     
   if (members.globals && members.globals.length) {
     globalNav = ''
@@ -693,7 +694,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     members.tutorials = tutorials.children
   }
   view.tutorials = members.tutorials
-  members.components = helper.find(data, {kind: 'class', component: {isUndefined: false}})
+  members.components = helper.find(data, { type: 'component' })
   members.classes = helper.find(data, {kind: 'class', component: {isUndefined: true}})
 
   // output pretty-printed source files by default
