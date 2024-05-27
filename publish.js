@@ -1,5 +1,4 @@
 'use strict'
-
 var doop = require('jsdoc/util/doop')
 var env = require('jsdoc/env')
 var fs = require('jsdoc/fs')
@@ -12,6 +11,7 @@ var util = require('util')
 const { getParser } = require('jsdoc/util/markdown')
 
 var bundler = require('./bundler')
+const { exit } = require('process')
 const markdownParser = getParser()
 
 var htmlsafe = helper.htmlsafe
@@ -240,6 +240,7 @@ function generate(title, subtitle, docs, filename, resolveLinks) {
   }
 
   outpath = path.join(outdir, filename)
+
   html = view.render('container.tmpl', docData)
 
   if (resolveLinks) {
@@ -261,6 +262,7 @@ function generateSourceFiles(sourceFiles, encoding) {
     try {
       source = {
         kind: 'source',
+        file: sourceFiles[file].shortened,
         code: helper.htmlsafe( fs.readFileSync(sourceFiles[file].resolved, encoding) )
       }
     }
@@ -318,6 +320,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
   const subCategories = items.reduce((memo, item) => {
     const subCategory = item.subCategory || ''
     memo[subCategory] = memo[subCategory] || []
+    // console.log(memo[subCategory])
     return {
       ...memo,
       [subCategory]: [...memo[subCategory], item]
@@ -327,7 +330,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
   const subCategoryNames = Object.keys(subCategories)
     
   var nav = ''
-
+  // console.log(items, itemHeading, itemsSeen, linktoFn)
   subCategoryNames.forEach((subCategoryName) => {
     const subCategoryItems = subCategories[subCategoryName]
     if (subCategoryItems.length) {
@@ -335,9 +338,11 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     
       subCategoryItems.forEach(function(item) {
         var displayName
+
+        var filename = item.filename
     
         if ( !hasOwnProp.call(item, 'longname') ) {
-          itemsNav += '<li>' + linktoFn('', item.name) + '</li>'
+          itemsNav += '<li  class="navBar-content">' + linktoFn('', item.name) + '<div class="filenameDiv"> <p>'+filename+'</p> </div>' +  '</li>'
         }
         else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
           if (env.conf.templates.default.useLongnameInNav) {
@@ -345,7 +350,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
           } else {
             displayName = item.name
           }
-          itemsNav += '<li>' + linktoFn(item.longname, displayName.replace(/\b(module|event):/g, ''))
+
+          itemsNav += '<li class="navBar-content">'+ linktoFn(item.longname, displayName.replace(/\b(module|event):/g, '')) + '<div  class="filenameDiv"> <p>'+filename+'</p> </div>'
 
           if (item.children && item.children.length) {
             itemsNav += '<ul>'
@@ -355,7 +361,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
               } else {
                 displayName = child.name
               }
-              itemsNav += '<li>' + linktoFn(child.longname, displayName.replace(/\b(module|event):/g, '')) + '</li>'
+              itemsNav += '<li class="navBar-content">' + linktoFn(child.longname, displayName.replace(/\b(module|event):/g, '')) + 
+              '<div class="filenameDiv"> <p>'+filename+'</p> </div>'
+              '</li>'
             })
             itemsNav += '</ul>'
           }
@@ -371,8 +379,15 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         if (subCategoryName) {
           heading = heading + ' / ' + subCategoryName
         }
-        nav += '<h3>' + heading + '</h3><ul>' + itemsNav + '</ul>'
-      }
+
+      // Dropdown extra
+      //  var buttonheading = "'" + heading +"'"
+      //   nav += '<h3>' + heading + '</h3> <button onclick="showContentFunction(' + buttonheading + ')" class="dropbtn">Dropdown</button> <ul class="dropdown-content" id="'+heading+'">' + itemsNav + '</ul>'
+      //   }
+
+      
+        nav += '<h3>' + heading + '</h3>' + itemsNav + '</ul>'
+        }
     }
   })
 
@@ -392,10 +407,22 @@ function buildGroupNav (members, title) {
   var seenTutorials = {}
   var nav = ''
   var seen = {}
-  nav += '<div class="category">'
+  nav += '<div class=("category_"+title+"")>'
+
+ 
+
+
   if (title) {
-    nav += '<h2>' + title + '</h2>'
+    var titleRef = "'" + title  + "'"
+    var titleRefMenuIcon = "'" + title +"_arrow" + "'"
+    nav += '<div><div class="title_header"><h3 class="core-header">' + title +'</h3> </div>' + '<div onclick="showContentFunction(' + titleRef + ')" class="title_arrow"><i id='+titleRefMenuIcon+' class="arrow down"></i></div>' + '</div>'
+
+//<p onclick="showContentFunction(' + titleRef + ')" class="dropbtn">view</p>
   }
+  
+  // nav += '<p>'+members.shortFilename+'</p>'
+
+  nav += '<div class="dropdown-content" id='+title +"_content"+' >'
   nav += buildMemberNav(members.tutorials || [], 'Tutorials', seenTutorials, linktoTutorial)
   nav += buildMemberNav(members.modules || [], 'Modules', {}, linkto)
   nav += buildMemberNav(members.externals || [], 'Externals', seen, linktoExternal)
@@ -405,25 +432,29 @@ function buildGroupNav (members, title) {
   nav += buildMemberNav(members.events || [], 'Events', seen, linkto)
   nav += buildMemberNav(members.mixins || [], 'Mixins', seen, linkto)
   nav += buildMemberNav(members.components || [], 'Components', seen, linkto)
-    
-  if (members.globals && members.globals.length) {
-    globalNav = ''
 
-    members.globals.forEach(function(g) {
-      if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
-        globalNav += '<li>' + linkto(g.longname, g.name) + '</li>'
+  
+
+    if (members.globals && members.globals.length) {
+      globalNav = ''
+
+      members.globals.forEach(function(g) {
+        var filename = g.filename
+        if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+          globalNav += '<li class="navBar-content">' + linkto(g.longname, g.name)  + '<div class="filenameDiv"> <p>'+filename+'</p> </div>'+ '</li>'
+        }
+        seen[g.longname] = true
+      })
+
+      if (!globalNav) {
+        // turn the heading into a link so you can actually get to the global page
+        nav += '<h3 class="core-header">' + linkto('global', 'Global') + '</h3>'
       }
-      seen[g.longname] = true
-    })
-
-    if (!globalNav) {
-      // turn the heading into a link so you can actually get to the global page
-      nav += '<h3>' + linkto('global', 'Global') + '</h3>'
+      else {
+        nav += '<h3 class="core-header">Global</h3>' + globalNav 
+      }
     }
-    else {
-      nav += '<h3>Global</h3><ul>' + globalNav + '</ul>'
-    }
-  }
+  nav += '</div>'
   nav += '</div>'
   return nav
 }
@@ -445,35 +476,162 @@ function buildGroupNav (members, title) {
  */
 function buildNav(members, navTypes = null, betterDocs) {
   const href = betterDocs.landing ? 'docs.html' : 'index.html'
-  var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
+  var nav = navTypes ? '' : ''
+  // var nav = navTypes ? '' : `<h2><a href="${href}">Documentation</a></h2>`
 
-  var categorised = {}
+  var fileCategories = {}
+  var categories = {}
   var rootScope = {}
+
+  // var experiment = { }
 
   var types = navTypes || ['modules', 'externals', 'namespaces', 'classes',
     'components', 'interfaces', 'events', 'mixins', 'globals']
   types.forEach(function(type) {
     if (!members[type]) { return }
     members[type].forEach(function(element) {
+
       if (element.access && element.access === 'private') {
         return
       }
-      if (element.category) {
-        if (!categorised[element.category]){ categorised[element.category] = [] }
-        if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
-        categorised[element.category][type].push(element)
+
+      // if (element.category) {
+      //   if (!categorised[element.category]){ categorised[element.category] = [] }
+      //   if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
+      //   categorised[element.category][type].push(element)
+      // } else {
+      //   rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
+      // }
+
+      if(element.shortFilename) {
+        if (!fileCategories[element.shortFilename]){ fileCategories[element.shortFilename] = [] }
+        if (!fileCategories[element.shortFilename][type]){ fileCategories[element.shortFilename][type] = [] }
+        fileCategories[element.shortFilename][type].push(element)
       } else {
         rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
       }
+
+      if(element.category) {
+        if (!categories[element.category]){ categories[element.category] = [] }
+        if (!categories[element.category][type]){ categories[element.category][type] = [] }
+        categories[element.category][type].push(element)
+      } 
+
+       // if (element.category) {
+      //   if (!categorised[element.category]){ categorised[element.category] = [] }
+      //   if (!categorised[element.category][type]){ categorised[element.category][type] = [] }
+      //   categorised[element.category][type].push(element)
+      // } else {
+      //   rootScope[type] ? rootScope[type].push(element) : rootScope[type] = [element]
+      // }
+
+      // {
+      //   "demo.js" : {
+      //     "class" : []
+      //   }
+      // }
+      // {
+      //   "root" : {
+      //     "demo.js" : {
+      //       "class" : []
+      //     }
+      //     "core" : {
+      //       "demo2.js" : {
+      //         "class" : []
+      //       }
+      //     }
+      //   }
+      // }
+      
+      // // Build file path
+      // if(element.filename) {
+      //   var spiltedStr = element.filename.split('/');
+      //   if(Array.isArray(spiltedStr)) {
+      //     // Is in files.
+      //     if(spiltedStr.length > 1) {
+      //       for(let i = 0; i < spiltedStr.length; i++) {
+
+      //         if (!experiment[spiltedStr[i]]){ experiment[spiltedStr[i]] = [] }
+
+      //       }
+      //       spiltedStr.forEach(function(path) {
+
+      //         if (!experiment[element.path]){ experiment[element.path] = [] }
+
+
+      //         if (!experiment[element.fileName][type]){ experiment[element.fileName][type] = [] }
+      //         experiment[element.fileName][type].push(element)
+
+      //       })
+      //     }
+
+      //   }
+     
+      // } 
+
     })
   })
+
+  Object.keys(categories).length
+
+  // nav += '<div><p> Total files '+ Object.keys(categories).length+' documented</p></div>'
+
+  nav += '<div><h2  id="FilesTabTitle" class="tabheader file" onclick="displayFiles()">Files</h2>'
+
+  if(Object.keys(categories).length > 0) {
+    nav += '<h2 id="CategoriesTabTitle" class="tabheader category" onclick="displayCategories()">Categories</h2>'
+  }
+
+  nav += '</div>'
+
+  nav += '<div id="file_structure">'
+
+
+  // Object.keys(categorised).sort().forEach(function (category) {
+  //   nav += buildGroupNav(categorised[category], category)
+  // })
+
+  Object.keys(fileCategories).sort().forEach(function (category) {
     
-  nav += buildGroupNav(rootScope)
-  Object.keys(categorised).sort().forEach(function (category) {
-    nav += buildGroupNav(categorised[category], category)
+    nav += buildGroupNav(fileCategories[category], category)
+
   })
 
+  nav += buildGroupNav(rootScope, 'Unlisted')
+
+  nav += '</div>'
+
+  Object.keys(categories).sort().forEach(function (category) {
+    nav += '<div id="category_structure">'
+
+    nav += buildGroupNav(categories[category], category)
+
+    nav += '</div>'
+
+  })
+
+  
   return nav
+}
+
+function addFilename (f, filename) {
+  f.filename = filename
+  
+  // var types = f.type ? buildItemTypeStrings(f) : []
+
+  // f.signature = (f.signature || '') + '<span class="type-signature">' +
+  //       (types.length ? ' :' + types.join('|') : '') + '</span>'
+
+}
+
+function addShortFilename (f, filename) {
+  f.shortFilename = filename
+  
+  // var types = f.type ? buildItemTypeStrings(f) : []
+
+  // f.signature = (f.signature || '') + '<span class="type-signature">' +
+  //       (types.length ? ' :' + types.join('|') : '') + '</span>'
+
 }
 
 /**
@@ -557,6 +715,7 @@ exports.publish = function(taffyData, opts, tutorials) {
         }
       })
     }
+
     if (doclet.see) {
       doclet.see.forEach(function(seeItem, i) {
         doclet.see[i] = hashToLink(doclet, seeItem)
@@ -654,6 +813,15 @@ exports.publish = function(taffyData, opts, tutorials) {
       addSignatureReturns(doclet)
       addAttribs(doclet)
     }
+    if(doclet.meta) {
+      var filename = getPathFromDoclet(doclet)
+     
+      filename = sourceFiles[filename].shortened
+      var shortFilename = doclet.meta.filename
+      addFilename(doclet, filename)
+      addShortFilename(doclet, shortFilename)
+    }
+   
   })
 
   // do this after the urls have all been generated
@@ -675,6 +843,7 @@ exports.publish = function(taffyData, opts, tutorials) {
   view.smallHeader = !conf.betterDocs.navButtons
 
   members = helper.getMembers(data)
+
   if (opts.tutorials) {
     // sort tutorials
     try {
@@ -688,7 +857,6 @@ exports.publish = function(taffyData, opts, tutorials) {
       }
       members.tutorials = tutorials.children
     }
-        
   } else {
     members.tutorials = tutorials.children
   }
@@ -707,8 +875,8 @@ exports.publish = function(taffyData, opts, tutorials) {
   view.tutoriallink = tutoriallink;
   view.htmlsafe = htmlsafe
   view.outputSourceFiles = outputSourceFiles
-
   // once for all
+  // console.log(members)
   view.nav = buildNav(members, null, conf.betterDocs)
   
   view.tutorialsNav = buildNav(members, ['tutorials'], conf.betterDocs)
